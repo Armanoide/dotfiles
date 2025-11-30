@@ -3,6 +3,7 @@
 # Get config directory
 CONFIG_DIR="${CONFIG_DIR:-$HOME/.config/sketchybar}"
 source "$CONFIG_DIR/colors.sh"
+source "$CONFIG_DIR/icons.sh"
 
 # Get workspace ID
 if [ -n "$1" ]; then
@@ -14,17 +15,26 @@ fi
 # Get focused workspace
 FOCUSED=$(/opt/homebrew/bin/aerospace list-workspaces --focused)
 
+# Determine which apps are in the workspace
+APPS=$(/opt/homebrew/bin/aerospace list-windows --workspace "$WORKSPACE_ID"  2>/dev/null)
+
+ICON=$(get_icon "$APPS")
+
+# Set the icon
+sketchybar --set "$NAME" icon="$ICON"
+
 # Highlight if focused
 if [ "$WORKSPACE_ID" = "$FOCUSED" ]; then
   sketchybar --set $NAME \
-    background.color=$MAUVE \
     background.drawing=on \
-    background.y_offset=0 \
-    label.color=$CRUST
+    background.color=$MAUVE \
+    label.color=$MAUVE \
+    icon.color=$MAUVE
 else
   sketchybar --set $NAME \
     background.drawing=off \
-    label.color=$TEXT
+    label.color=$TEXT \
+    icon.color=$TEXT
 fi
 
 # replace line 21 to 23 with the following code

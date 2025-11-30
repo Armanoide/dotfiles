@@ -17,9 +17,9 @@ EXISTING=($(sketchybar --query bar | jq -r '.items[] | select(startswith("space.
 for existing in "${EXISTING[@]}"; do
   sid=${existing#space.}
   # check if workspace is empty and not focused
-  if [[ ! " ${WORKSPACES_TO_SHOW[@]} " =~ " ${sid} " ]]; then
-    sketchybar --remove "$existing"
-  fi
+  # if [[ ! " ${WORKSPACES_TO_SHOW[@]} " =~ " ${sid} " ]]; then
+  #   sketchybar --remove "$existing"
+  # fi
 done
 
 # Add/update workspaces that should be shown
@@ -32,17 +32,22 @@ for sid in "${WORKSPACES_TO_SHOW[@]}"; do
     fi
     sketchybar --add item "space.$sid" left \
       --set "space.$sid" \
-      background.color=0x44ffffff \
       background.corner_radius=4 \
-      background.height=20 \
-      background.drawing=off \
+      background.height=2 \
+      background.y_offset=-13 \
+      background.drawing=on \
+      background.padding_left=5 \
+      background.padding_right=5 \
+      icon.font="MesloLGS Nerd Font Mono:Bold:25.0" \
+      icon.x_offset=0 \
+      label.x_offset=0 \
       label="$LABEL" \
       click_script="/opt/homebrew/bin/aerospace workspace $sid" \
       script="$CONFIG_DIR/plugins/space.sh $sid" \
       update_freq=1 \
       --subscribe "space.$sid" aerospace_workspace_change workspace_manager
   fi
-done
+ done
 
 # Force initial update
 sketchybar --trigger workspace_update

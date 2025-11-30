@@ -43,13 +43,12 @@ sketchybar --add item workspace_manager left \
            script="$PLUGIN_DIR/workspace_manager.sh" \
            --subscribe workspace_manager aerospace_workspace_change
 
-
 ##### adding center items #####
-sketchybar --add item front_app left \
-           --set front_app icon.drawing=on \
-                          label.drawing=on \
-                          script="$PLUGIN_DIR/front_app.sh" \
-           --subscribe front_app front_app_switched
+# sketchybar --add item front_app left \
+#            --set front_app icon.drawing=on \
+#                           label.drawing=on \
+#                           script="$PLUGIN_DIR/front_app.sh" \
+#            --subscribe front_app front_app_switched
 
 ##### Adding Right Items #####
 
@@ -67,6 +66,11 @@ sketchybar --add item volume right \
 sketchybar --add item network right \
            --set network script="$PLUGIN_DIR/network.sh" \
                          update_freq=10 label.drawing=off
+
+sketchybar --add item keyboard right \
+           --set keyboard script="$PLUGIN_DIR/keyboard.sh" \
+           update_freq=2
+
 
 ##### Force all scripts to run the first time (never do this in a script) #####
 sketchybar --update
