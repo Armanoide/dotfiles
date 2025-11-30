@@ -1,0 +1,22 @@
+{
+    "profiles": [
+        {
+            "devices": [
+                {
+                    "disable_built_in_keyboard_if_exists": true,
+                    "identifiers": {
+                        "is_keyboard": true,
+                        "is_pointing_device": true,
+                        "product_id": 63490,
+                        "vendor_id": 13652
+                    },
+                    "ignore": false,
+                    "ignore_vendor_events": true
+                }
+            ],
+            "name": "Default",
+            "selected": true,
+            "virtual_hid_keyboard": { "keyboard_type_v2": "ansi" }
+        }
+    ]
+}
