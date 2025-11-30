@@ -1,0 +1,170 @@
+# This is the configuration file for Ghostty.
+#
+# This template file has been automatically created at the following
+# path since Ghostty couldn't find any existing config files on your system:
+#
+#   /Users/norbert/Library/Application Support/com.mitchellh.ghostty/config
+#
+# The template does not set any default options, since Ghostty ships
+# with sensible defaults for all options. Users should only need to set
+# options that they want to change from the default.
+#
+# Run `ghostty +show-config --default --docs` to view a list of
+# all available config options and their default values.
+#
+# Additionally, each config option is also explained in detail
+# on Ghostty's website, at https://ghostty.org/docs/config.
+
+# Config syntax crash course
+# ==========================
+# # The config file consists of simple key-value pairs,
+# # separated by equals signs.
+# font-family = Iosevka
+# window-padding-x = 2
+#
+# # Spacing around the equals sign does not matter.
+# # All of these are identical:
+# key=value
+# key= value
+# key =value
+# key = value
+#
+# # Any line beginning with a # is a comment. It's not possible to put
+# # a comment after a config option, since it would be interpreted as a
+# # part of the value. For example, this will have a value of "#123abc":
+# background = #123abc
+#
+# # Empty values are used to reset config keys to default.
+# key =
+#
+# # Some config options have unique syntaxes for their value,
+# # which is explained in the docs for that config option.
+# # Just for example:
+# resize-overlay-duration = 4s 200ms
+
+###########
+########### System
+###########
+
+#theme = "Catppuccin Mocha"
+# use deep for better contrast
+theme = "deep" 
+
+quit-after-last-window-closed = true
+auto-update = "check"
+quick-terminal-position = "bottom"
+copy-on-select = false
+
+###########
+########### Font
+###########
+
+#font-family = "JetBrainsMono Nerd Font Mono"
+font-family = BerkeleyMono Nerd Font
+font-style = Medium
+font-style-bold = Bold
+font-style-italic = Medium Italic
+font-style-bold-italic = Bold Italic
+font-size = 14
+font-thicken = true
+term=xterm-ghostty
+
+###########
+########### Window
+###########
+
+window-inherit-working-directory = true
+window-subtitle = "working-directory"
+window-padding-balance = true
+window-save-state = always 
+window-colorspace = "display-p3"
+background-opacity = 0.6
+background-blur = 20
+macos-non-native-fullscreen = true
+macos-option-as-alt = false
+macos-auto-secure-input = true
+macos-secure-input-indication = true
+macos-titlebar-style=transparent
+minimum-contrast = 1.05
+window-vsync = true
+window-theme = dark
+
+
+###########
+########### Cursor
+###########
+
+#cursor-invert-fg-bg = true
+shell-integration-features = no-cursor, sudo, no-title
+adjust-cell-height = 35%
+cursor-style-blink = true
+cursor-style = block
+custom-shader = "~/.config/ghostty/shaders/cursor_blaze.glsl"
+cursor-text="#000000"
+
+###########
+########### Mouse
+###########
+
+
+mouse-hide-while-typing = true
+mouse-scroll-multiplier = 2
+
+
+###########
+########### keybind - docs
+###########
+
+# (https://donsnotes.com/tech/charsets/ascii.html)
+
+###########
+########### keybind - NVim
+###########
+
+#keybind=cmd+h=text:\x17\x68
+#keybind=cmd+j=text:\x17\x6A
+#keybind=cmd+k=text:\x17\x6B
+#keybind=cmd+l=text:\x17\x6C
+#keybind=cmd+d=text:\x04   
+#keybind=cmd+u=text:\x15
+#keybind=cmd+s=text:\x13
+keybind=alt+h=text:\x1b\x68
+keybind=alt+j=text:\x1b\x6A
+keybind=alt+k=text:\x1b\x6B
+keybind=alt+l=text:\x1b\x6C
+keybind=alt+up=text:\x1b[1;3A
+keybind=alt+down=text:\x1b[1;3B
+keybind=alt+left=text:\x1b[1;3D
+keybind=alt+right=text:\x1b[1;3C
+
+
+###########
+########### keybind - Tmux
+###########
+
+keybind=cmd+1=text:\x17\x31
+keybind=cmd+2=text:\x17\x32
+keybind=cmd+3=text:\x17\x33
+keybind=cmd+4=text:\x17\x34
+keybind=cmd+5=text:\x17\x35
+keybind=cmd+6=text:\x17\x36
+keybind=cmd+7=text:\x17\x37
+keybind=cmd+8=text:\x17\x38
+keybind=cmd+9=text:\x17\x39
+keybind=cmd+0=text:\x0B
+
+
+###########
+########### keybind French (failed to catch correctly by ghostty) 
+###########
+
+keybind=shift+alt+l=text:|
+
+
+###########
+########### Fun
+###########
+
+
+
+#custom-shader = "~/.config/ghostty/shaders/glitchy.glsl"
