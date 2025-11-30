@@ -1,17 +1,18 @@
 return {
   {
     "mvllow/modes.nvim",
-    dir = "/Volumes/EXT1_SSD/Users/user1/Projects/Other/modes.nvim",
+    -- dir = "/Volumes/EXT1_SSD/Users/user1/Projects/Other/modes.nvim",
+    url = "https://github.com/Armanoide/modes.nvim",
     config = function()
       require("modes").setup({
         colors = {
-          normal  = "#89b4fa",
-          insert  = "#a6e3a1",
-          visual  = "#cba6f7",
+          normal = "#89b4fa",
+          insert = "#a6e3a1",
+          visual = "#cba6f7",
           replace = "#eba0ac",
-          delete  = "#d20f39",
-          copy    = "#8839ef",
-          format  = "#b4befe"
+          delete = "#d20f39",
+          copy = "#8839ef",
+          format = "#b4befe",
         },
         line_opacity = 0.4,
         set_cursor = true,
