@@ -4,12 +4,17 @@
 # Run Sketchybar together with AeroSpace
 # sketchbar has a built-in detection of already running process,
 # so it won't be run twice on AeroSpace restart
-after-startup-command = ['exec-and-forget sketchybar --reload', 'exec-and-forget sketchybar']
+after-startup-command = [
+  'exec-and-forget sketchybar --reload',
+  'exec-and-forget sketchybar',
+]
 
 # Notify Sketchybar about workspace change
-exec-on-workspace-change = ['/bin/bash', '-c',
-    'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE',
-    'exec-and-forget borders active_color=0xffe1e3e4 inactive_color=0xff494d64 width=5.0'
+exec-on-workspace-change = [
+  '/bin/bash',
+  '-c',
+  'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE',
+  'exec-and-forget borders active_color=0xffe1e3e4 inactive_color=0xff494d64 width=5.0',
 
 ]
 
@@ -49,7 +54,7 @@ automatically-unhide-macos-hidden-apps = false
 # Possible values: (qwerty|dvorak|colemak)
 # See https://nikitabobko.github.io/AeroSpace/guide#key-mapping
 [key-mapping]
-    preset = 'qwerty'
+preset = 'qwerty'
 
 # Gaps between windows (inner-*) and between monitor edges (outer-*).
 # Possible values:
@@ -60,12 +65,16 @@ automatically-unhide-macos-hidden-apps = false
 #                 See:
 #                 https://nikitabobko.github.io/AeroSpace/guide#assign-workspaces-to-monitors
 [gaps]
-    inner.horizontal = 20
-    inner.vertical =   20
-    outer.left =       20
-    outer.bottom =     20
-    outer.top =        20
-    outer.right =      20
+inner.horizontal = 20
+inner.vertical = 20
+outer.left = 5
+outer.bottom = 0
+outer.top = [
+  { monitor."Studio Display" = 32 },
+  { monitor."Built-in Retina Display" = 0 },
+  20,
+]
+outer.right = 5
 
 # 'main' binding mode declaration
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
@@ -73,102 +82,159 @@ automatically-unhide-macos-hidden-apps = false
 # Fallback value (if you omit the key): mode.main.binding = {}
 [mode.main.binding]
 
-    # All possible keys:
-    # - Letters.        a, b, c, ..., z
-    # - Numbers.        0, 1, 2, ..., 9
-    # - Keypad numbers. keypad0, keypad1, keypad2, ..., keypad9
-    # - F-keys.         f1, f2, ..., f20
-    # - Special keys.   minus, equal, period, comma, slash, backslash, quote, semicolon,
-    #                   backtick, leftSquareBracket, rightSquareBracket, space, enter, esc,
-    #                   backspace, tab, pageUp, pageDown, home, end, forwardDelete,
-    #                   sectionSign (ISO keyboards only, european keyboards only)
-    # - Keypad special. keypadClear, keypadDecimalMark, keypadDivide, keypadEnter, keypadEqual,
-    #                   keypadMinus, keypadMultiply, keypadPlus
-    # - Arrows.         left, down, up, right
+# All possible keys:
+# - Letters.        a, b, c, ..., z
+# - Numbers.        0, 1, 2, ..., 9
+# - Keypad numbers. keypad0, keypad1, keypad2, ..., keypad9
+# - F-keys.         f1, f2, ..., f20
+# - Special keys.   minus, equal, period, comma, slash, backslash, quote, semicolon,
+#                   backtick, leftSquareBracket, rightSquareBracket, space, enter, esc,
+#                   backspace, tab, pageUp, pageDown, home, end, forwardDelete,
+#                   sectionSign (ISO keyboards only, european keyboards only)
+# - Keypad special. keypadClear, keypadDecimalMark, keypadDivide, keypadEnter, keypadEqual,
+#                   keypadMinus, keypadMultiply, keypadPlus
+# - Arrows.         left, down, up, right
 
-    # All possible modifiers: cmd, alt, ctrl, shift
+# All possible modifiers: cmd, alt, ctrl, shift
 
-    # All possible commands: https://nikitabobko.github.io/AeroSpace/commands
+# All possible commands: https://nikitabobko.github.io/AeroSpace/commands
 
-    # See: https://nikitabobko.github.io/AeroSpace/commands#exec-and-forget
-    # You can uncomment the following lines to open up terminal with alt + enter shortcut
-    # (like in i3)
-    # alt-enter = '''exec-and-forget osascript -e '
-    # tell application "Terminal"
-    #     do script
-    #     activate
-    # end tell'
-    # '''
+# See: https://nikitabobko.github.io/AeroSpace/commands#exec-and-forget
+# You can uncomment the following lines to open up terminal with alt + enter shortcut
+# (like in i3)
+# alt-enter = '''exec-and-forget osascript -e '
+# tell application "Terminal"
+#     do script
+#     activate
+# end tell'
+# '''
 
-    # See: https://nikitabobko.github.io/AeroSpace/commands#layout
-    cmd-shift-quote = 'layout tiles horizontal vertical'
-    cmd-m = 'layout accordion horizontal vertical'
+# See: https://nikitabobko.github.io/AeroSpace/commands#layout
+cmd-shift-quote = 'layout tiles horizontal vertical'
+cmd-m = 'layout accordion horizontal vertical'
 
-    # See: https://nikitabobko.github.io/AeroSpace/commands#focus
-    cmd-h = 'focus left'
-    cmd-j = 'focus down'
-    cmd-k = 'focus up'
-    cmd-l = 'focus right'
+# See: https://nikitabobko.github.io/AeroSpace/commands#focus
+cmd-h = 'focus left'
+cmd-j = 'focus down'
+cmd-k = 'focus up'
+cmd-l = 'focus right'
 
-    # See: https://nikitabobko.github.io/AeroSpace/commands#move
-    cmd-shift-h = 'move left'
-    cmd-shift-j = 'move down'
-    cmd-shift-k = 'move up'
-    cmd-shift-l = 'move right'
+# See: https://nikitabobko.github.io/AeroSpace/commands#move
+cmd-shift-h = 'move left'
+cmd-shift-j = 'move down'
+cmd-shift-k = 'move up'
+cmd-shift-l = 'move right'
 
-    # See: https://nikitabobko.github.io/AeroSpace/commands#resize
-    cmd-equal = 'resize smart -50'
-    cmd-slash = 'resize smart +50'
+# See: https://nikitabobko.github.io/AeroSpace/commands#resize
+cmd-equal = 'resize smart -50'
+cmd-slash = 'resize smart +50'
 
-    # See: https://nikitabobko.github.io/AeroSpace/commands#workspace
-    cmd-1 = ['workspace 1', 'exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=1 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)']
-    cmd-2 = ['workspace 2', 'exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=2 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)']
-    cmd-3 = ['workspace 3', 'exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=3 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)']
-    cmd-4 = ['workspace 4', 'exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=4 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)']
-    cmd-5 = ['workspace 5', 'exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=5 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)']
-    cmd-6 = ['workspace 6', 'exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=6 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)']
-#    cmd-7 = ['workspace 7', 'exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=7 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)']
-#    cmd-8 = ['workspace 8', 'exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=8 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)']
-#    cmd-9 = ['workspace 9', 'exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=9 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)']
+# See: https://nikitabobko.github.io/AeroSpace/commands#workspace
+cmd-1 = [
+  'workspace 1',
+  'exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=1 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)',
+]
+cmd-2 = [
+  'workspace 2',
+  'exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=2 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)',
+]
+cmd-3 = [
+  'workspace 3',
+  'exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=3 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)',
+]
+cmd-4 = [
+  'workspace 4',
+  'exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=4 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)',
+]
+cmd-5 = [
+  'workspace 5',
+  'exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=5 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)',
+]
+cmd-6 = [
+  'workspace 6',
+  'exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=6 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)',
+]
+cmd-7 = [
+  'workspace 7',
+  'exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=7 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)',
+]
+cmd-8 = [
+  'workspace 8',
+  'exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=8 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)',
+]
+cmd-9 = [
+  'workspace 9',
+  'exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=9 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)',
+]
 
-    # See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
-    cmd-shift-1 = ['move-node-to-workspace 1', 'exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=1 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)']
-    cmd-shift-2 = ['move-node-to-workspace 2', 'exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=2 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)']
-    cmd-shift-3 = ['move-node-to-workspace 3', 'exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=3 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)']
-    cmd-shift-4 = ['move-node-to-workspace 4', 'exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=4 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)']
-    cmd-shift-5 = ['move-node-to-workspace 5', 'exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=5 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)']
-    cmd-shift-6 = ['move-node-to-workspace 6', 'exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=6 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)']
-#    cmd-shift-7 = ['move-node-to-workspace 7', 'exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=7 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)']
-#    cmd-shift-8 = ['move-node-to-workspace 8', 'exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=8 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)']
-#    cmd-shift-9 = ['move-node-to-workspace 9', 'exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=9 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)']
+# See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
+cmd-shift-1 = [
+  'move-node-to-workspace 1',
+  'exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=1 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)',
+]
+cmd-shift-2 = [
+  'move-node-to-workspace 2',
+  'exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=2 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)',
+]
+cmd-shift-3 = [
+  'move-node-to-workspace 3',
+  'exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=3 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)',
+]
+cmd-shift-4 = [
+  'move-node-to-workspace 4',
+  'exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=4 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)',
+]
+cmd-shift-5 = [
+  'move-node-to-workspace 5',
+  'exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=5 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)',
+]
+cmd-shift-6 = [
+  'move-node-to-workspace 6',
+  'exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=6 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)',
+]
+cmd-shift-7 = [
+  'move-node-to-workspace 7',
+  'exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=7 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)',
+]
+cmd-shift-8 = [
+  'move-node-to-workspace 8',
+  'exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=8 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)',
+]
+cmd-shift-9 = [
+  'move-node-to-workspace 9',
+  'exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=9 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)',
+]
 
-    # See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
-    cmd-tab = 'workspace-back-and-forth'
-    # See: https://nikitabobko.github.io/AeroSpace/commands#move-workspace-to-monitor
-    cmd-shift-tab = 'move-workspace-to-monitor --wrap-around next'
+# See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
+cmd-tab = 'workspace-back-and-forth'
+# See: https://nikitabobko.github.io/AeroSpace/commands#move-workspace-to-monitor
+cmd-shift-tab = 'move-workspace-to-monitor --wrap-around next'
 
-    # See: https://nikitabobko.github.io/AeroSpace/commands#mode
-    cmd-shift-semicolon = 'mode service'
+# See: https://nikitabobko.github.io/AeroSpace/commands#mode
+cmd-shift-semicolon = 'mode service'
 
 # 'service' binding mode declaration.
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
 [mode.service.binding]
-    esc = ['reload-config', 'mode main']
-    r = ['flatten-workspace-tree', 'mode main'] # reset layout
-    f = ['layout floating tiling', 'mode main'] # Toggle between floating and tiling layout
-    backspace = ['close-all-windows-but-current', 'mode main']
+esc = ['reload-config', 'mode main']
+r = ['flatten-workspace-tree', 'mode main'] # reset layout
+f = [
+  'layout floating tiling',
+  'mode main',
+] # Toggle between floating and tiling layout
+backspace = ['close-all-windows-but-current', 'mode main']
 
-    # sticky is not yet supported https://github.com/nikitabobko/AeroSpace/issues/2
-    #s = ['layout sticky tiling', 'mode main']
+# sticky is not yet supported https://github.com/nikitabobko/AeroSpace/issues/2
+#s = ['layout sticky tiling', 'mode main']
 
-    cmd-shift-h = ['join-with left', 'mode main']
-    cmd-shift-j = ['join-with down', 'mode main']
-    cmd-shift-k = ['join-with up', 'mode main']
-    cmd-shift-l = ['join-with right', 'mode main']
+cmd-shift-h = ['join-with left', 'mode main']
+cmd-shift-j = ['join-with down', 'mode main']
+cmd-shift-k = ['join-with up', 'mode main']
+cmd-shift-l = ['join-with right', 'mode main']
 
-    down = 'volume down'
-    up = 'volume up'
-    shift-down = ['volume set 0', 'mode main']
+down = 'volume down'
+up = 'volume up'
+shift-down = ['volume set 0', 'mode main']
 
 [[on-window-detected]]
 if.app-id = 'com.mitchellh.ghostty'
@@ -183,4 +249,13 @@ run = "move-node-to-workspace 2"
 if.app-id = 'copm.google.Chrome'
 run = "move-node-to-workspace 2"
 
-
+[workspace-to-monitor-force-assignment]
+1 = 'main'
+2 = 'main'
+3 = 'main'
+4 = 'main'
+5 = 'main'
+6 = ['secondary', 'main']
+7 = ['secondary', 'main']
+8 = ['secondary', 'main']
+9 = ['secondary', 'main']
