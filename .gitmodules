@@ -1,0 +1,3 @@
+[submodule ".config/catppuccin-fz"]
+	path = .config/catppuccin-fz
+	url = https://github.com/catppuccin/fzf.git

@@ -1,0 +1,8 @@
+[preview]
+wrap = "yes"
+enabled = true
+method = "chafa"
+max_height = 1500
+max_width = 1500
+image_filter = "lanczos3"
+image_quality = 90

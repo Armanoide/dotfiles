@@ -5,4 +5,5 @@
 .config/sunshine
 .config/QtProject
 .config/github-copilot
-
+.config/yarn
+.config/terminfo

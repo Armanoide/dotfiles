@@ -1,0 +1,53 @@
+------@type LazySpec
+return {
+  ---  -- disable neo-tree (Explorer)
+  ---  { "nvim-neo-tree/neo-tree.nvim", enabled = false },
+  ---
+  ---  -- setup yazi
+  ---  {
+  ---    "mikavilpas/yazi.nvim",
+  ---    version = "*",
+  ---    event = "VeryLazy",
+  ---    dependencies = {
+  ---      { "nvim-lua/plenary.nvim", lazy = true },
+  ---    },
+  ---    keys = function(_, keys)
+  ---      return {
+  ---        {
+  ---          "<leader>e",
+  ---          "<cmd>Yazi<cr>",
+  ---          desc = "Explorer Yazi (root dir)",
+  ---        },
+  ---        {
+  ---          "<leader>E",
+  ---          "<cmd>Yazi cwd<cr>",
+  ---          desc = "Explorer Yazi (cwd)",
+  ---        },
+  ---        {
+  ---          "<leader>fe",
+  ---          "<cmd>Yazi<cr>",
+  ---          desc = "Explorer Yazi (root dir)",
+  ---        },
+  ---        {
+  ---          "<leader>fE",
+  ---          "<cmd>Yazi cwd<cr>",
+  ---          desc = "Explorer Yazi (cwd)",
+  ---        },
+  ---        {
+  ---          "<C-Up>",
+  ---          "<cmd>Yazi toggle<cr>",
+  ---          desc = "Resume last Yazi session",
+  ---        },
+  ---      }
+  ---    end,
+  ---    opts = {
+  ---      open_for_directories = true,
+  ---      keymaps = {
+  ---        show_help = "<f1>",
+  ---      },
+  ---    },
+  ---    init = function()
+  ---      vim.g.loaded_netrwPlugin = 1
+  ---    end,
+  ---  },
+}
