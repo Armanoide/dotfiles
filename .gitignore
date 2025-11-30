@@ -7,3 +7,6 @@
 .config/github-copilot
 .config/yarn
 .config/terminfo
+
+.tmux/resurrect
+.tmux/plugins
