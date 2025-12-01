@@ -114,10 +114,10 @@ cmd-shift-quote = 'layout tiles horizontal vertical'
 cmd-m = 'layout accordion horizontal vertical'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#focus
-cmd-h = 'focus left'
-cmd-j = 'focus down'
-cmd-k = 'focus up'
-cmd-l = 'focus right'
+cmd-h = 'exec-and-forget ~/.config/aerospace/remap-passthrough.sh --key cmd-h --command "focus left" --only "Raycast"'
+cmd-j = 'exec-and-forget ~/.config/aerospace/remap-passthrough.sh --key cmd-j --command "focus down" --only "Raycast"'
+cmd-k = 'exec-and-forget ~/.config/aerospace/remap-passthrough.sh --key cmd-k --command "focus up" --only "Raycast"'
+cmd-l = 'exec-and-forget ~/.config/aerospace/remap-passthrough.sh --key cmd-l --command "focus right" --only "Raycast"'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#move
 cmd-shift-h = 'move left'
@@ -130,85 +130,49 @@ cmd-equal = 'resize smart -50'
 cmd-slash = 'resize smart +50'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#workspace
-cmd-1 = [
-  'workspace 1',
-  'exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=1 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)',
-]
-cmd-2 = [
-  'workspace 2',
-  'exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=2 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)',
-]
-cmd-3 = [
-  'workspace 3',
-  'exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=3 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)',
-]
-cmd-4 = [
-  'workspace 4',
-  'exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=4 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)',
-]
-cmd-5 = [
-  'workspace 5',
-  'exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=5 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)',
-]
-cmd-6 = [
-  'workspace 6',
-  'exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=6 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)',
-]
-cmd-7 = [
-  'workspace 7',
-  'exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=7 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)',
-]
-cmd-8 = [
-  'workspace 8',
-  'exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=8 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)',
-]
-cmd-9 = [
-  'workspace 9',
-  'exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=9 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)',
-]
+cmd-1 = 'exec-and-forget ~/.config/aerospace/remap-passthrough.sh --key cmd-1 --command "workspace 1" --only "Raycast"; exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=1 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)'
+
+cmd-2 = 'exec-and-forget ~/.config/aerospace/remap-passthrough.sh --key cmd-2 --command "workspace 2" --only "Raycast"; exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=2 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)'
+
+cmd-3 = 'exec-and-forget ~/.config/aerospace/remap-passthrough.sh --key cmd-3 --command "workspace 3" --only "Raycast"; exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=3 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)'
+
+cmd-4 = 'exec-and-forget ~/.config/aerospace/remap-passthrough.sh --key cmd-4 --command "workspace 4" --only "Raycast"; exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=4 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)'
+
+cmd-5 = 'exec-and-forget ~/.config/aerospace/remap-passthrough.sh --key cmd-5 --command "workspace 5" --only "Raycast"; exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=5 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)'
+
+cmd-6 = 'exec-and-forget ~/.config/aerospace/remap-passthrough.sh --key cmd-6 --command "workspace 6" --only "Raycast"; exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=6 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)'
+
+cmd-7 = 'exec-and-forget ~/.config/aerospace/remap-passthrough.sh --key cmd-7 --command "workspace 7" --only "Raycast"; exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=7 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)'
+
+cmd-8 = 'exec-and-forget ~/.config/aerospace/remap-passthrough.sh --key cmd-8 --command "workspace 8" --only "Raycast"; exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=8 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)'
+
+cmd-9 = 'exec-and-forget ~/.config/aerospace/remap-passthrough.sh --key cmd-9 --command "workspace 9" --only "Raycast"; exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=9 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
-cmd-shift-1 = [
-  'move-node-to-workspace 1',
-  'exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=1 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)',
-]
-cmd-shift-2 = [
-  'move-node-to-workspace 2',
-  'exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=2 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)',
-]
-cmd-shift-3 = [
-  'move-node-to-workspace 3',
-  'exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=3 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)',
-]
-cmd-shift-4 = [
-  'move-node-to-workspace 4',
-  'exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=4 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)',
-]
-cmd-shift-5 = [
-  'move-node-to-workspace 5',
-  'exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=5 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)',
-]
-cmd-shift-6 = [
-  'move-node-to-workspace 6',
-  'exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=6 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)',
-]
-cmd-shift-7 = [
-  'move-node-to-workspace 7',
-  'exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=7 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)',
-]
-cmd-shift-8 = [
-  'move-node-to-workspace 8',
-  'exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=8 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)',
-]
-cmd-shift-9 = [
-  'move-node-to-workspace 9',
-  'exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=9 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)',
-]
+
+cmd-shift-1 = 'exec-and-forget ~/.config/aerospace/remap-passthrough.sh --key cmd-shift-1 --command "move-node-to-workspace 1" --only "Raycast"; exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=1 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)'
+
+cmd-shift-2 = 'exec-and-forget ~/.config/aerospace/remap-passthrough.sh --key cmd-shift-2 --command "move-node-to-workspace 2" --only "Raycast"; exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=2 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)'
+
+cmd-shift-3 = 'exec-and-forget ~/.config/aerospace/remap-passthrough.sh --key cmd-shift-3 --command "move-node-to-workspace 3" --only "Raycast"; exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=3 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)'
+
+cmd-shift-4 = 'exec-and-forget ~/.config/aerospace/remap-passthrough.sh --key cmd-shift-4 --command "move-node-to-workspace 4" --only "Raycast"; exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=4 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)'
+
+cmd-shift-5 = 'exec-and-forget ~/.config/aerospace/remap-passthrough.sh --key cmd-shift-5 --command "move-node-to-workspace 5" --only "Raycast"; exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=5 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)'
+
+cmd-shift-6 = 'exec-and-forget ~/.config/aerospace/remap-passthrough.sh --key cmd-shift-6 --command "move-node-to-workspace 6" --only "Raycast"; exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=6 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)'
+
+cmd-shift-7 = 'exec-and-forget ~/.config/aerospace/remap-passthrough.sh --key cmd-shift-7 --command "move-node-to-workspace 7" --only "Raycast"; exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=7 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)'
+
+cmd-shift-8 = 'exec-and-forget ~/.config/aerospace/remap-passthrough.sh --key cmd-shift-8 --command "move-node-to-workspace 8" --only "Raycast"; exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=8 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)'
+
+cmd-shift-9 = 'exec-and-forget ~/.config/aerospace/remap-passthrough.sh --key cmd-shift-9 --command "move-node-to-workspace 9" --only "Raycast"; exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=9 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)'
+
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
-cmd-tab = 'workspace-back-and-forth'
+alt-tab = 'workspace-back-and-forth'
 # See: https://nikitabobko.github.io/AeroSpace/commands#move-workspace-to-monitor
-cmd-shift-tab = 'move-workspace-to-monitor --wrap-around next'
+alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#mode
 cmd-shift-semicolon = 'mode service'
@@ -259,3 +223,7 @@ run = "move-node-to-workspace 2"
 7 = ['secondary', 'main']
 8 = ['secondary', 'main']
 9 = ['secondary', 'main']
+
+[mode.passthrough.binding]
+# dummy binding so AeroSpace knows passthrough mode exists
+ctrl-cmd-alt-shift-9 = 'close'
