@@ -22,11 +22,11 @@ esac
 COLOR=$MAUVE
 
 sketchybar --set "$ITEM_NAME" \
-  icon="" \
+  icon=":keyboard:" \
   label=$LAYOUT \
   icon.color=$COLOR \
   background.color=$COLOR \
   label.color="$COLOR" \
-  icon.font="MesloLGS Nerd Font Mono:Bold:17.0" \
+  icon.font="sketchybar-app-font:Regular:20.0" \
   icon.padding_right=4
 

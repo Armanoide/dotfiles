@@ -29,7 +29,7 @@ for sid in "${WORKSPACES[@]}"; do
       background.drawing=on \
       background.padding_left=5 \
       background.padding_right=5 \
-      icon.font="MesloLGS Nerd Font Mono:Bold:25.0" \
+      icon.font="sketchybar-app-font:Regular:20.0" \
       icon.x_offset=0 \
       label.x_offset=0 \
       label="$LABEL" \
