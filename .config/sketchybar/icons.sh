@@ -16,9 +16,11 @@ get_icon() {
     *Mots\ de\ passe*)                  echo ":passwords:";;
     *Ghostty*)                          echo ":ghostty:";;
     *TextEdit*)                         echo "󰂮";;
-    *Cleaner*)                          echo "󱝧";;
+    *App\ Cleaner*)                     echo ":app_cleaner:";;
     *Finder*)                           echo ":finder:";;
     *Notes*)                            echo ":notes:";;
+    *Leader\ Key*)                      echo ":leader_key:";;
+    *Raycast*)                          echo ":raycast:";;
     *)                                  echo ":default:";;
   esac
 }
