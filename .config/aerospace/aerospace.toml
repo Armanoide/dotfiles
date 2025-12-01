@@ -110,8 +110,8 @@ outer.right = 5
 # '''
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#layout
-cmd-shift-quote = 'layout tiles horizontal vertical'
-cmd-m = 'layout accordion horizontal vertical'
+# cmd-alt-t = 'layout tiles horizontal vertical'
+# cmd-alt-v = 'layout accordion horizontal vertical'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#focus
 cmd-h = 'exec-and-forget ~/.config/aerospace/remap-passthrough.sh --key cmd-h --command "focus left" --only "Raycast"'
@@ -126,8 +126,8 @@ cmd-shift-k = 'move up'
 cmd-shift-l = 'move right'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#resize
-cmd-equal = 'resize smart -50'
-cmd-slash = 'resize smart +50'
+cmd-equal = 'resize smart -50' # CMD +
+cmd-slash = 'resize smart +50' # CMD -
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#workspace
 cmd-1 = 'exec-and-forget ~/.config/aerospace/remap-passthrough.sh --key cmd-1 --command "workspace 1" --only "Raycast"; exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=1 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)'
@@ -170,16 +170,19 @@ cmd-shift-9 = 'exec-and-forget ~/.config/aerospace/remap-passthrough.sh --key cm
 
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
-alt-tab = 'workspace-back-and-forth'
+cmd-0 = 'workspace-back-and-forth'
+
 # See: https://nikitabobko.github.io/AeroSpace/commands#move-workspace-to-monitor
-alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
+cmd-shift-0 = 'move-workspace-to-monitor --wrap-around next'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#mode
-cmd-shift-semicolon = 'mode service'
+cmd-alt-s = 'mode service'
 
 # 'service' binding mode declaration.
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
 [mode.service.binding]
+t = 'layout tiles horizontal vertical'
+a = 'layout accordion horizontal vertical'
 esc = ['reload-config', 'mode main']
 r = ['flatten-workspace-tree', 'mode main'] # reset layout
 f = [
@@ -208,10 +211,13 @@ run = "move-node-to-workspace 1"
 if.app-id = 'com.apple.Safari'
 run = "move-node-to-workspace 2"
 
+[[on-window-detected]]
+if.app-id = 'com.google.Chrome'
+run = "move-node-to-workspace 2"
 
 [[on-window-detected]]
-if.app-id = 'copm.google.Chrome'
-run = "move-node-to-workspace 2"
+if.app-id = 'com.apple.finder'
+run = "move-node-to-workspace 9"
 
 [workspace-to-monitor-force-assignment]
 1 = 'main'
