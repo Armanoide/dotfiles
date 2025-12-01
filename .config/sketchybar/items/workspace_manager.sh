@@ -5,15 +5,7 @@ source "$CONFIG_DIR/colors.sh"
 
 WORKSPACES=(1 2 3 4 5 6 7 8 9)
 
-# Get existing space items from SketchyBar
-EXISTING=($(sketchybar --query bar | jq -r '.items[] | select(startswith("space."))'))
 
-# Remove workspaces that shouldn't be shown
-for existing in "${EXISTING[@]}"; do
-  sid=${existing#space.}
-done
-
-# Add/update workspaces that should be shown
 for sid in "${WORKSPACES[@]}"; do
   if ! sketchybar --query "space.$sid" &>/dev/null; then
     if [ $sid = "11" ]; then
@@ -38,7 +30,7 @@ for sid in "${WORKSPACES[@]}"; do
       update_freq=1 \
       --subscribe "space.$sid" aerospace_workspace_change workspace_manager
   fi
- done
+done
 
 # Force initial update
 sketchybar --trigger workspace_update

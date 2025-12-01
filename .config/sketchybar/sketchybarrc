@@ -4,11 +4,12 @@
 source "$CONFIG_DIR/colors.sh" # Loads all defined colors
 
 PLUGIN_DIR="$CONFIG_DIR/plugins"
+ITEM_DIR="$CONFIG_DIR/items"
 
 sketchybar --bar position=top height=30 blur_radius=0 \
           color=$CRUST \
           margin=0 \
-          #border_color=$OVERLAY1 border_width=0 
+          #border_color=$OVERLAY1 border_width=0
 
 default=(
   icon.color=$TEAL
@@ -33,43 +34,19 @@ sketchybar --default "${default[@]}"
 # Add Aerospace workspace event handler
 sketchybar --add event aerospace_workspace_change
 
-# Add workspace manager 
-sketchybar --add item workspace_manager left \
-           --set workspace_manager \
-           icon.padding_left=0 \
-           icon.padding_right=0 \
-           label.padding_left=0 \
-           label.padding_right=0 \
-           script="$PLUGIN_DIR/workspace_manager.sh" \
-           --subscribe workspace_manager aerospace_workspace_change
-
-##### adding center items #####
-# sketchybar --add item front_app left \
-#            --set front_app icon.drawing=on \
-#                           label.drawing=on \
-#                           script="$PLUGIN_DIR/front_app.sh" \
-#            --subscribe front_app front_app_switched
+source "$ITEM_DIR/workspace_manager.sh"
+source "$ITEM_DIR/front_app.sh"
 
 ##### Adding Right Items #####
 
-sketchybar --add item clock right \
-           --set clock update_freq=20 script="$PLUGIN_DIR/clock.sh" \
+source "$ITEM_DIR/clock.sh"
+source "$ITEM_DIR/battery.sh"
+source "$ITEM_DIR/volume.sh"
+source "$ITEM_DIR/network.sh"
+source "$ITEM_DIR/keyboard.sh"
 
-sketchybar --add item battery right \
-           --set battery update_freq=120 script="$PLUGIN_DIR/battery.sh" \
-           --subscribe battery system_woke power_source_change
 
-sketchybar --add item volume right \
-           --set volume script="$PLUGIN_DIR/volume.sh" \
-           --subscribe volume volume_change
 
-sketchybar --add item network right \
-           --set network script="$PLUGIN_DIR/network.sh" \
-                         update_freq=10 label.drawing=off
-
-sketchybar --add item keyboard right \
-           --set keyboard script="$PLUGIN_DIR/keyboard.sh" \
-           update_freq=2
 
 
 ##### Force all scripts to run the first time (never do this in a script) #####
