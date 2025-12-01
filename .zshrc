@@ -250,3 +250,10 @@ fpath+=~/.zfunc; autoload -Uz compinit; compinit
  fi
 export PATH="/opt/homebrew/opt/postgresql@15/bin:$PATH"
 alias postgresql_bg='/opt/homebrew/opt/postgresql@15/bin/postgres -D /opt/homebrew/var/postgresql@15'
+
+# bun completions
+[ -s "/$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
