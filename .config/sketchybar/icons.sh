@@ -16,7 +16,9 @@ get_icon() {
     *Mots\ de\ passe*)                  echo ":passwords:";;
     *Ghostty*)                          echo ":ghostty:";;
     *TextEdit*)                         echo "󰂮";;
+    *Aperçu*)                           echo ":preview:";;
     *App\ Cleaner*)                     echo ":app_cleaner:";;
+    *Moniteur\ d*activité*)             echo ":activity_monitor:";;
     *Finder*)                           echo ":finder:";;
     *Notes*)                            echo ":notes:";;
     *Leader\ Key*)                      echo ":leader_key:";;

@@ -7,10 +7,10 @@ source "$CONFIG_DIR/colors.sh"
 # https://felixkratz.github.io/SketchyBar/config/events#events-and-scripting
 
 # Format: Day/Month Hour:Minute
-DATETIME=$(date '+%a %d %H:%M')
+DATETIME=$(date '+%H:%M')
 
-sketchybar --set "$NAME" label="$DATETIME" icon= \
-  label.color=$MAROON \
-  icon.color=$MAROON \
-  icon.font="MesloLGS Nerd Font Mono:Bold:25.0" \
-  background.color=$MAROON
+sketchybar --set "$NAME" label="$DATETIME" icon=":clock:" \
+  label.color=$MAUVE \
+  icon.color=$MAUVE \
+  icon.font="sketchybar-app-font:Regular:20.0" \
+  background.color=$MAUVE

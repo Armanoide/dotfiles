@@ -1,4 +1,3 @@
-# sketchybarrc
 #!/bin/bash
 
 source "$CONFIG_DIR/colors.sh" # Loads all defined colors
@@ -6,7 +5,7 @@ source "$CONFIG_DIR/colors.sh" # Loads all defined colors
 PLUGIN_DIR="$CONFIG_DIR/plugins"
 ITEM_DIR="$CONFIG_DIR/items"
 
-sketchybar --bar position=top height=30 blur_radius=0 \
+sketchybar --bar position=top height=37 blur_radius=0 \
           color=$CRUST \
           margin=0 \
           #border_color=$OVERLAY1 border_width=0
@@ -44,9 +43,7 @@ source "$ITEM_DIR/battery.sh"
 source "$ITEM_DIR/volume.sh"
 source "$ITEM_DIR/network.sh"
 source "$ITEM_DIR/keyboard.sh"
-
-
-
+source "$ITEM_DIR/media.sh"
 
 
 ##### Force all scripts to run the first time (never do this in a script) #####

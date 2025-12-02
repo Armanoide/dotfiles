@@ -12,25 +12,25 @@ if [ "$SENDER" = "volume_change" ]; then
 
   case "$VOLUME" in
   [6-9][0-9] | 100)
-    ICON=""
+    ICON=":volume_high:"
     COLOR=$BLUE
     ;;
   [3-5][0-9])
-    ICON=""
+    ICON=":volume_low:"
     COLOR=$BLUE
     ;;
   [1-9] | [1-2][0-9])
-    ICON=""
+    ICON=":volume_low:"
     COLOR=$BLUE
     ;;
   *)
-    ICON=""
+    ICON=":volume_muted:"
     COLOR=$OVERLAY0
     ;;
   esac
 
   sketchybar --set "$ITEM_NAME" icon="$ICON" label="$VOLUME%" icon.color=$COLOR label.color=$COLOR \
-    icon.font="MesloLGS Nerd Font Mono:Bold:28.0" \
     icon.padding_right=3 \
+    icon.font="sketchybar-app-font:Regular:20.0" \
     background.color=$COLOR
 fi

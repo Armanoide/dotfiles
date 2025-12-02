@@ -36,17 +36,17 @@ if [[ "$CHARGING" != "" ]]; then
 fi
 
 # Set colors based on percentage
-# if [ "$PERCENTAGE" -le 15 ]; then
-#  COLOR=$RED
-# elif [ "$PERCENTAGE" -le 30 ]; then
-#  COLOR=$YELLOW
-# else
-#  COLOR=$GREEN
-# fi
+if [ "$PERCENTAGE" -le 15 ]; then
+  COLOR=$RED
+elif [ "$PERCENTAGE" -le 30 ]; then
+  COLOR=$YELLOW
+else
+  COLOR=$GREEN
+fi
 
-COLOR=$GREEN
 sketchybar --set "$ITEM_NAME" icon="$ICON" label="${PERCENTAGE}%" \
   icon.color=$COLOR \
   label.color=$COLOR \
   icon.font="$FONT" \
   background.color=$COLOR
+

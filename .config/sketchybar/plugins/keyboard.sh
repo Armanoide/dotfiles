@@ -11,7 +11,7 @@ LAYOUT=$(defaults read ~/Library/Preferences/com.apple.HIToolbox.plist AppleSele
   | sed 's/^[[:space:]]*//;s/[[:space:]]*$//' \
   | head -n1)
 
-# Select icon depending on layout (optional)
+# Select icon depending on layout
 case "$LAYOUT" in
   "French"|"FR")                          LAYOUT="FR";;
   "U.S."|"US"|"USInternational-PC")       LAYOUT="US";;
@@ -19,7 +19,7 @@ case "$LAYOUT" in
 esac
 
 # Colors
-COLOR=$MAUVE
+COLOR=$MAROON
 
 sketchybar --set "$ITEM_NAME" \
   icon=":keyboard:" \
