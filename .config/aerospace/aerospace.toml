@@ -71,7 +71,7 @@ outer.left = 5
 outer.bottom = 0
 outer.top = [
   { monitor."Studio Display" = 32 },
-  { monitor."Built-in Retina Display" = 0 },
+  { monitor."Built-in Retina Display" = 7 },
   20,
 ]
 outer.right = 5
