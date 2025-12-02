@@ -45,6 +45,29 @@ plugins=(
 source $ZSH/oh-my-zsh.sh
 
 ############################################################
+# 🔧 Init Shell
+############################################################
+
+# You may need to manually set your language environmentj
+unset LC_ALL
+export LANG=en_US.UTF-8
+
+# Override system ncurses for better compatibility with some tools
+export PATH="/opt/homebrew/opt/ncurses/bin:$PATH"
+export TERMINFO_DIRS="/opt/homebrew/Cellar/ncurses/6.5/share/terminfo:$TERMINFO_DIRS"
+export TERMINFO="$HOME/.config/terminfo"
+# Force program to use Ghostty feature such as yazi with preview
+export TERM_PROGRAM=Ghostty
+# export TERM=xterm-ghostty
+
+############################################################
+# 💻 ZSH
+############################################################
+
+# zsh completion
+fpath+=~/.zfunc; autoload -Uz compinit; compinit
+
+############################################################
 # 🛠️ Homebrew Setup
 ############################################################
 # Ensure Homebrew bin in PATH
@@ -139,7 +162,11 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"
 
 # Bun
-export PATH="/Volumes/EXT1_SSD/Users/user1/.bun/bin:$PATH"
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+
+# Bun completions
+[ -s "/$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
 
 # QT for UIC
 export PATH="/opt/homebrew/Cellar/qt/6.7.3/share/qt/libexec:$PATH"
@@ -226,34 +253,12 @@ typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
 # vivid colors for ls
 export LS_COLORS="$(vivid generate catppuccin-mocha)"
 
-
 ############################################################
-# 🔧 Init Shell
+# 🖥️ TMUX
 ############################################################
-
-# You may need to manually set your language environmentj
-export LANG=en_US.UTF-8
-
-# Override system ncurses for better compatibility with some tools
-export PATH="/opt/homebrew/opt/ncurses/bin:$PATH"
-export TERMINFO_DIRS="/opt/homebrew/Cellar/ncurses/6.5/share/terminfo:$TERMINFO_DIRS"
-export TERMINFO="$HOME/.config/terminfo"
-# Force program to use Ghostty feature such as yazi with preview
-export TERM_PROGRAM=Ghostty
-# export TERM=xterm-ghostty
-# zsh completion
-fpath+=~/.zfunc; autoload -Uz compinit; compinit
-
  # tmux auto-attach when in SSH
  if [[ -n "$SSH_CONNECTION" && -z "$TMUX" && -t 1 ]]; then
      tmux attach || tmux new
  fi
-export PATH="/opt/homebrew/opt/postgresql@15/bin:$PATH"
-alias postgresql_bg='/opt/homebrew/opt/postgresql@15/bin/postgres -D /opt/homebrew/var/postgresql@15'
 
-# bun completions
-[ -s "/$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
 
-# bun
-export BUN_INSTALL="$HOME/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
