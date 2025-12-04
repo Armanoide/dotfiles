@@ -58,7 +58,11 @@ export TERMINFO_DIRS="/opt/homebrew/Cellar/ncurses/6.5/share/terminfo:$TERMINFO_
 export TERMINFO="$HOME/.config/terminfo"
 # Force program to use Ghostty feature such as yazi with preview
 export TERM_PROGRAM=Ghostty
-# export TERM=xterm-ghostty
+
+# Source private secrets
+if [[ -f "$HOME/.zshrc_secret" ]]; then
+    source "$HOME/.zshrc_secret"
+fi
 
 ############################################################
 # 💻 ZSH
@@ -189,6 +193,7 @@ fi
 ############################################################
 # 🤖 AI / ML
 ############################################################
+
 # LM Studio
 export PATH="$PATH:/Volumes/EXT1_SSD/Users/user1/.lmstudio/bin"
 
@@ -202,6 +207,10 @@ export OLLAMA_BACKEND=mlx
 ############################################################
 # ⚡ Aliases
 ############################################################
+
+# Tailscale
+alias tailscale="/Applications/Tailscale.app/Contents/MacOS/Tailscale"
+
 # Xcode
 alias xcodeclean='sudo rm -rf ~/Library/Developer/Xcode/DerivedData'
 
@@ -260,5 +269,4 @@ export LS_COLORS="$(vivid generate catppuccin-mocha)"
  if [[ -n "$SSH_CONNECTION" && -z "$TMUX" && -t 1 ]]; then
      tmux attach || tmux new
  fi
-
 
