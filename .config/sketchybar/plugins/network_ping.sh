@@ -3,7 +3,7 @@
 ITEM_NAME="network_ping"
 
 # Get the ping target from .zshrc using ripgrep
-TARGET=$(rg 'PING_REMOTE_WORK_TARGET' "$HOME/.zshrc" | rg -o '\d+\.\d+\.\d+\.\d+' | head -n1)
+TARGET=$(rg 'PING_REMOTE_WORK_TARGET' "$HOME/.zshrc_secret" | rg -o '\d+\.\d+\.\d+\.\d+' | head -n1)
 
 # Perform a single ping with a short timeout
 PING_OUTPUT=$(ping -c 1 -W 300 "$TARGET" 2>/dev/null)
