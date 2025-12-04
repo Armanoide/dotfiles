@@ -26,10 +26,9 @@ sketchybar --set "$NAME" icon="$ICON"
 # Highlight if focused
 if [ "$WORKSPACE_ID" = "$FOCUSED" ]; then
   sketchybar --set $NAME \
-    background.drawing=on \
     background.color=$MAUVE \
-    label.color=$MAUVE \
-    icon.color=$MAUVE
+    label.color=$CRUST \
+    icon.color=$CRUST
 else
   sketchybar --set $NAME \
     background.drawing=off \

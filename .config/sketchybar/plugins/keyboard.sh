@@ -22,11 +22,7 @@ esac
 COLOR=$MAROON
 
 sketchybar --set "$ITEM_NAME" \
-  icon=":keyboard:" \
+  label.font="MesloLGS Nerd Font Mono:Bold:15.0" \
+  label.padding_right=5 \
   label=$LAYOUT \
-  icon.color=$COLOR \
-  background.color=$COLOR \
-  label.color="$COLOR" \
-  icon.font="sketchybar-app-font:Regular:20.0" \
-  icon.padding_right=4
 

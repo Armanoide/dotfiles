@@ -1,0 +1,20 @@
+{
+  "name": "indicator-generator",
+  "version": "1.0.0",
+  "description": "Generates circular progress indicators using Sharp and SVG.",
+  "main": "generate_indicators.js",
+  "scripts": {
+    "start": "node generate_indicator.js"
+  },
+  "keywords": [
+    "sharp",
+    "image-manipulation",
+    "svg",
+    "progress-indicator"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "sharp": "^0.33.2"
+  }
+}

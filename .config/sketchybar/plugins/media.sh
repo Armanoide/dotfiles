@@ -38,6 +38,7 @@ fi
 if [[ "$title" == "null" ]]; then
     COLOR_ICON=$OVERLAY0
     LABEL_WIDTH="0"
+    LABEL_DRAWING="off"
 fi
 
 
@@ -87,10 +88,11 @@ fi
 sketchybar --set "$ITEM_NAME" \
     icon=":music: $STATUS_ICON" \
     label="$DISPLAY_TITLE" \
-    label.font="SF Mono:Regular:15" \
+    label.font="MesloLGS Nerd Font Mono:Bold:12.0" \
+    icon.y_offset=-2 \
     icon.color="$COLOR_ICON" \
     label.color="$COLOR" \
-    background.color="$COLOR" \
+    icon.padding_right=4 \
     icon.font="sketchybar-app-font:Regular:20.0" \
     label.max_chars=$MAX_LEN \
     label.width=$LABEL_WIDTH

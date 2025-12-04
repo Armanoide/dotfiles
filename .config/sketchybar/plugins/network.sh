@@ -17,18 +17,13 @@ ETH_STATUS=$(ifconfig en0 | grep "status: active")
 
 if [ -n "$WIFI_SSID" ]; then
   sketchybar --set "$ITEM_NAME" icon="$WIFI_ICON" label="$WIFI_SSID ($WIFI_SIGNAL dBm)" \
-    icon.color=$YELLOW label.color=$YELLOW \
-    icon.font="sketchybar-app-font:Regular:20.0" \
-    background.color=$YELLOW
+    icon.font="sketchybar-app-font:Regular:20.0" 
 
 elif [ -n "$ETH_STATUS" ]; then
-  sketchybar --set "$ITEM_NAME" icon="$ETH_ICON" label="Ethernet Connected" \
-    icon.color=$YELLOW label.color=$YELLOW \
-    icon.font="sketchybar-app-font:Regular:20.0" \
-    background.color=$YELLOW
+  sketchybar --set "$ITEM_NAME" icon="$ETH_ICON" label="" \
+    icon.font="sketchybar-app-font:Regular:20.0" 
 else
   sketchybar --set "$ITEM_NAME" icon="$DISCONNECTED_ICON" label="Disconnected" \
     icon.color=$OVERLAY0 label.color=$OVERLAY0 \
-    icon.font="sketchybar-app-font:Regular:20.0" \
-    background.color=$YELLOW
+    icon.font="sketchybar-app-font:Regular:20.0" 
 fi

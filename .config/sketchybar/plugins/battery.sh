@@ -7,6 +7,8 @@ ITEM_NAME="battery"
 
 PERCENTAGE="$(pmset -g batt | grep -Eo "\d+%" | cut -d% -f1)"
 CHARGING="$(pmset -g batt | grep 'AC Power')"
+INDICATOR_COLOR="green"
+PADDING_RIGHT=0
 
 if [ "$PERCENTAGE" = "" ]; then
   exit 0
@@ -28,25 +30,28 @@ case "${PERCENTAGE}" in
 *) ICON="" ;;
 esac
 # setting the font for icons abouve
-FONT="MesloLGS Nerd Font Mono:Bold:35.0"
+FONT="MesloLGS Nerd Font Mono:Bold:30.0"
 
 if [[ "$CHARGING" != "" ]]; then
   ICON=""
+  PADDING_RIGHT=3
   FONT="MesloLGS Nerd Font Mono:Bold:20.0"
 fi
 
 # Set colors based on percentage
 if [ "$PERCENTAGE" -le 15 ]; then
+  INDICATOR_COLOR="red"
   COLOR=$RED
 elif [ "$PERCENTAGE" -le 30 ]; then
+  INDICATOR_COLOR="yellow"
   COLOR=$YELLOW
 else
   COLOR=$GREEN
 fi
 
-sketchybar --set "$ITEM_NAME" icon="$ICON" label="${PERCENTAGE}%" \
-  icon.color=$COLOR \
-  label.color=$COLOR \
+sketchybar --set "$ITEM_NAME" icon="$ICON"  \
   icon.font="$FONT" \
-  background.color=$COLOR
+  icon.y_offset=-2 \
+  icon.padding_right=$PADDING_RIGHT \
+  background.image="$CONFIG_DIR/assets/$INDICATOR_COLOR/${PERCENTAGE}.png"
 

@@ -1,30 +1,36 @@
 #!/bin/bash
 
-source "$CONFIG_DIR/colors.sh" # Loads all defined colors
-
 PLUGIN_DIR="$CONFIG_DIR/plugins"
 ITEM_DIR="$CONFIG_DIR/items"
+TOOL_DIR="$CONFIG_DIR/tools"
+ASSET_DIR="$CONFIG_DIR/assets"
 
-sketchybar --bar position=top height=37 blur_radius=0 \
-          color=$CRUST \
-          margin=0 \
+source "$CONFIG_DIR/colors.sh" 
+source "$TOOL_DIR/spacer.sh"
+
+
+sketchybar --bar position=top height=45 blur_radius=0 \
+          color=$TRANSPARENT \
           #border_color=$OVERLAY1 border_width=0
 
 default=(
-  icon.color=$TEAL
+  icon.color=$TEXT
   label.color=$TEXT
   icon.font="MesloLGS Nerd Font Mono:Bold:15.0"
-  label.font="MesloLGS Nerd Font Mono:Bold:15.0"
-  background.height=2 \
-  background.y_offset=-13 \
-  background.padding_left=2 \
-  background.padding_right=2
-  padding_left=2
-  padding_right=2
-  label.padding_left=2
-  label.padding_right=7
-  icon.padding_left=2
-  icon.padding_right=2
+  label.font="MesloLGS Nerd Font Mono:Bold:12.0"
+  background.height=40
+  background.color=$CRUST
+  background.padding_left=5
+  background.padding_right=5
+  background.corner_radius=20
+  background.size
+  padding_left=100
+  padding_right=100
+  # label.padding_left=10
+  # label.padding_right=7
+  # best way to do margin
+  # icon.padding_left=10
+  # label.padding_right=10
 )
 sketchybar --default "${default[@]}"
 
@@ -34,17 +40,42 @@ sketchybar --default "${default[@]}"
 sketchybar --add event aerospace_workspace_change
 
 source "$ITEM_DIR/workspace_manager.sh"
+add_spacer spacer_1 left 5
 source "$ITEM_DIR/front_app.sh"
+add_spacer spacer_2 left 5
+source "$ITEM_DIR/media.sh"
 
 ##### Adding Right Items #####
 
 source "$ITEM_DIR/clock.sh"
+add_spacer spacer_3 right 5
 source "$ITEM_DIR/battery.sh"
+add_spacer spacer_4 right 5
+source "$ITEM_DIR/cpu.sh"
+add_spacer spacer_5 right 5
+source "$ITEM_DIR/ram.sh"
+add_spacer spacer_6 right 5
+source "$ITEM_DIR/disk.sh"
+add_spacer spacer_7 right 5
 source "$ITEM_DIR/volume.sh"
+add_spacer spacer_8 right 5
 source "$ITEM_DIR/network.sh"
+add_spacer spacer_9 right 5
+source "$ITEM_DIR/tailscale.sh"
+add_spacer spacer_10 right 5
+source "$ITEM_DIR/network_ping.sh"
+add_spacer spacer_11 right 5
 source "$ITEM_DIR/keyboard.sh"
-source "$ITEM_DIR/media.sh"
+add_spacer spacer_12 right 5
+source "$ITEM_DIR/airpods_right.sh"
+add_spacer spacer_13 right 5
+source "$ITEM_DIR/airpods_case.sh"
+add_spacer spacer_14 right 5
+source "$ITEM_DIR/airpods_left.sh"
 
+
+sketchybar --add bracket group_info_1 cpu disk ram
+sketchybar --add bracket group_info_2 airpods_right airpods_case airpods_left
 
 ##### Force all scripts to run the first time (never do this in a script) #####
 sketchybar --update

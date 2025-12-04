@@ -6,31 +6,34 @@ source "$CONFIG_DIR/colors.sh"
 # percentage is passed to the script.
 
 ITEM_NAME="volume"
-
+PADDING_RIGHT=5
 if [ "$SENDER" = "volume_change" ]; then
   VOLUME="$INFO"
 
   case "$VOLUME" in
   [6-9][0-9] | 100)
     ICON=":volume_high:"
-    COLOR=$BLUE
+    COLOR=$TEXT
     ;;
   [3-5][0-9])
     ICON=":volume_low:"
-    COLOR=$BLUE
+    COLOR=$TEXT
     ;;
   [1-9] | [1-2][0-9])
     ICON=":volume_low:"
-    COLOR=$BLUE
+    COLOR=$TEXT
     ;;
   *)
     ICON=":volume_muted:"
     COLOR=$OVERLAY0
+    PADDING_RIGHT=2
     ;;
   esac
 
-  sketchybar --set "$ITEM_NAME" icon="$ICON" label="$VOLUME%" icon.color=$COLOR label.color=$COLOR \
-    icon.padding_right=3 \
+  sketchybar --set "$ITEM_NAME" icon="$ICON" icon.color=$COLOR \
     icon.font="sketchybar-app-font:Regular:20.0" \
-    background.color=$COLOR
+    icon.y_offset=-2 \
+    icon.padding_right=$PADDING_RIGHT \
+    background.image="$CONFIG_DIR/assets/mauve/${VOLUME}.png"
+
 fi
