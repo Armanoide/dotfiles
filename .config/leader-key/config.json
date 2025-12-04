@@ -1,0 +1,170 @@
+{
+  "actions" : [
+    {
+      "key" : "t",
+      "type" : "application",
+      "value" : "/Applications/Ghostty.app"
+    },
+    {
+      "actions" : [
+        {
+          "key" : "s",
+          "type" : "application",
+          "value" : "/Applications/Safari.app"
+        },
+        {
+          "key" : "e",
+          "type" : "application",
+          "value" : "/Applications/Mail.app"
+        },
+        {
+          "key" : "i",
+          "type" : "application",
+          "value" : "/System/Applications/Music.app"
+        },
+        {
+          "key" : "m",
+          "type" : "application",
+          "value" : "/Applications/Messages.app"
+        },
+        {
+          "key" : "r",
+          "type" : "application",
+          "value" : "/System/Applications/System Settings.app"
+        }
+      ],
+      "key" : "o",
+      "label" : "open",
+      "type" : "group"
+    },
+    {
+      "actions" : [
+        {
+          "key" : "e",
+          "type" : "url",
+          "value" : "raycast://extensions/raycast/emoji-symbols/search-emoji-symbols"
+        },
+        {
+          "key" : "p",
+          "type" : "url",
+          "value" : "raycast://confetti"
+        },
+        {
+          "key" : "c",
+          "type" : "url",
+          "value" : "raycast://extensions/raycast/system/open-camera"
+        }
+      ],
+      "key" : "r",
+      "type" : "group"
+    },
+    {
+      "actions" : [
+        {
+          "iconPath" : "camera.circle.fill",
+          "key" : "s",
+          "label" : "screenshot",
+          "type" : "command",
+          "value" : "open /System/Applications/Utilities/Screenshot.app"
+        }
+      ],
+      "key" : "s",
+      "type" : "group"
+    },
+    {
+      "actions" : [
+        {
+          "actions" : [
+            {
+              "iconPath" : "uiwindow.split.2x1",
+              "key" : "s",
+              "label" : "Window layout accordion",
+              "type" : "command",
+              "value" : "/opt/homebrew/bin/aerospace layout accordion"
+            },
+            {
+              "iconPath" : "uiwindow.split.2x1",
+              "key" : "h",
+              "label" : "Layout accordion horizontal",
+              "type" : "command",
+              "value" : "/opt/homebrew/bin/aerospace layout h_accordion"
+            },
+            {
+              "iconPath" : "uiwindow.split.2x1",
+              "key" : "v",
+              "label" : "Layout accordion vertical",
+              "type" : "command",
+              "value" : "/opt/homebrew/bin/aerospace layout v_accordion"
+            }
+          ],
+          "iconPath" : "uiwindow.split.2x1",
+          "key" : "a",
+          "label" : "Window layout accordion",
+          "type" : "group"
+        },
+        {
+          "actions" : [
+            {
+              "iconPath" : "uiwindow.split.2x1",
+              "key" : "v",
+              "label" : "Layout v_tiles",
+              "type" : "command",
+              "value" : "/opt/homebrew/bin/aerospace layout v_tiles"
+            },
+            {
+              "iconPath" : "uiwindow.split.2x1",
+              "key" : "h",
+              "label" : "Layout h_tiles",
+              "type" : "command",
+              "value" : "/opt/homebrew/bin/aerospace layout h_tiles"
+            },
+            {
+              "iconPath" : "uiwindow.split.2x1",
+              "key" : "s",
+              "label" : "Layout tiling",
+              "type" : "command",
+              "value" : "/opt/homebrew/bin/aerospace layout tiling"
+            },
+            {
+              "iconPath" : "uiwindow.split.2x1",
+              "key" : "t",
+              "label" : "Window layout tiles",
+              "type" : "command",
+              "value" : "/opt/homebrew/bin/aerospace layout tiles"
+            }
+          ],
+          "iconPath" : "uiwindow.split.2x1",
+          "key" : "t",
+          "label" : "Window layout tiles",
+          "type" : "group"
+        },
+        {
+          "iconPath" : "uiwindow.split.2x1",
+          "key" : "h",
+          "label" : "Window layout horizontal",
+          "type" : "command",
+          "value" : "/opt/homebrew/bin/aerospace layout horizontal"
+        },
+        {
+          "iconPath" : "uiwindow.split.2x1",
+          "key" : "v",
+          "label" : "Window layout vertical",
+          "type" : "command",
+          "value" : "/opt/homebrew/bin/aerospace layout vertical"
+        },
+        {
+          "iconPath" : "uiwindow.split.2x1",
+          "key" : "f",
+          "label" : "Layout floating",
+          "type" : "command",
+          "value" : "/opt/homebrew/bin/aerospace layout floating"
+        }
+      ],
+      "iconPath" : "uiwindow.split.2x1",
+      "key" : "w",
+      "label" : "Window",
+      "type" : "group"
+    }
+  ],
+  "type" : "group"
+}
