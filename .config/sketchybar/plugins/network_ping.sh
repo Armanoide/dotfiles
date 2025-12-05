@@ -14,23 +14,22 @@ INDICATOR_COLOR="red"
 
 # Default if ping failed
 if [[ -z "$LATENCY" ]]; then
-    LATENCY="∞"
     INDICATOR_COLOR="red"
     LATENCY_PERCENT=100
 else
     LAT=${LATENCY%.*}  # integer part
 
     # Map latency to color
-    if (( LAT < 6 )); then
+    if (( LAT < 25 )); then
         INDICATOR_COLOR="green"
-    elif (( LAT < 12 )); then
+    elif (( LAT < 50 )); then
         INDICATOR_COLOR="yellow"
     else
         INDICATOR_COLOR="red"
     fi
 
     # Map latency to 1–100 scale
-    MAX_LATENCY=50
+    MAX_LATENCY=100
     LATENCY_PERCENT=$(( LAT * 100 / MAX_LATENCY ))
     if (( LATENCY_PERCENT > 100 )); then
         LATENCY_PERCENT=100
@@ -43,6 +42,7 @@ fi
 sketchybar --set "$ITEM_NAME" \
     icon="" \
     icon.font="MesloLGS Nerd Font Mono:Bold:25.0" \
+    icon.padding_left=8 \
     background.image="$CONFIG_DIR/assets/$INDICATOR_COLOR/${LATENCY_PERCENT}.png"
 
 

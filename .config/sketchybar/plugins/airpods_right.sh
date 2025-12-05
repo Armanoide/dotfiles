@@ -21,6 +21,6 @@ fi
 
 sketchybar --set "$ITEM_NAME" icon="ᖳ" \
   icon.y_offset=-2 \
-  icon.padding_right=5 \
+  icon.padding_right=8 \
   background.image="$CONFIG_DIR/assets/$INDICATOR_COLOR/${LEVEL}.png"
 
