@@ -20,7 +20,7 @@ const configuration = [
     color: '#a6e3a1'
   }
 ];
-const BACKGROUND_COLOR = '#9399b2';
+const BACKGROUND_COLOR = '#423B38';
 const SIZE = 33;
 
 // --- Constants definition --
