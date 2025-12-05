@@ -44,14 +44,14 @@ const getCoordinates = (angleInDegrees) => {
 // --- Main Generation Function ---
 async function generateIndicators(count, conf) {
   // Use conf.name to create color-specific directories
-  const ASSETS_DIR = `../.assets/${conf.name}`;
+  const ASSETS_DIR = `../assets/${conf.name}`;
   // Removed the '..' for cleaner directory structure relative to script
 
   await fs.mkdir(ASSETS_DIR, { recursive: true });
   console.log(`\n\n🎯 Processing Configuration: ${conf.name} (${conf.color})`);
   console.log(`✅ Directory '${ASSETS_DIR}' ensured.`);
 
-  for (let i = 1; i <= count; i++) {
+  for (let i = 0; i <= count; i++) {
     // Calculate the sweep angle (0 to 270 degrees)
     const currentSweepAngle = Math.round((i * TOTAL_ARC_DEGREES) / 100);
     const currentEndAngle = START_ANGLE_DEG + currentSweepAngle;
