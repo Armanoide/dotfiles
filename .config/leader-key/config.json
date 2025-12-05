@@ -1,257 +1,336 @@
 {
-  "actions": [
+  "actions" : [
     {
-      "actions": [
+      "actions" : [
         {
-          "iconPath": "terminal.fill",
-          "key": "t",
-          "label": "Ghostty (Terminal)",
-          "type": "application",
-          "value": "/Applications/Ghostty.app"
+          "iconPath" : "message.fill",
+          "key" : "c",
+          "label" : "Messages (Chat)",
+          "type" : "application",
+          "value" : "/Applications/Messages.app"
         },
         {
-          "iconPath": "safari.fill",
-          "key": "s",
-          "label": "Safari Browser",
-          "type": "application",
-          "value": "/Applications/Safari.app"
+          "iconPath" : "terminal.fill",
+          "key" : "g",
+          "label" : "Ghostty (Terminal)",
+          "type" : "application",
+          "value" : "/Applications/Ghostty.app"
         },
         {
-          "iconPath": "globe",
-          "key": "h",
-          "label": "Chrome Browser",
-          "type": "application",
-          "value": "/Applications/Google Chrome.app"
+          "iconPath" : "globe",
+          "key" : "h",
+          "label" : "Chrome Browser",
+          "type" : "application",
+          "value" : "/Applications/Google Chrome.app"
         },
         {
-          "iconPath": "lock.shield.fill",
-          "key": "r",
-          "label": "Tor Browser",
-          "type": "application",
-          "value": "/Applications/Tor Browser.app"
+          "iconPath" : "bubble.left.and.bubble.right.fill",
+          "key" : "l",
+          "label" : "Slack",
+          "type" : "application",
+          "value" : "/Applications/Slack.app"
         },
         {
-          "iconPath": "envelope.fill",
-          "key": "m",
-          "label": "Mail",
-          "type": "application",
-          "value": "/Applications/Mail.app"
+          "iconPath" : "envelope.fill",
+          "key" : "m",
+          "label" : "Mail",
+          "type" : "application",
+          "value" : "/Applications/Mail.app"
         },
         {
-          "iconPath": "message.fill",
-          "key": "c",
-          "label": "Messages (Chat)",
-          "type": "application",
-          "value": "/Applications/Messages.app"
+          "iconPath" : "note.text.badge.plus",
+          "key" : "n",
+          "label" : "Notes",
+          "type" : "application",
+          "value" : "/System/Applications/Notes.app"
         },
         {
-          "iconPath": "music.note",
-          "key": "u",
-          "label": "Music",
-          "type": "application",
-          "value": "/System/Applications/Music.app"
+          "iconPath" : "safari.fill",
+          "key" : "s",
+          "label" : "Safari Browser",
+          "type" : "application",
+          "value" : "/Applications/Safari.app"
         },
         {
-          "iconPath": "shippingbox.fill",
-          "key": "d",
-          "label": "Docker Desktop",
-          "type": "application",
-          "value": "/Applications/Docker.app"
+          "iconPath" : "lock.shield.fill",
+          "key" : "t",
+          "label" : "Tor Browser",
+          "type" : "application",
+          "value" : "/Applications/Tor Browser.app"
+        },
+        {
+          "iconPath" : "music.note",
+          "key" : "u",
+          "label" : "Music",
+          "type" : "application",
+          "value" : "/System/Applications/Music.app"
         }
       ],
-      "iconPath": "apps.iphone",
-      "key": "a",
-      "label": "Applications",
-      "type": "group"
+      "iconPath" : "apps.iphone",
+      "key" : "a",
+      "label" : "Applications",
+      "type" : "group"
     },
     {
-      "actions": [
+      "actions" : [
         {
-          "iconPath": "house.fill",
-          "key": "h",
-          "label": "Home Folder",
-          "type": "command",
-          "value": "open ~/"
+          "iconPath" : "shippingbox.fill",
+          "key" : "d",
+          "label" : "Docker Desktop",
+          "type" : "application",
+          "value" : "/Applications/Docker.app"
         },
         {
-          "iconPath": "arrow.down.doc.fill",
-          "key": "d",
-          "label": "Downloads Folder",
-          "type": "command",
-          "value": "open ~/Downloads"
+          "iconPath" : "arrow.down.left.square.fill",
+          "key" : "l",
+          "label" : "Rsync pull (Remote -> Local)",
+          "type" : "command",
+          "value" : "~/.local/rbin/rsync_to_remote.sh pull"
         },
         {
-          "iconPath": "folder.fill",
-          "key": "p",
-          "label": "Projects Folder",
-          "type": "command",
-          "value": "open ~/Projects"
-        },
-        {
-          "iconPath": "eye.slash.fill",
-          "key": "t",
-          "label": "Toggle Hidden Files",
-          "type": "command",
-          "value": "osascript -e 'tell application \"System Events\" to keystroke \".\" using {command down, shift down}'"
+          "iconPath" : "arrow.up.right.square.fill",
+          "key" : "p",
+          "label" : "Rsync push (Local -> Remote)",
+          "type" : "command",
+          "value" : "~/.local/rbin/rsync_to_remote.sh push"
         }
       ],
-      "iconPath": "folder.circle.fill",
-      "key": "f",
-      "label": "Files & Folders",
-      "type": "group"
+      "iconPath" : "wrench.and.screwdriver.fill",
+      "key" : "d",
+      "label" : "Dev Tools & Sync",
+      "type" : "group"
     },
     {
-      "actions": [
+      "actions" : [
         {
-          "iconPath": "doc.on.clipboard.fill",
-          "key": "c",
-          "label": "Raycast Clipboard History",
-          "type": "url",
-          "value": "raycast://extensions/raycast/clipboard-history/clipboard-history"
+          "iconPath" : "arrow.down.doc.fill",
+          "key" : "d",
+          "label" : "Downloads Folder",
+          "type" : "command",
+          "value" : "open ~/Downloads"
         },
         {
-          "iconPath": "face.smiling.fill",
-          "key": "e",
-          "label": "Raycast Emoji Search",
-          "type": "url",
-          "value": "raycast://extensions/raycast/emoji-symbols/search-emoji-symbols"
+          "iconPath" : "house.fill",
+          "key" : "h",
+          "label" : "Home Folder",
+          "type" : "command",
+          "value" : "open ~/"
         },
         {
-          "iconPath": "sparkles",
-          "key": "p",
-          "label": "Raycast Confetti (fun!)",
-          "type": "url",
-          "value": "raycast://confetti"
+          "iconPath" : "folder.fill",
+          "key" : "p",
+          "label" : "Projects Folder",
+          "type" : "command",
+          "value" : "open ~/Projects"
         },
         {
-          "iconPath": "camera.fill",
-          "key": "a",
-          "label": "Raycast Camera (Action)",
-          "type": "url",
-          "value": "raycast://extensions/raycast/system/open-camera"
+          "iconPath" : "doc.fill",
+          "key" : "r",
+          "label" : "Raycast Files",
+          "type" : "command",
+          "value" : "open ~/Library/Application\\ Support/com.raycast/database"
+        },
+        {
+          "iconPath" : "eye.slash.fill",
+          "key" : "t",
+          "label" : "Toggle Hidden Files",
+          "type" : "command",
+          "value" : "osascript -e 'tell application \"System Events\" to keystroke \".\" using {command down, shift down}'"
         }
       ],
-      "iconPath": "figure.highfive",
-      "key": "r",
-      "label": "Raycast Utilities",
-      "type": "group"
+      "iconPath" : "folder.circle.fill",
+      "key" : "f",
+      "label" : "Files & Folders",
+      "type" : "group"
     },
     {
-      "actions": [
+      "actions" : [
         {
-          "iconPath": "crop.free",
-          "key": "s",
-          "label": "Screenshot (Area Select)",
-          "type": "command",
-          "value": "osascript -e 'tell application \"System Events\" to keystroke \"4\" using {command down, shift down}'"
+          "iconPath" : "camera.fill",
+          "key" : "a",
+          "label" : "Raycast Camera (Action)",
+          "type" : "url",
+          "value" : "raycast://extensions/raycast/system/open-camera"
         },
         {
-          "iconPath": "video.fill",
-          "key": "v",
-          "label": "Screen Recording/Video Tool",
-          "type": "command",
-          "value": "osascript -e 'tell application \"System Events\" to keystroke \"5\" using {command down, shift down}'"
+          "iconPath" : "face.smiling.fill",
+          "key" : "e",
+          "label" : "Raycast Emoji Search",
+          "type" : "url",
+          "value" : "raycast://extensions/raycast/emoji-symbols/search-emoji-symbols"
         },
         {
-          "iconPath": "gearshape.2.fill",
-          "key": "r",
-          "label": "System Settings",
-          "type": "application",
-          "value": "/System/Applications/System Settings.app"
-        }
-      ],
-      "iconPath": "macbook.and.ipad",
-      "key": "s",
-      "label": "System Actions",
-      "type": "group"
-    },
-    {
-      "actions": [
-        {
-          "iconPath": "arrow.up.left.and.arrow.down.right.and.arrow.up.right.and.arrow.down.left",
-          "key": "f",
-          "label": "Toggle Fullscreen",
-          "type": "command",
-          "value": "/opt/homebrew/bin/aerospace fullscreen"
+          "iconPath" : "sparkles",
+          "key" : "f",
+          "label" : "Raycast Confetti (fun!)",
+          "type" : "url",
+          "value" : "raycast://confetti"
         },
         {
-          "iconPath": "distribute.horizontal.fill",
-          "key": "b",
-          "label": "Balance Window Sizes",
-          "type": "command",
-          "value": "/opt/homebrew/bin/aerospace balance-sizes"
+          "iconPath" : "doc.on.clipboard.fill",
+          "key" : "h",
+          "label" : "Raycast Clipboard History",
+          "type" : "url",
+          "value" : "raycast://extensions/raycast/clipboard-history/clipboard-history"
         },
         {
-          "iconPath": "rectangle.split.3x1",
-          "key": "l",
-          "label": "Toggle Float / Tile",
-          "type": "command",
-          "value": "/opt/homebrew/bin/aerospace toggle-tiling-for-window"
-        },
-        {
-          "actions": [
+          "actions" : [
             {
-              "iconPath": "rectangle.split.2x1.fill",
-              "key": "h",
-              "label": "Horizontal Tiling",
-              "type": "command",
-              "value": "/opt/homebrew/bin/aerospace layout h_tiles"
+              "iconPath" : "window.horizontal.closed",
+              "key" : "w",
+              "label" : "Screenshot (Window)",
+              "type" : "url",
+              "value" : "raycast://extensions/Aayush9029/screenshot/capture-area"
             },
             {
-              "iconPath": "rectangle.split.1x2.fill",
-              "key": "v",
-              "label": "Vertical Tiling",
-              "type": "command",
-              "value": "/opt/homebrew/bin/aerospace layout v_tiles"
+              "iconPath" : "crop.free",
+              "key" : "s",
+              "label" : "Screenshot (Area)",
+              "type" : "url",
+              "value" : "raycast://extensions/Aayush9029/screenshot/capture-area"
             },
             {
-              "iconPath": "rectangle.split.2x2.fill",
-              "key": "t",
-              "label": "Default Tiles Layout",
-              "type": "command",
-              "value": "/opt/homebrew/bin/aerospace layout tiles"
+              "iconPath" : "video.fill",
+              "key" : "v",
+              "label" : "Screen Recording/Video Tool",
+              "type" : "application",
+              "value" : "/System/Applications/Utilities/Screenshot.app"
             }
           ],
-          "iconPath": "rectangle.grid.2x2.fill",
-          "key": "t",
-          "label": "Tiles Layouts",
-          "type": "group"
+          "iconPath" : "camera.viewfinder",
+          "key" : "s",
+          "label" : "Screenshot",
+          "type" : "group"
         },
         {
-          "actions": [
-            {
-              "iconPath": "rectangle.split.2x1",
-              "key": "h",
-              "label": "Horizontal Accordion",
-              "type": "command",
-              "value": "/opt/homebrew/bin/aerospace layout h_accordion"
-            },
-            {
-              "iconPath": "rectangle.split.1x2",
-              "key": "v",
-              "label": "Vertical Accordion",
-              "type": "command",
-              "value": "/opt/homebrew/bin/aerospace layout v_accordion"
-            },
-            {
-              "iconPath": "rectangle.split.2x2",
-              "key": "a",
-              "label": "Default Accordion",
-              "type": "command",
-              "value": "/opt/homebrew/bin/aerospace layout accordion"
-            }
-          ],
-          "iconPath": "square.grid.2x2",
-          "key": "a",
-          "label": "Accordion Layouts",
-          "type": "group"
+          "iconPath" : "square.split.2x2.fill",
+          "key" : "w",
+          "label" : "Raycast Window Management",
+          "type" : "url",
+          "value" : "raycast://extensions/raycast/window-management/index"
         }
       ],
-      "iconPath": "uiwindow.split.2x2",
-      "key": "w",
-      "label": "Window Management (Aerospace)",
-      "type": "group"
+      "iconPath" : "/Applications/Raycast.app",
+      "key" : "r",
+      "label" : "Raycast Utilities",
+      "type" : "group"
+    },
+    {
+      "actions" : [
+        {
+          "iconPath" : "lock.fill",
+          "key" : "l",
+          "label" : "Lock Screen",
+          "type" : "command",
+          "value" : "/System/Library/CoreServices/Menu Extras/User.menu/Contents/Resources/CGSession -suspend"
+        },
+        {
+          "iconPath" : "gearshape.2.fill",
+          "key" : "s",
+          "label" : "System Settings",
+          "type" : "application",
+          "value" : "/System/Applications/System Settings.app"
+        },
+        {
+          "iconPath" : "power",
+          "key" : "x",
+          "label" : "Shut Down",
+          "type" : "command",
+          "value" : "osascript -e 'tell app \"System Events\" to shut down'"
+        }
+      ],
+      "iconPath" : "macbook.and.ipad",
+      "key" : "s",
+      "label" : "System Actions",
+      "type" : "group"
+    },
+    {
+      "actions" : [
+        {
+          "actions" : [
+            {
+              "iconPath" : "rectangle.split.2x2",
+              "key" : "a",
+              "label" : "Default Accordion",
+              "type" : "command",
+              "value" : "/opt/homebrew/bin/aerospace layout accordion"
+            },
+            {
+              "iconPath" : "rectangle.split.2x1",
+              "key" : "h",
+              "label" : "Horizontal Accordion",
+              "type" : "command",
+              "value" : "/opt/homebrew/bin/aerospace layout h_accordion"
+            },
+            {
+              "iconPath" : "rectangle.split.1x2",
+              "key" : "v",
+              "label" : "Vertical Accordion",
+              "type" : "command",
+              "value" : "/opt/homebrew/bin/aerospace layout v_accordion"
+            }
+          ],
+          "iconPath" : "square.grid.2x2",
+          "key" : "a",
+          "label" : "Accordion Layouts",
+          "type" : "group"
+        },
+        {
+          "iconPath" : "distribute.horizontal.fill",
+          "key" : "b",
+          "label" : "Balance Window Sizes",
+          "type" : "command",
+          "value" : "/opt/homebrew/bin/aerospace balance-sizes"
+        },
+        {
+          "iconPath" : "arrow.up.left.and.arrow.down.right.and.arrow.up.right.and.arrow.down.left",
+          "key" : "f",
+          "label" : "Toggle Fullscreen",
+          "type" : "command",
+          "value" : "/opt/homebrew/bin/aerospace fullscreen"
+        },
+        {
+          "iconPath" : "rectangle.split.3x1",
+          "key" : "l",
+          "label" : "Toggle Float / Tile",
+          "type" : "command",
+          "value" : "/opt/homebrew/bin/aerospace toggle-tiling-for-window"
+        },
+        {
+          "actions" : [
+            {
+              "iconPath" : "rectangle.split.2x1.fill",
+              "key" : "h",
+              "label" : "Horizontal Tiling",
+              "type" : "command",
+              "value" : "/opt/homebrew/bin/aerospace layout h_tiles"
+            },
+            {
+              "iconPath" : "rectangle.split.2x2.fill",
+              "key" : "t",
+              "label" : "Default Tiles Layout",
+              "type" : "command",
+              "value" : "/opt/homebrew/bin/aerospace layout tiles"
+            },
+            {
+              "iconPath" : "rectangle.split.1x2.fill",
+              "key" : "v",
+              "label" : "Vertical Tiling",
+              "type" : "command",
+              "value" : "/opt/homebrew/bin/aerospace layout v_tiles"
+            }
+          ],
+          "iconPath" : "rectangle.grid.2x2.fill",
+          "key" : "t",
+          "label" : "Tiles Layouts",
+          "type" : "group"
+        }
+      ],
+      "iconPath" : "appwindow.swipe.rectangle",
+      "key" : "w",
+      "label" : "Window Management (Aerospace)",
+      "type" : "group"
     }
   ],
-  "type": "group"
+  "type" : "group"
 }
