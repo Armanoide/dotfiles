@@ -52,9 +52,7 @@ add_spacer spacer_3 right 5
 source "$ITEM_DIR/battery.sh"
 add_spacer spacer_4 right 5
 source "$ITEM_DIR/cpu.sh"
-add_spacer spacer_5 right 5
 source "$ITEM_DIR/ram.sh"
-add_spacer spacer_6 right 5
 source "$ITEM_DIR/disk.sh"
 add_spacer spacer_7 right 5
 source "$ITEM_DIR/volume.sh"
@@ -63,19 +61,19 @@ source "$ITEM_DIR/network.sh"
 add_spacer spacer_9 right 5
 source "$ITEM_DIR/tailscale.sh"
 add_spacer spacer_10 right 5
+source "$ITEM_DIR/rsync_status.sh"
 source "$ITEM_DIR/network_ping.sh"
 add_spacer spacer_11 right 5
 source "$ITEM_DIR/keyboard.sh"
 add_spacer spacer_12 right 5
 source "$ITEM_DIR/airpods_right.sh"
-add_spacer spacer_13 right 5
 source "$ITEM_DIR/airpods_case.sh"
-add_spacer spacer_14 right 5
 source "$ITEM_DIR/airpods_left.sh"
 
 
 sketchybar --add bracket group_info_1 cpu disk ram
 sketchybar --add bracket group_info_2 airpods_right airpods_case airpods_left
+sketchybar --add bracket group_info_3 rsync_status network_ping
 
 ##### Force all scripts to run the first time (never do this in a script) #####
 sketchybar --update
