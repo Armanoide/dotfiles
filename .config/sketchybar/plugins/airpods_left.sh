@@ -9,6 +9,8 @@ BT_INFO=$(system_profiler SPBluetoothDataType 2>/dev/null)
 
 # Extract battery values
 LEVEL=$(echo "$BT_INFO" | grep "Left Battery Level" | awk '{print $NF}' | tr -d '%' | tr -cd '0-9')
+LEVEL=${LEVEL:-0}
+
 INDICATOR_COLOR="green"
 
 if [[ $LEVEL -le 15 ]]; then
