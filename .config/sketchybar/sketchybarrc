@@ -58,6 +58,7 @@ add_spacer spacer_7 right 5
 source "$ITEM_DIR/volume.sh"
 add_spacer spacer_8 right 5
 source "$ITEM_DIR/network.sh"
+source "$ITEM_DIR/internet.sh"
 add_spacer spacer_9 right 5
 source "$ITEM_DIR/tailscale.sh"
 add_spacer spacer_10 right 5
@@ -74,6 +75,7 @@ source "$ITEM_DIR/airpods_left.sh"
 sketchybar --add bracket group_info_1 cpu disk ram
 sketchybar --add bracket group_info_2 airpods_right airpods_case airpods_left
 sketchybar --add bracket group_info_3 rsync_status network_ping
+sketchybar --add bracket group_info_4 internet network network_tailscale network_internet
 
 ##### Force all scripts to run the first time (never do this in a script) #####
 sketchybar --update

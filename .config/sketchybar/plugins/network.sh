@@ -1,29 +1,49 @@
 #!/bin/bash
 
+# Load colors (Assuming $CONFIG_DIR is correctly set)
 source "$CONFIG_DIR/colors.sh"
 
 ITEM_NAME="network"
 
-WIFI_ICON=":wifi:"
-ETH_ICON=":wifi:"
-DISCONNECTED_ICON=":wifi_off:"
+WIDTH=85
 
-# Get Wi-Fi SSID and Signal Strength
-WIFI_SSID=$(networksetup -getairportnetwork en0 | awk -F': ' '{print $2}')
-WIFI_SIGNAL=$(/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -I | awk '/agrCtlRSSI/ {print $2}')
+NETWORK_IFACE=$(route get default 2>/dev/null | grep interface | awk '{print $2}')
+IP_ADDRESS_INTERNET=$(ifconfig "$NETWORK_IFACE" 2>/dev/null | grep 'inet ' | awk '$1=="inet" {print $2}')
 
-# Check Ethernet status
-ETH_STATUS=$(ifconfig en0 | grep "status: active")
-
-if [ -n "$WIFI_SSID" ]; then
-  sketchybar --set "$ITEM_NAME" icon="$WIFI_ICON" label="$WIFI_SSID ($WIFI_SIGNAL dBm)" \
-    icon.font="sketchybar-app-font:Regular:20.0" 
-
-elif [ -n "$ETH_STATUS" ]; then
-  sketchybar --set "$ITEM_NAME" icon="$ETH_ICON" label="" \
-    icon.font="sketchybar-app-font:Regular:20.0" 
+TAILSCALE_BIN="/Applications/Tailscale.app/Contents/MacOS/Tailscale"
+if [ -x "$TAILSCALE_BIN" ]; then
+    STATUS=$("$TAILSCALE_BIN" status --json 2>/dev/null)
+    IP_ADDRESS_TAILSCALE=$(echo "$STATUS" | jq -r '.Self.TailscaleIPs[0]' 2>/dev/null)
 else
-  sketchybar --set "$ITEM_NAME" icon="$DISCONNECTED_ICON" label="Disconnected" \
-    icon.color=$OVERLAY0 label.color=$OVERLAY0 \
-    icon.font="sketchybar-app-font:Regular:20.0" 
+    IP_ADDRESS_TAILSCALE="-"
 fi
+
+
+sketchybar --set "$ITEM_NAME" \
+  height=0 \
+  padding_right=0 \
+  padding_left=0 \
+  label.padding_right=0 \
+  label.padding_left=0 \
+  icon.padding_right=0 \
+  icon.padding_left=10 \
+  background.color=""
+
+
+sketchybar --set "${ITEM_NAME}_internet" \
+    width=$WIDTH \
+    height=20 \
+    label.y_offset=9 \
+    label="$IP_ADDRESS_INTERNET" \
+    label.font="MesloLGS Nerd Font Mono:Regular:10.0" \
+    padding_right=0 \
+    padding_left=0
+
+sketchybar --set "${ITEM_NAME}_tailscale" \
+    width=0 \
+    height=20 \
+    label.y_offset=-9 \
+    label="$IP_ADDRESS_TAILSCALE" \
+    label.font="MesloLGS Nerd Font Mono:Regular:10.0" \
+    padding_right="-$WIDTH" \
+    padding_left=10
