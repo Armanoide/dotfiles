@@ -13,3 +13,5 @@
 
 .tmux/resurrect
 .tmux/plugins
+
+.config/karabiner/automatic_backups/**
