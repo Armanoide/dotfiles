@@ -1,351 +1,358 @@
 {
-  "actions": [
+  "actions" : [
     {
-      "actions": [
+      "actions" : [
         {
-          "iconPath": "message.fill",
-          "key": "c",
-          "label": "Messages (Chat)",
-          "type": "application",
-          "value": "/Applications/Messages.app"
+          "iconPath" : "message.fill",
+          "key" : "c",
+          "label" : "Messages (Chat)",
+          "type" : "application",
+          "value" : "/Applications/Messages.app"
         },
         {
-          "iconPath": "terminal.fill",
-          "key": "g",
-          "label": "Ghostty (Terminal)",
-          "type": "application",
-          "value": "/Applications/Ghostty.app"
+          "iconPath" : "terminal.fill",
+          "key" : "g",
+          "label" : "Ghostty (Terminal)",
+          "type" : "application",
+          "value" : "/Applications/Ghostty.app"
         },
         {
-          "iconPath": "globe",
-          "key": "h",
-          "label": "Chrome Browser",
-          "type": "application",
-          "value": "/Applications/Google Chrome.app"
+          "iconPath" : "globe",
+          "key" : "h",
+          "label" : "Chrome Browser",
+          "type" : "application",
+          "value" : "/Applications/Google Chrome.app"
         },
         {
-          "iconPath": "bubble.left.and.bubble.right.fill",
-          "key": "l",
-          "label": "Slack",
-          "type": "application",
-          "value": "/Applications/Slack.app"
+          "iconPath" : "bubble.left.and.bubble.right.fill",
+          "key" : "l",
+          "label" : "Slack",
+          "type" : "application",
+          "value" : "/Applications/Slack.app"
         },
         {
-          "iconPath": "envelope.fill",
-          "key": "m",
-          "label": "Mail",
-          "type": "application",
-          "value": "/Applications/Mail.app"
+          "iconPath" : "envelope.fill",
+          "key" : "m",
+          "label" : "Mail",
+          "type" : "application",
+          "value" : "/Applications/Mail.app"
         },
         {
-          "iconPath": "note.text.badge.plus",
-          "key": "n",
-          "label": "Notes",
-          "type": "application",
-          "value": "/System/Applications/Notes.app"
+          "iconPath" : "note.text.badge.plus",
+          "key" : "n",
+          "label" : "Notes",
+          "type" : "application",
+          "value" : "/System/Applications/Notes.app"
         },
         {
-          "iconPath": "safari.fill",
-          "key": "s",
-          "label": "Safari Browser",
-          "type": "application",
-          "value": "/Applications/Safari.app"
+          "iconPath" : "safari.fill",
+          "key" : "s",
+          "label" : "Safari Browser",
+          "type" : "application",
+          "value" : "/Applications/Safari.app"
         },
         {
-          "iconPath": "lock.shield.fill",
-          "key": "t",
-          "label": "Tor Browser",
-          "type": "application",
-          "value": "/Applications/Tor Browser.app"
+          "iconPath" : "lock.shield.fill",
+          "key" : "t",
+          "label" : "Tor Browser",
+          "type" : "application",
+          "value" : "/Applications/Tor Browser.app"
         },
         {
-          "iconPath": "music.note",
-          "key": "u",
-          "label": "Music",
-          "type": "application",
-          "value": "/System/Applications/Music.app"
+          "iconPath" : "music.note",
+          "key" : "u",
+          "label" : "Music",
+          "type" : "application",
+          "value" : "/System/Applications/Music.app"
         }
       ],
-      "iconPath": "apps.iphone",
-      "key": "a",
-      "label": "Applications",
-      "type": "group"
+      "iconPath" : "apps.iphone",
+      "key" : "a",
+      "label" : "Applications",
+      "type" : "group"
     },
     {
-      "actions": [
+      "actions" : [
         {
-          "iconPath": "shippingbox.fill",
-          "key": "d",
-          "label": "Docker Desktop",
-          "type": "application",
-          "value": "/Applications/Docker.app"
+          "iconPath" : "shippingbox.fill",
+          "key" : "d",
+          "label" : "Docker Desktop",
+          "type" : "application",
+          "value" : "/Applications/Docker.app"
         },
         {
-          "iconPath": "arrow.down.left.square.fill",
-          "key": "l",
-          "label": "Rsync pull (Remote -> Local)",
-          "type": "command",
-          "value": "~/.local/rbin/rsync_to_remote.sh pull"
+          "iconPath" : "arrow.down.left.square.fill",
+          "key" : "l",
+          "label" : "Rsync pull (Remote -> Local)",
+          "type" : "command",
+          "value" : "~/.local/rbin/rsync_to_remote.sh pull"
         },
         {
-          "iconPath": "arrow.up.right.square.fill",
-          "key": "p",
-          "label": "Rsync push (Local -> Remote)",
-          "type": "command",
-          "value": "~/.local/rbin/rsync_to_remote.sh push"
+          "iconPath" : "arrow.up.right.square.fill",
+          "key" : "p",
+          "label" : "Rsync push (Local -> Remote)",
+          "type" : "command",
+          "value" : "~/.local/rbin/rsync_to_remote.sh push"
         }
       ],
-      "iconPath": "wrench.and.screwdriver.fill",
-      "key": "d",
-      "label": "Dev Tools & Sync",
-      "type": "group"
+      "iconPath" : "wrench.and.screwdriver.fill",
+      "key" : "d",
+      "label" : "Dev Tools & Sync",
+      "type" : "group"
     },
     {
-      "actions": [
+      "actions" : [
         {
-          "iconPath": "arrow.down.doc.fill",
-          "key": "d",
-          "label": "Downloads Folder",
-          "type": "command",
-          "value": "open ~/Downloads"
+          "iconPath" : "arrow.down.doc.fill",
+          "key" : "d",
+          "label" : "Downloads Folder",
+          "type" : "command",
+          "value" : "open ~/Downloads"
         },
         {
-          "iconPath": "house.fill",
-          "key": "h",
-          "label": "Home Folder",
-          "type": "command",
-          "value": "open ~/"
+          "iconPath" : "house.fill",
+          "key" : "h",
+          "label" : "Home Folder",
+          "type" : "command",
+          "value" : "open ~/"
         },
         {
-          "iconPath": "folder.fill",
-          "key": "p",
-          "label": "Projects Folder",
-          "type": "command",
-          "value": "open ~/Projects"
+          "iconPath" : "folder.fill",
+          "key" : "p",
+          "label" : "Projects Folder",
+          "type" : "command",
+          "value" : "open ~/Projects"
         },
         {
-          "iconPath": "doc.fill",
-          "key": "r",
-          "label": "Raycast Files",
-          "type": "command",
-          "value": "open ~/Library/Application\\ Support/com.raycast/database"
+          "iconPath" : "doc.fill",
+          "key" : "r",
+          "label" : "Raycast Files",
+          "type" : "command",
+          "value" : "open ~/Library/Application\\ Support/com.raycast/database"
         },
         {
-          "iconPath": "eye.slash.fill",
-          "key": "t",
-          "label": "Toggle Hidden Files",
-          "type": "command",
-          "value": "osascript -e 'tell application \"System Events\" to keystroke \".\" using {command down, shift down}'"
+          "iconPath" : "eye.slash.fill",
+          "key" : "t",
+          "label" : "Toggle Hidden Files",
+          "type" : "command",
+          "value" : "osascript -e 'tell application \"System Events\" to keystroke \".\" using {command down, shift down}'"
         }
       ],
-      "iconPath": "folder.circle.fill",
-      "key": "f",
-      "label": "Files & Folders",
-      "type": "group"
+      "iconPath" : "folder.circle.fill",
+      "key" : "f",
+      "label" : "Files & Folders",
+      "type" : "group"
     },
     {
-      "actions": [
+      "actions" : [
         {
-          "iconPath": "camera.fill",
-          "key": "a",
-          "label": "Raycast Camera (Action)",
-          "type": "url",
-          "value": "raycast://extensions/raycast/system/open-camera"
+          "iconPath" : "camera.fill",
+          "key" : "a",
+          "label" : "Raycast Camera (Action)",
+          "type" : "url",
+          "value" : "raycast://extensions/raycast/system/open-camera"
         },
         {
-          "iconPath": "face.smiling.fill",
-          "key": "e",
-          "label": "Raycast Emoji Search",
-          "type": "url",
-          "value": "raycast://extensions/raycast/emoji-symbols/search-emoji-symbols"
+          "iconPath" : "face.smiling.fill",
+          "key" : "e",
+          "label" : "Raycast Emoji Search",
+          "type" : "url",
+          "value" : "raycast://extensions/raycast/emoji-symbols/search-emoji-symbols"
         },
         {
-          "iconPath": "sparkles",
-          "key": "f",
-          "label": "Raycast Confetti (fun!)",
-          "type": "url",
-          "value": "raycast://confetti"
+          "iconPath" : "sparkles",
+          "key" : "f",
+          "label" : "Raycast Confetti (fun!)",
+          "type" : "url",
+          "value" : "raycast://confetti"
         },
         {
-          "iconPath": "doc.on.clipboard.fill",
-          "key": "h",
-          "label": "Raycast Clipboard History",
-          "type": "url",
-          "value": "raycast://extensions/raycast/clipboard-history/clipboard-history"
+          "iconPath" : "doc.on.clipboard.fill",
+          "key" : "h",
+          "label" : "Raycast Clipboard History",
+          "type" : "url",
+          "value" : "raycast://extensions/raycast/clipboard-history/clipboard-history"
         },
         {
-          "actions": [
+          "actions" : [
             {
-              "iconPath": "crop.free",
-              "key": "s",
-              "label": "Screenshot (Area)",
-              "type": "url",
-              "value": "raycast://extensions/Aayush9029/screenshot/capture-area"
+              "iconPath" : "crop.free",
+              "key" : "s",
+              "label" : "Screenshot (Area)",
+              "type" : "url",
+              "value" : "raycast://extensions/Aayush9029/screenshot/capture-area"
             },
             {
-              "iconPath": "video.fill",
-              "key": "v",
-              "label": "Screen Recording/Video Tool",
-              "type": "application",
-              "value": "/System/Applications/Utilities/Screenshot.app"
+              "iconPath" : "video.fill",
+              "key" : "v",
+              "label" : "Screen Recording/Video Tool",
+              "type" : "application",
+              "value" : "/System/Applications/Utilities/Screenshot.app"
             },
             {
-              "iconPath": "window.horizontal.closed",
-              "key": "w",
-              "label": "Screenshot (Window)",
-              "type": "url",
-              "value": "raycast://extensions/Aayush9029/screenshot/capture-window"
+              "iconPath" : "window.horizontal.closed",
+              "key" : "w",
+              "label" : "Screenshot (Window)",
+              "type" : "url",
+              "value" : "raycast://extensions/Aayush9029/screenshot/capture-window"
             }
           ],
-          "iconPath": "camera.viewfinder",
-          "key": "s",
-          "label": "Screenshot",
-          "type": "group"
+          "iconPath" : "camera.viewfinder",
+          "key" : "s",
+          "label" : "Screenshot",
+          "type" : "group"
         },
         {
-          "iconPath": "square.split.2x2.fill",
-          "key": "w",
-          "label": "Raycast Window Management",
-          "type": "url",
-          "value": "raycast://extensions/raycast/window-management/index"
+          "iconPath" : "square.split.2x2.fill",
+          "key" : "w",
+          "label" : "Raycast Window Management",
+          "type" : "url",
+          "value" : "raycast://extensions/raycast/window-management/index"
         }
       ],
-      "iconPath": "/Applications/Raycast.app",
-      "key": "r",
-      "label": "Raycast Utilities",
-      "type": "group"
+      "iconPath" : "/Applications/Raycast.app",
+      "key" : "r",
+      "label" : "Raycast Utilities",
+      "type" : "group"
     },
     {
-      "actions": [
+      "actions" : [
         {
-          "iconPath": "lock.fill",
-          "key": "l",
-          "label": "Lock Screen",
-          "type": "command",
-          "value": "/System/Library/CoreServices/Menu Extras/User.menu/Contents/Resources/CGSession -suspend"
+          "iconPath" : "lock.fill",
+          "key" : "l",
+          "label" : "Lock Screen",
+          "type" : "url",
+          "value" : "raycast://extensions/raycast/system/lock-screen"
         },
         {
-          "iconPath": "gearshape.2.fill",
-          "key": "s",
-          "label": "System Settings",
-          "type": "application",
-          "value": "/System/Applications/System Settings.app"
+          "iconPath" : "gearshape.2.fill",
+          "key" : "s",
+          "label" : "System Settings",
+          "type" : "application",
+          "value" : "/System/Applications/System Settings.app"
         },
         {
-          "iconPath": "power",
-          "key": "x",
-          "label": "Shut Down",
-          "type": "command",
-          "value": "osascript -e 'tell app \"System Events\" to shut down'"
+          "iconPath" : "power",
+          "key" : "x",
+          "label" : "Shut Down",
+          "type" : "url",
+          "value" : "raycast://extensions/raycast/system/shut-down"
+        },
+        {
+          "iconPath" : "restart",
+          "key" : "r",
+          "label" : "Reboot",
+          "type" : "url",
+          "value" : "raycast://extensions/raycast/system/restart"
         }
       ],
-      "iconPath": "macbook.and.ipad",
-      "key": "s",
-      "label": "System Actions",
-      "type": "group"
+      "iconPath" : "macbook.and.ipad",
+      "key" : "s",
+      "label" : "System Actions",
+      "type" : "group"
     },
     {
-      "actions": [
+      "actions" : [
         {
-          "actions": [
+          "actions" : [
             {
-              "iconPath": "rectangle.split.2x2",
-              "key": "d",
-              "label": "Default Accordion",
-              "type": "command",
-              "value": "/opt/homebrew/bin/aerospace layout accordion"
+              "iconPath" : "rectangle.split.2x2",
+              "key" : "d",
+              "label" : "Default Accordion",
+              "type" : "command",
+              "value" : "/opt/homebrew/bin/aerospace layout accordion"
             },
             {
-              "iconPath": "rectangle.split.2x1",
-              "key": "h",
-              "label": "Horizontal Accordion",
-              "type": "command",
-              "value": "/opt/homebrew/bin/aerospace layout h_accordion"
+              "iconPath" : "rectangle.split.2x1",
+              "key" : "h",
+              "label" : "Horizontal Accordion",
+              "type" : "command",
+              "value" : "/opt/homebrew/bin/aerospace layout h_accordion"
             },
             {
-              "iconPath": "rectangle.split.1x2",
-              "key": "v",
-              "label": "Vertical Accordion",
-              "type": "command",
-              "value": "/opt/homebrew/bin/aerospace layout v_accordion"
+              "iconPath" : "rectangle.split.1x2",
+              "key" : "v",
+              "label" : "Vertical Accordion",
+              "type" : "command",
+              "value" : "/opt/homebrew/bin/aerospace layout v_accordion"
             }
           ],
-          "iconPath": "rectangle.on.rectangle",
-          "key": "a",
-          "label": "Accordion Layouts",
-          "type": "group"
+          "iconPath" : "rectangle.on.rectangle",
+          "key" : "a",
+          "label" : "Accordion Layouts",
+          "type" : "group"
         },
         {
-          "iconPath": "distribute.horizontal.fill",
-          "key": "b",
-          "label": "Balance Window Sizes",
-          "type": "command",
-          "value": "/opt/homebrew/bin/aerospace balance-sizes"
+          "iconPath" : "distribute.horizontal.fill",
+          "key" : "b",
+          "label" : "Balance Window Sizes",
+          "type" : "command",
+          "value" : "/opt/homebrew/bin/aerospace balance-sizes"
         },
         {
-          "iconPath": "arrow.down.left.and.arrow.up.right.rectangle.fill",
-          "key": "f",
-          "label": "Toggle Fullscreen",
-          "type": "command",
-          "value": "/opt/homebrew/bin/aerospace fullscreen"
+          "iconPath" : "arrow.down.left.and.arrow.up.right.rectangle.fill",
+          "key" : "f",
+          "label" : "Toggle Fullscreen",
+          "type" : "command",
+          "value" : "/opt/homebrew/bin/aerospace fullscreen"
         },
         {
-          "actions": [
+          "actions" : [
             {
-              "iconPath": "rectangle.3.group",
-              "key": "f",
-              "label": "Mode Floating",
-              "type": "command",
-              "value": "/opt/homebrew/bin/aerospace layout floating"
+              "iconPath" : "rectangle.3.group",
+              "key" : "f",
+              "label" : "Mode Floating",
+              "type" : "command",
+              "value" : "/opt/homebrew/bin/aerospace layout floating"
             },
             {
-              "iconPath": "rectangle.split.3x1",
-              "key": "t",
-              "label": "Mode Tilling",
-              "type": "command",
-              "value": "/opt/homebrew/bin/aerospace layout tiling"
+              "iconPath" : "rectangle.split.3x1",
+              "key" : "t",
+              "label" : "Mode Tilling",
+              "type" : "command",
+              "value" : "/opt/homebrew/bin/aerospace layout tiling"
             }
           ],
-          "iconPath": "questionmark.square.dashed",
-          "key": "m",
-          "label": "Mode tilling/floating",
-          "type": "group"
+          "iconPath" : "questionmark.square.dashed",
+          "key" : "m",
+          "label" : "Mode tilling/floating",
+          "type" : "group"
         },
         {
-          "actions": [
+          "actions" : [
             {
-              "iconPath": "rectangle.split.2x2.fill",
-              "key": "d",
-              "label": "Default Tiles Layout",
-              "type": "command",
-              "value": "/opt/homebrew/bin/aerospace layout tiles"
+              "iconPath" : "rectangle.split.2x2.fill",
+              "key" : "d",
+              "label" : "Default Tiles Layout",
+              "type" : "command",
+              "value" : "/opt/homebrew/bin/aerospace layout tiles"
             },
             {
-              "iconPath": "rectangle.split.2x1.fill",
-              "key": "h",
-              "label": "Horizontal Tiling",
-              "type": "command",
-              "value": "/opt/homebrew/bin/aerospace layout h_tiles"
+              "iconPath" : "rectangle.split.2x1.fill",
+              "key" : "h",
+              "label" : "Horizontal Tiling",
+              "type" : "command",
+              "value" : "/opt/homebrew/bin/aerospace layout h_tiles"
             },
             {
-              "iconPath": "rectangle.split.1x2.fill",
-              "key": "v",
-              "label": "Vertical Tiling",
-              "type": "command",
-              "value": "/opt/homebrew/bin/aerospace layout v_tiles"
+              "iconPath" : "rectangle.split.1x2.fill",
+              "key" : "v",
+              "label" : "Vertical Tiling",
+              "type" : "command",
+              "value" : "/opt/homebrew/bin/aerospace layout v_tiles"
             }
           ],
-          "iconPath": "rectangle.grid.2x2.fill",
-          "key": "t",
-          "label": "Tiles Layouts",
-          "type": "group"
+          "iconPath" : "rectangle.grid.2x2.fill",
+          "key" : "t",
+          "label" : "Tiles Layouts",
+          "type" : "group"
         }
       ],
-      "iconPath": "appwindow.swipe.rectangle",
-      "key": "w",
-      "label": "Window Management (Aerospace)",
-      "type": "group"
+      "iconPath" : "appwindow.swipe.rectangle",
+      "key" : "w",
+      "label" : "Window Management (Aerospace)",
+      "type" : "group"
     }
   ],
-  "type": "group"
+  "type" : "group"
 }
