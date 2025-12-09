@@ -1,5 +1,6 @@
 #!/bin/bash
 
+DEBUG_FILE="$CONFIG_DIR/debug.log"
 PLUGIN_DIR="$CONFIG_DIR/plugins"
 ITEM_DIR="$CONFIG_DIR/items"
 TOOL_DIR="$CONFIG_DIR/tools"
@@ -10,8 +11,7 @@ source "$TOOL_DIR/spacer.sh"
 
 
 sketchybar --bar position=top height=45 blur_radius=0 \
-          color=$TRANSPARENT \
-          #border_color=$OVERLAY1 border_width=0
+          color=$TRANSPARENT
 
 default=(
   icon.color=$TEXT
@@ -26,11 +26,6 @@ default=(
   background.size
   padding_left=100
   padding_right=100
-  # label.padding_left=10
-  # label.padding_right=7
-  # best way to do margin
-  # icon.padding_left=10
-  # label.padding_right=10
 )
 sketchybar --default "${default[@]}"
 
