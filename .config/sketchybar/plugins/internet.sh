@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# Load colors (Assuming $CONFIG_DIR is correctly set)
 source "$CONFIG_DIR/colors.sh"
 
 ITEM_NAME="internet"
@@ -12,8 +11,7 @@ IP_ADDRESS_INTERNET=$(ifconfig "$NETWORK_IFACE" 2>/dev/null | grep 'inet ' | awk
 
 LEVEL=0
 LEVEL_COLOR="red"
-# Configuration for Test Trigger
-# Only run a new test if the last report is older than this (in seconds)
+
 REPORT_STALE_TIMEOUT=600
 
 if [ -f "$REPORT_FILE" ]; then
@@ -21,14 +19,10 @@ if [ -f "$REPORT_FILE" ]; then
   if [ -n "$DOWNLOAD_MBPS_INT" ]; then
     MAX_SPEED=500
 
-    # 🚨 NEW STEP: Force DOWNLOAD_MBPS_INT to an integer
-    # Using 'printf' or 'cut' to remove the decimal and everything after it.
-    # The '%.0f' format specifier (floating point with 0 decimal places) works well.
-    INT_VALUE=$(printf "%.0f" "$DOWNLOAD_MBPS_INT") 
+    INT_VALUE=$(printf "%.0f" "$DOWNLOAD_MBPS_INT")
 
     LEVEL=$(( ($INT_VALUE * 100) / $MAX_SPEED ))
 
-    # Clamp LEVEL between 0 and 100
     if [ "$LEVEL" -gt 100 ]; then
       LEVEL=100
     elif [ "$LEVEL" -lt 0 ]; then
@@ -43,16 +37,16 @@ if [ -f "$REPORT_FILE" ]; then
       LEVEL_COLOR="red"
     fi
 
-    # --- 4. Check for Stale Report and Trigger New Test ---
-    LAST_MODIFIED=$(stat -f "%m" "$REPORT_FILE")
-    CURRENT_TIME=$(date +%s)
-    TIME_DIFF=$((CURRENT_TIME - LAST_MODIFIED))
-
-    if [ "$TIME_DIFF" -gt "$REPORT_STALE_TIMEOUT" ]; then
-    # Execute the test script in the background
-    $SCRIPT_BIN &
-    fi
   fi
+fi
+
+
+LAST_MODIFIED=$(stat -f "%m" "$REPORT_FILE")
+CURRENT_TIME=$(date +%s)
+TIME_DIFF=$((CURRENT_TIME - LAST_MODIFIED))
+
+if [ "$TIME_DIFF" -gt "$REPORT_STALE_TIMEOUT" ]; then
+  $SCRIPT_BIN &
 fi
 
 if [ -n "$IP_ADDRESS_INTERNET" ]; then
