@@ -1,5 +1,6 @@
 **/**/node_modules/
 **/**/.DS_Store
+**/**/*.log
 
 .config/gh
 .config/gcloud
@@ -14,4 +15,11 @@
 .tmux/resurrect
 .tmux/plugins
 
+.config/configstore/
+.config/.isolated-storage/
+.config/xbuild/
+.config/fontforge/
+
+
 .config/karabiner/automatic_backups/**
+
