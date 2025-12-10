@@ -3,12 +3,8 @@
 My essential, highly customized configuration files, fine-tuned for a productivity-driven workflow on **macOS**.
 
 ## 💻 Screenshot
+![My custom dotfiles setup with Zsh, Neovim, and Ghostty on macOS](assets/desktop-full-1.png)
 
-Here is a glimpse of the current setup:
-
-![A custom terminal setup on macOS showing a tiling window manager or terminal multiplexer, code in an editor, and shell prompts.](http://googleusercontent.com/image_collection/image_retrieval/4232247613517246520_0)
-
----
 
 ## ✨ Key Components
 
