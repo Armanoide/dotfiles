@@ -179,26 +179,11 @@ export PATH="/opt/homebrew/Cellar/qt/6.7.3/share/qt/libexec:$PATH"
 export ES_JAVA_HOME=/opt/homebrew/opt/openjdk
 
 ############################################################
-# ☁️ Cloud & CLI
-############################################################
-# Google Cloud SDK
-if [ -f '/Volumes/EXT1_SSD/Users/user1/Projects/Scripts/Combo/combo-cli/google-cloud-sdk/path.zsh.inc' ]; then
-  . '/Volumes/EXT1_SSD/Users/user1/Projects/Scripts/Combo/combo-cli/google-cloud-sdk/path.zsh.inc'
-fi
-if [ -f '/Volumes/EXT1_SSD/Users/user1/Projects/Scripts/Combo/combo-cli/google-cloud-sdk/completion.zsh.inc' ]; then
-  . '/Volumes/EXT1_SSD/Users/user1/Projects/Scripts/Combo/combo-cli/google-cloud-sdk/completion.zsh.inc'
-fi
-
-
-############################################################
 # 🤖 AI / ML
 ############################################################
 
 # LM Studio
-export PATH="$PATH:/Volumes/EXT1_SSD/Users/user1/.lmstudio/bin"
-
-# Windsurf
-export PATH="/Volumes/EXT1_SSD/Users/user1/.codeium/windsurf/bin:$PATH"
+export PATH="$PATH:$HOME/.lmstudio/bin"
 
 # Ollama
 export OLLAMA_BACKEND=mlx
