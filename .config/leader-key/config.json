@@ -176,8 +176,8 @@
         {
           "actions" : [
             {
-              "iconPath" : "crop.free",
-              "key" : "s",
+              "iconPath" : "plus.rectangle",
+              "key" : "a",
               "label" : "Screenshot (Area)",
               "type" : "url",
               "value" : "raycast://extensions/Aayush9029/screenshot/capture-area"
