@@ -17,6 +17,7 @@ This repository manages configurations for the following applications:
 | **Zsh** | `.zshrc`  |
 | **tmux** | `.tmux.conf` |
 | **Ghostty** | `.config/ghostty/` |
+| **Sketchybar** | `.config/sketchybar/` |
 | .local/rbin | (Various binary) |
 
 
