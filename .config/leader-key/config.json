@@ -201,13 +201,6 @@
           "key" : "s",
           "label" : "Screenshot",
           "type" : "group"
-        },
-        {
-          "iconPath" : "square.split.2x2.fill",
-          "key" : "w",
-          "label" : "Raycast Window Management",
-          "type" : "url",
-          "value" : "raycast://extensions/raycast/window-management/index"
         }
       ],
       "iconPath" : "/Applications/Raycast.app",
@@ -218,11 +211,25 @@
     {
       "actions" : [
         {
+          "iconPath" : "keyboard",
+          "key" : "k",
+          "label" : "Switch keyboard",
+          "type" : "url",
+          "value" : "raycast://extensions/lucaschultz/input-switcher/toggle"
+        },
+        {
           "iconPath" : "lock.fill",
           "key" : "l",
           "label" : "Lock Screen",
           "type" : "url",
           "value" : "raycast://extensions/raycast/system/lock-screen"
+        },
+        {
+          "iconPath" : "restart",
+          "key" : "r",
+          "label" : "Reboot",
+          "type" : "url",
+          "value" : "raycast://extensions/raycast/system/restart"
         },
         {
           "iconPath" : "gearshape.2.fill",
@@ -237,13 +244,6 @@
           "label" : "Shut Down",
           "type" : "url",
           "value" : "raycast://extensions/raycast/system/shut-down"
-        },
-        {
-          "iconPath" : "restart",
-          "key" : "r",
-          "label" : "Reboot",
-          "type" : "url",
-          "value" : "raycast://extensions/raycast/system/restart"
         }
       ],
       "iconPath" : "macbook.and.ipad",
