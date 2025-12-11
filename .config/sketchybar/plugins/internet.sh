@@ -17,7 +17,7 @@ REPORT_STALE_TIMEOUT=600
 if [ -f "$REPORT_FILE" ]; then
   DOWNLOAD_MBPS_INT=$(rg Mbps "$REPORT_FILE" | rg -o "\d+\.\d+" | tail -n 1)
   if [ -n "$DOWNLOAD_MBPS_INT" ]; then
-    MAX_SPEED=500
+    MAX_SPEED=300
 
     INT_VALUE=$(printf "%.0f" "$DOWNLOAD_MBPS_INT")
 

@@ -24,5 +24,8 @@ COLOR=$MAROON
 sketchybar --set "$ITEM_NAME" \
   label.font="MesloLGS Nerd Font Mono:Bold:15.0" \
   label.padding_right=5 \
-  label=$LAYOUT \
+  label.padding_left=5 \
+  icon.padding_right=0 \
+  icon.padding_left=0 \
+  label=$LAYOUT
 

@@ -21,11 +21,17 @@ if [[ "$ONLINE" == "Running" ]]; then
     icon=":tailscale:" \
     icon.font="sketchybar-app-font:Regular:20.0" \
     icon.color=$TEXT \
-    label.font="MesloLGS Nerd Font Mono:Bold:12.0"
+    label.padding_left=0 \
+    label.padding_right=0 \
+    icon.padding_left=4 \
+    icon.padding_right=4
 else
   sketchybar --set "$NAME" \
     icon=":tailscale:" \
     icon.font="sketchybar-app-font:Regular:20.0" \
-    icon.padding_left=5 \
-    icon.color=$OVERLAY0
+    icon.color=$OVERLAY0 \
+    label.padding_left=0 \
+    label.padding_right=0 \
+    icon.padding_left=4 \
+    icon.padding_right=4
 fi
