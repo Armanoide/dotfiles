@@ -14,6 +14,7 @@ if [ "$SENDER" = "volume_change" ]; then
   [6-9][0-9] | 100)
     ICON=":volume_high:"
     COLOR=$TEXT
+    PADDING_RIGHT=2
     ;;
   [3-5][0-9])
     ICON=":volume_low:"
