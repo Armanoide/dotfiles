@@ -50,7 +50,7 @@ return {
               vim.keymap.set(mode, keys, func, { buffer = bufnr, desc = desc })
             end
             -- rust-lsp mappings
-            lsp_map("n", "<leader>ci", function()
+            lsp_map("n", "K", function()
               vim.cmd.rustlsp({ "hover", "actions" })
             end, "rust hover docs")
             lsp_map("n", "<leader>cj", function()
