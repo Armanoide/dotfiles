@@ -9,7 +9,7 @@ vim.opt.termguicolors = true
 vim.g.lazyvim_check_order = false
 
 -- Enable automatic code formatting on save
-vim.g.autoformat = true
+vim.g.autoformat = false
 
 -- Use the system clipboard for all yank, delete, change, and put operations
 -- (makes Vim share the same clipboard as macOS/Linux/Windows)
