@@ -4,7 +4,7 @@ return {
     "nvim-treesitter/nvim-treesitter-context",
     config = function(_, opts)
       require("treesitter-context").setup(opts)
-    end
+    end,
   },
   -- Core Treesitter setup for syntax highlighting, indentation, incremental selection, and language parser management
   {
@@ -54,6 +54,8 @@ return {
         "gitignore",
         "query",
         "verilog",
+        "swift",
+        "objc",
       },
     },
   },
