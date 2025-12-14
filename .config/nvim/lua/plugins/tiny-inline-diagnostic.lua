@@ -1,8 +1,5 @@
 return {
-  {
-    "neovim/nvim-lspconfig",
-    opts = { diagnostics = { virtual_text = false } },
-  },
+
   {
     "rachartier/tiny-inline-diagnostic.nvim",
     event = "VeryLazy",
