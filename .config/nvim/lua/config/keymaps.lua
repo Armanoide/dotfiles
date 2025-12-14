@@ -4,18 +4,6 @@
 
 local map = vim.keymap.set
 
--- Move between windows with Cmd + hjkl (Mac)
--- map("n", "<D-h>", "<C-w>h", { noremap = true, silent = true })
--- map("n", "<D-j>", "<C-w>j", { noremap = true, silent = true })
--- map("n", "<D-k>", "<C-w>k", { noremap = true, silent = true })
--- map("n", "<D-l>", "<C-w>l", { noremap = true, silent = true })
-
--- Resize window with Ctrl+arrows
--- map("n", "<M-Up>", ":resize +1<CR>", { silent = true })
--- map("n", "<M-Down>", ":resize -1<CR>", { silent = true })
--- map("n", "<M-Left>", ":vertical resize -1<CR>", { silent = true })
--- map("n", "<M-Right>", ":vertical resize +1<CR>", { silent = true })
-
 -- Save file with Cmd+S (Mac)
 vim.api.nvim_set_keymap("n", "<D-s>", ":w<CR>", { noremap = true, silent = true })
 vim.api.nvim_set_keymap("i", "<D-s>", "<Esc>:w<CR>", { noremap = true, silent = true })
