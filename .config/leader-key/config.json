@@ -93,6 +93,12 @@
           "label" : "Rsync push (Local -> Remote)",
           "type" : "command",
           "value" : "~/.local/rbin/rsync_to_remote.sh push"
+        },
+        {
+          "key" : "x",
+          "label" : "Xcode",
+          "type" : "application",
+          "value" : "/Applications/Xcode.app"
         }
       ],
       "iconPath" : "wrench.and.screwdriver.fill",
