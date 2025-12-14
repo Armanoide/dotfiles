@@ -222,7 +222,8 @@ alias ls=eza
 alias ll='eza -la --group-directories-first --icons'
 # cat
 alias b=bat
-
+# custom binary
+PATH="$HOME/.local/rbin:$PATH"
 
 ############################################################
 # 🔍 Productivity: fzf & zoxide
