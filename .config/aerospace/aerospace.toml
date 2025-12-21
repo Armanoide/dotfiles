@@ -70,8 +70,9 @@ inner.vertical = 20
 outer.left = 5
 outer.bottom = 0
 outer.top = [
-  { monitor."Studio Display" = 32 },
+  { monitor."Studio Display" = 50 },
   { monitor."Built-in Retina Display" = 12 },
+  { monitor."Sidecar Display (AirPlay)" = 40 },
   20,
 ]
 outer.right = 5
