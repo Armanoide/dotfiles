@@ -64,7 +64,6 @@ return {
     -- Custom Keymaps (Fixed the "Command not found" error by using keys)
     keys = {
       { "K", "<cmd>RustLsp { 'hover', 'actions' }<cr>", desc = "Rust Hover Docs" },
-      { "<leader>cj", "<cmd>RustLsp joinlines<cr>", desc = "Rust Join Lines" },
       { "<leader>cwa", "<cmd>RustLsp codeAction<cr>", desc = "Rust Code Action" },
       { "<leader>cwe", "<cmd>RustLsp explainError<cr>", desc = "Rust Error Explain" },
       { "<leader>cwd", "<cmd>RustLsp openDocs<cr>", desc = "Rust Docs" },
