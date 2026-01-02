@@ -178,6 +178,9 @@ export PATH="/opt/homebrew/Cellar/qt/6.7.3/share/qt/libexec:$PATH"
 # Elasticsearch
 export ES_JAVA_HOME=/opt/homebrew/opt/openjdk
 
+# Anaconda
+export PATH="/opt/homebrew/anaconda3/bin:$PATH"
+
 ############################################################
 # 🤖 AI / ML
 ############################################################
@@ -198,11 +201,6 @@ alias tailscale="/Applications/Tailscale.app/Contents/MacOS/Tailscale"
 
 # Xcode
 alias xcodeclean='sudo rm -rf ~/Library/Developer/Xcode/DerivedData'
-
-# Combo CLI shortcuts
-alias combo-download=combo-cli
-alias combo-ra=k9s
-alias combo-logs=stern
 
 # General
 alias allow_app='sudo xattr -rd com.apple.quarantine --'
