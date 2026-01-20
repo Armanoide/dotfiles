@@ -54,6 +54,11 @@ export LANG=en_US.UTF-8
 
 # Override system ncurses for better compatibility with some tools
 export PATH="/opt/homebrew/opt/ncurses/bin:$PATH"
+if [[ -z "$TERMINFO_DIRS" ]]; then
+    export TERMINFO_DIRS="/opt/homebrew/Cellar/ncurses/6.5/share/terminfo:$TERMINFO_DIRS"
+else
+    export TERMINFO_DIRS="/opt/homebrew/Cellar/ncurses/6.5/share/terminfo:$TERMINFO_DIRS"
+fi
 export TERMINFO_DIRS="/opt/homebrew/Cellar/ncurses/6.5/share/terminfo:$TERMINFO_DIRS"
 export TERMINFO="$HOME/.config/terminfo"
 # Force program to use Ghostty feature such as yazi with preview
@@ -250,7 +255,7 @@ export LS_COLORS="$(vivid generate catppuccin-mocha)"
 # 🖥️ TMUX
 ############################################################
  # tmux auto-attach when in SSH
- if [[ -n "$SSH_CONNECTION" && -z "$TMUX" && -t 1 ]]; then
+ if [[ -n "$SSH_CONNECTION" && -z "$TMUX" && -n "$PS1" ]]; then
      tmux attach || tmux new
  fi
 
