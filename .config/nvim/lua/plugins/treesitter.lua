@@ -32,8 +32,6 @@ return {
       },
       -- ensure these language parsers are installed
       ensure_installed = {
-        "norg",
-        "norg_meta",
         "json",
         "rust",
         "javascript",
@@ -53,7 +51,6 @@ return {
         "dockerfile",
         "gitignore",
         "query",
-        "verilog",
         "swift",
         "objc",
       },
