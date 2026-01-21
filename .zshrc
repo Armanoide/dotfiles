@@ -259,3 +259,10 @@ export LS_COLORS="$(vivid generate catppuccin-mocha)"
      tmux attach || tmux new
  fi
 
+
+############################################################
+# 🔑 bitwarden SSH Agent
+############################################################
+if [ -S "$HOME/.bitwarden-ssh-agent.sock" ]; then
+  export SSH_AUTH_SOCK="$HOME/.bitwarden-ssh-agent.sock"
+fi
