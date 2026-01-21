@@ -67,7 +67,6 @@ font-style-italic = Medium Italic
 font-style-bold-italic = Bold Italic
 font-size = 14
 font-thicken = true
-term=xterm-ghostty
 
 ###########
 ########### Window
