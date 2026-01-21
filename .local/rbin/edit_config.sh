@@ -10,6 +10,7 @@ edit-config() {
     "sketchybar" "$HOME/.config/sketchybar"
     "leader-key" "$HOME/.config/leader-key/config.json"
     "zshrc"      "$HOME/.zshrc"
+    "secret"     "$HOME/.zshrc_secret"
   )
 
   # Get keys using Zsh syntax: ${(k)configs}
