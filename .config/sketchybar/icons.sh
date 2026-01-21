@@ -4,6 +4,7 @@ get_icon() {
   app="$1"
 
   case "$app" in
+    *Bitwarden*)                        echo ":bit_warden:";;
     *Google\ Chrome*)                   echo ":google_chrome:";;
     *Safari*)                           echo ":safari:";;
     *TV*)                               echo ":tv:";;
