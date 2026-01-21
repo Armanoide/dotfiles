@@ -64,6 +64,11 @@
           "label" : "Music",
           "type" : "application",
           "value" : "/System/Applications/Music.app"
+        },
+        {
+          "key" : "b",
+          "type" : "application",
+          "value" : "/Applications/Bitwarden.app"
         }
       ],
       "iconPath" : "apps.iphone",
@@ -130,18 +135,18 @@
           "value" : "open ~/Projects"
         },
         {
-          "iconPath" : "doc.fill",
-          "key" : "r",
-          "label" : "Raycast Files",
-          "type" : "command",
-          "value" : "open ~/Library/Application\\ Support/com.raycast/database"
-        },
-        {
           "iconPath" : "eye.slash.fill",
           "key" : "t",
           "label" : "Toggle Hidden Files",
           "type" : "command",
           "value" : "osascript -e 'tell application \"System Events\" to keystroke \".\" using {command down, shift down}'"
+        },
+        {
+          "iconPath" : "apps.ipad.landscape",
+          "key" : "a",
+          "label" : "Open Applications Folder",
+          "type" : "command",
+          "value" : "open /Applications"
         }
       ],
       "iconPath" : "folder.circle.fill",
