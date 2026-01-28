@@ -1,0 +1,62 @@
+services:
+  mailserver:
+    image: ghcr.io/docker-mailserver/docker-mailserver:latest
+    container_name: mailserver
+    hostname: ${HOSTNAME}
+    domainname: ${DOMAINNAME}
+    env_file: .env
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+    cap_add:
+      - NET_ADMIN
+      - SYS_PTRACE
+    ports:
+      - "25:25"
+      - "143:143"
+      - "587:587"
+      - "993:993"
+    networks:
+      - mail_network
+    volumes:
+      - nasshare:/var/mail
+      - ./config/:/tmp/docker-mailserver/
+      - ./logs/:/var/log/mail/
+
+      - ./state/indices:/var/mail-state/indices
+      - ./state/control:/var/mail-state/control
+
+      - /etc/localtime:/etc/localtime:ro
+      - ${SSL_CERT_PATH_LOCAL}:/tmp/ssl/fullchain.pem:ro
+      - ${SSL_KEY_PATH_LOCAL}:/tmp/ssl/privkey.pem:ro
+    restart: always
+    environment:
+      - ENABLE_FETCHMAIL=1
+      - FETCHMAIL_POLL=86400
+      - DMS_VMAIL_UID=${MY_UID}
+      - DMS_VMAIL_GID=${MY_GID}
+      - DOVECOT_USER_ATTRS==home=/var/mail/%d/%n,=uid=${MY_UID},=gid=${MY_GID}
+      - SSL_TYPE=manual
+      - SSL_CERT_PATH=/tmp/ssl/fullchain.pem
+      - SSL_KEY_PATH=/tmp/ssl/privkey.pem
+      - RELAY_HOST=${RELAY_HOST}
+      - RELAY_PORT=${RELAY_PORT}
+      - RELAY_USER=${RELAY_USER}
+      - RELAY_PASS=${RELAY_PASS}
+      - SENDER_CANONICAL_MAPS=${SENDER_CANONICAL_MAPS}
+      - ONE_DIR=0
+      - POKS=0
+volumes:
+  postfix_data:
+  postfix_spool:
+  nasshare:
+    driver: local
+    driver_opts:
+      type: cifs
+      o: "username=${NAS_USER},password=${NAS_PASS},vers=3.0,uid=${MY_UID},gid=${MY_GID},mfsymlinks,noperm"
+      device: "${NAS_PATH}"
+
+networks:
+  mail_network:
+    external: true
