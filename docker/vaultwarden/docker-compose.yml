@@ -1,0 +1,22 @@
+services:
+  vaultwarden:
+    image: vaultwarden/server:latest
+    container_name: vaultwarden
+    restart: always
+    env_file: .env
+    environment:
+      # Enables real-time syncing across devices
+      - WEBSOCKET_ENABLED=true
+      # Add this line to enable SSH item support
+      - EXPERIMENTAL_CLIENT_FEATURE_FLAGS=ssh-key-vault-item,ssh-agent
+    volumes:
+      - ./vw-data:/data
+    ports:
+      - "${PORT_WEB}:80"
+      - "${PORT_WEBSOCKET}:3012"
+    networks:
+      - shared_db_network
+
+networks:
+  shared_db_network:
+    external: true
