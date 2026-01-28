@@ -49,6 +49,58 @@ case "$(uname -s)" in
 esac
 
 ############################################################
+# System & OS
+############################################################
+
+# Source private secrets
+if [[ -f "$HOME/.zshrc_secret" ]]; then
+    source "$HOME/.zshrc_secret"
+fi
+
+# You may need to manually set your language environmentj
+unset LC_ALL
+export LANG=en_US.UTF-8
+
+# Editor
+export EDITOR="nvim"
+export VISUAL="nvim"
+
+export TERMINFO="$HOME/.config/terminfo"
+if [[ "$OS" == "mac" ]]; then
+  # Override system ncurses for better compatibility with some tools
+  export PATH="/opt/homebrew/opt/ncurses/bin:$PATH"
+  if [[ -z "$TERMINFO_DIRS" ]]; then
+      export TERMINFO_DIRS="/opt/homebrew/Cellar/ncurses/6.5/share/terminfo:$TERMINFO_DIRS"
+  else
+      export TERMINFO_DIRS="/opt/homebrew/Cellar/ncurses/6.5/share/terminfo:$TERMINFO_DIRS"
+  fi
+  export TERMINFO_DIRS="/opt/homebrew/Cellar/ncurses/6.5/share/terminfo:$TERMINFO_DIRS"
+  # Force program to use Ghostty feature such as yazi with preview
+  export TERM_PROGRAM=Ghostty
+fi
+
+# custom binary
+PATH="$HOME/.local/rbin:$PATH"
+PATH="$HOME/.local/bin:$PATH"
+
+# SSH Agent Symlink Fix (Server-only)
+if [[ "$USE_AUTH_SOCK" == "true" ]]; then
+  TARGET="$HOME/.ssh/ssh_auth_sock"
+  if [[ -n "$SSH_CONNECTION" && -S "$SSH_AUTH_SOCK" && "$SSH_AUTH_SOCK" != "$TARGET" ]]; then
+      # Ensure the directory exists first
+      mkdir -p "$(dirname "$TARGET")"
+      ln -sf "$SSH_AUTH_SOCK" "$TARGET"
+  fi
+  if [[ -S "$TARGET" ]]; then
+      export SSH_AUTH_SOCK="$TARGET"
+  fi
+fi
+ # tmux auto-attach when in SSH
+ if [[ -n "$SSH_CONNECTION" && -z "$TMUX" && -n "$PS1" ]]; then
+    tmux attach || tmux new
+ fi
+
+############################################################
 #  UI & Prompt & Colors
 ############################################################
 
@@ -70,45 +122,6 @@ if [[ "$OS" == "mac" ]]; then
   [ -f /opt/homebrew/opt/fzf/shell/key-bindings.zsh ] && source /opt/homebrew/opt/fzf/shell/key-bindings.zsh
   [ -f /opt/homebrew/opt/fzf/shell/completion.zsh ] && source /opt/homebrew/opt/fzf/shell/completion.zsh
 fi
-
-############################################################
-# System & OS
-############################################################
-
-# Source private secrets
-if [[ -f "$HOME/.zshrc_secret" ]]; then
-    source "$HOME/.zshrc_secret"
-fi
-
-# You may need to manually set your language environmentj
-unset LC_ALL
-export LANG=en_US.UTF-8
-
-# Editor
-export EDITOR="nvim"
-export VISUAL="nvim"
-
-if [[ "$OS" == "mac" ]]; then
-  # Override system ncurses for better compatibility with some tools
-  export PATH="/opt/homebrew/opt/ncurses/bin:$PATH"
-  if [[ -z "$TERMINFO_DIRS" ]]; then
-      export TERMINFO_DIRS="/opt/homebrew/Cellar/ncurses/6.5/share/terminfo:$TERMINFO_DIRS"
-  else
-      export TERMINFO_DIRS="/opt/homebrew/Cellar/ncurses/6.5/share/terminfo:$TERMINFO_DIRS"
-  fi
-  export TERMINFO_DIRS="/opt/homebrew/Cellar/ncurses/6.5/share/terminfo:$TERMINFO_DIRS"
-  export TERMINFO="$HOME/.config/terminfo"
-  # Force program to use Ghostty feature such as yazi with preview
-  export TERM_PROGRAM=Ghostty
-fi
-
-# custom binary
-PATH="$HOME/.local/rbin:$PATH"
-
- # tmux auto-attach when in SSH
- if [[ -n "$SSH_CONNECTION" && -z "$TMUX" && -n "$PS1" ]]; then
-    tmux attach || tmux new
- fi
 
 ############################################################
 # Homebrew Setup
