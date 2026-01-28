@@ -42,133 +42,135 @@ plugins=(
 	zsh-syntax-highlighting
 )
 
+case "$(uname -s)" in
+    Darwin) OS='mac' ;;
+    Linux)  OS='linux' ;;
+    *)      OS='unknown' ;;
+esac
+
+############################################################
+#  UI & Prompt & Colors
+############################################################
+
 source $ZSH/oh-my-zsh.sh
 
-############################################################
-# 🔧 Init Shell
-############################################################
+# Powerlevel10k
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
 
-# You may need to manually set your language environmentj
-unset LC_ALL
-export LANG=en_US.UTF-8
+# vivid colors for ls
+export LS_COLORS="$(vivid generate catppuccin-mocha)"
 
-# Override system ncurses for better compatibility with some tools
-export PATH="/opt/homebrew/opt/ncurses/bin:$PATH"
-if [[ -z "$TERMINFO_DIRS" ]]; then
-    export TERMINFO_DIRS="/opt/homebrew/Cellar/ncurses/6.5/share/terminfo:$TERMINFO_DIRS"
-else
-    export TERMINFO_DIRS="/opt/homebrew/Cellar/ncurses/6.5/share/terminfo:$TERMINFO_DIRS"
+# zsh completion
+fpath+=~/.zfunc; autoload -Uz compinit; compinit
+
+# fzf → fuzzy search, completion, and keybindings
+source <(fzf --zsh)
+if [[ "$OS" == "mac" ]]; then
+  [ -f /opt/homebrew/opt/fzf/shell/key-bindings.zsh ] && source /opt/homebrew/opt/fzf/shell/key-bindings.zsh
+  [ -f /opt/homebrew/opt/fzf/shell/completion.zsh ] && source /opt/homebrew/opt/fzf/shell/completion.zsh
 fi
-export TERMINFO_DIRS="/opt/homebrew/Cellar/ncurses/6.5/share/terminfo:$TERMINFO_DIRS"
-export TERMINFO="$HOME/.config/terminfo"
-# Force program to use Ghostty feature such as yazi with preview
-export TERM_PROGRAM=Ghostty
+
+############################################################
+# System & OS
+############################################################
 
 # Source private secrets
 if [[ -f "$HOME/.zshrc_secret" ]]; then
     source "$HOME/.zshrc_secret"
 fi
 
-############################################################
-# 💻 ZSH
-############################################################
+# You may need to manually set your language environmentj
+unset LC_ALL
+export LANG=en_US.UTF-8
 
-# zsh completion
-fpath+=~/.zfunc; autoload -Uz compinit; compinit
-
-############################################################
-# 🛠️ Homebrew Setup
-############################################################
-# Ensure Homebrew bin in PATH
-export PATH="/opt/homebrew/bin:$PATH"
-export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
-
-# Install Homebrew if not present
-if ! command -v brew >/dev/null 2>&1; then
-  NONINTERACTIVE=1 /bin/bash -c \
-    "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-fi
-
-# Load Homebrew into PATH (Apple Silicon)
-eval "$(/opt/homebrew/bin/brew shellenv)"
-
-############################################################
-# ✏️ Editor
-############################################################
-export HOMEBREW_EDITOR=nvim
+# Editor
 export EDITOR="nvim"
 export VISUAL="nvim"
 
+if [[ "$OS" == "mac" ]]; then
+  # Override system ncurses for better compatibility with some tools
+  export PATH="/opt/homebrew/opt/ncurses/bin:$PATH"
+  if [[ -z "$TERMINFO_DIRS" ]]; then
+      export TERMINFO_DIRS="/opt/homebrew/Cellar/ncurses/6.5/share/terminfo:$TERMINFO_DIRS"
+  else
+      export TERMINFO_DIRS="/opt/homebrew/Cellar/ncurses/6.5/share/terminfo:$TERMINFO_DIRS"
+  fi
+  export TERMINFO_DIRS="/opt/homebrew/Cellar/ncurses/6.5/share/terminfo:$TERMINFO_DIRS"
+  export TERMINFO="$HOME/.config/terminfo"
+  # Force program to use Ghostty feature such as yazi with preview
+  export TERM_PROGRAM=Ghostty
+fi
+
+# custom binary
+PATH="$HOME/.local/rbin:$PATH"
+
+ # tmux auto-attach when in SSH
+ if [[ -n "$SSH_CONNECTION" && -z "$TMUX" && -n "$PS1" ]]; then
+    tmux attach || tmux new
+ fi
 
 ############################################################
-# 🐘 Databases
+# Homebrew Setup
 ############################################################
-# PostgreSQL
-export PATH="/opt/homebrew/opt/postgresql@15/bin:$PATH"
-alias postgresql_bg='/opt/homebrew/opt/postgresql@15/bin/postgres -D /opt/homebrew/var/postgresql@15'
 
-# libpq (psql client tools)
-export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
+if [[ "$OS" == "mac" ]]; then
+  # Ensure Homebrew bin in PATH
+  export PATH="/opt/homebrew/bin:$PATH"
+  export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
 
+  # Install Homebrew if not present
+  if ! command -v brew >/dev/null 2>&1; then
+    NONINTERACTIVE=1 /bin/bash -c \
+      "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  fi
+
+  # Load Homebrew into PATH (Apple Silicon)
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+
+  export HOMEBREW_EDITOR=nvim
+fi
 
 ############################################################
-# 💎 Ruby (rbenv)
+# Languages & tools
 ############################################################
-export PATH="$HOME/.rbenv/bin:$PATH"
-export RUBY_CONFIGURE_OPTS="--with-openssl-dir=$(brew --prefix openssl@3)"
-eval "$(rbenv init -)"
-export PATH="/opt/homebrew/opt/openssl@1.1/bin:$PATH"
-export PATH="$HOME/.rbenv/shims:$PATH"
 
+# Ruby
+if [[ "$OS" == "mac" ]]; then
+  export PATH="$HOME/.rbenv/bin:$PATH"
+  export RUBY_CONFIGURE_OPTS="--with-openssl-dir=$(brew --prefix openssl@3)"
+  eval "$(rbenv init -)"
+  export PATH="/opt/homebrew/opt/openssl@1.1/bin:$PATH"
+  export PATH="$HOME/.rbenv/shims:$PATH"
+fi
 
-############################################################
-# 🐍 Python
-############################################################
 # Python & pip
-export PATH="/opt/homebrew/opt/python@3.13/bin:$PATH"
-alias pip3='python3 -m pip'
+if [[ "$OS" == "mac" ]]; then
+ export PATH="/opt/homebrew/opt/python@3.13/bin:$PATH"
+ alias pip3='python3 -m pip'
+fi
 
-# pyenv
-eval "$(pyenv init -)"
+# Pyenv
+if [[ "$OS" == "mac" ]]; then
+  eval "$(pyenv init -)"
+fi
 
-
-############################################################
-# 📱 Mobile Development
-############################################################
-# Maestro
-export PATH=$PATH:$HOME/.maestro/bin
-alias maestro_upgrade="curl -Ls "https://get.maestro.mobile.dev" | bash"
-
-# Android SDK
-export ANDROID_SDK_ROOT=$HOME/Library/Android/sdk
-export ANDROID_HOME=$ANDROID_SDK_ROOT
-export PATH=$PATH:$ANDROID_SDK_ROOT/emulator
-export PATH=$PATH:$ANDROID_SDK_ROOT/platform-tools
-export PATH=$PATH:$ANDROID_SDK_ROOT/tools
-alias android-fix-server="adb kill-server && adb start-server && adb reverse tcp:8081 tcp:8081"
-
-
-############################################################
-# ☕ Java
-############################################################
+# Java
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home
 export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
 
+# Rust & Cargo
+if [[ "$OS" == "mac" ]]; then
+  . "$HOME/.cargo/env"
+  export PATH="$HOME/.cargo/bin:$PATH"
+fi
 
-############################################################
-# 🦀 Rust & Cargo
-############################################################
-. "$HOME/.cargo/env"
-export PATH="$HOME/.cargo/bin:$PATH"
-
-
-############################################################
-# 🧰 Other Languages & Tools
-############################################################
 # NVM
-export NVM_DIR="$HOME/.nvm"
-[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"
-[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"
+if [[ "$OS" == "mac" ]]; then
+  export NVM_DIR="$HOME/.nvm"
+  [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"
+  [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"
+fi
 
 # Bun
 export BUN_INSTALL="$HOME/.bun"
@@ -180,89 +182,71 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 # QT for UIC
 export PATH="/opt/homebrew/Cellar/qt/6.7.3/share/qt/libexec:$PATH"
 
-# Elasticsearch
-export ES_JAVA_HOME=/opt/homebrew/opt/openjdk
-
 # Anaconda
-export PATH="/opt/homebrew/anaconda3/bin:$PATH"
+
+if [[ "$OS" == "mac" ]]; then
+  export PATH="/opt/homebrew/anaconda3/bin:$PATH"
+fi
 
 ############################################################
-# 🤖 AI / ML
+# Mobile Development
 ############################################################
 
-# LM Studio
-export PATH="$PATH:$HOME/.lmstudio/bin"
+if [[ "$OS" == "mac" ]]; then
+  # Maestro
+  export PATH=$PATH:$HOME/.maestro/bin
+  alias maestro_upgrade="curl -Ls "https://get.maestro.mobile.dev" | bash"
 
-# Ollama
-export OLLAMA_BACKEND=mlx
-
-
-############################################################
-# ⚡ Aliases
-############################################################
-
-# Tailscale
-alias tailscale="/Applications/Tailscale.app/Contents/MacOS/Tailscale"
-
-# Xcode
-alias xcodeclean='sudo rm -rf ~/Library/Developer/Xcode/DerivedData'
-
-# General
-alias allow_app='sudo xattr -rd com.apple.quarantine --'
-
-# Apply Brewfile
-alias brew_restore='brew bundle --file="$HOME/.config/homebrew/Brewfile"'
-alias brew_dump='brew bundle dump --file=$HOME/.config/homebrew/Brewfile --force'
+  # Android SDK
+  export ANDROID_SDK_ROOT=$HOME/Library/Android/sdk
+  export ANDROID_HOME=$ANDROID_SDK_ROOT
+  export PATH=$PATH:$ANDROID_SDK_ROOT/emulator
+  export PATH=$PATH:$ANDROID_SDK_ROOT/platform-tools
+  export PATH=$PATH:$ANDROID_SDK_ROOT/tools
+  alias android-fix-server="adb kill-server && adb start-server && adb reverse tcp:8081 tcp:8081"
+fi
 
 ############################################################
-# 📂 Navigation & File Tools
+# Aliases
 ############################################################
 
 # ls
 alias l=eza
 alias ls=eza
-# ls 
 alias ll='eza -la --group-directories-first --icons'
+
 # cat
 alias b=bat
-# custom binary
-PATH="$HOME/.local/rbin:$PATH"
 
-############################################################
-# 🔍 Productivity: fzf & zoxide
-############################################################
-# fzf → fuzzy search, completion, and keybindings
-source <(fzf --zsh)
-[ -f /opt/homebrew/opt/fzf/shell/key-bindings.zsh ] && source /opt/homebrew/opt/fzf/shell/key-bindings.zsh
-[ -f /opt/homebrew/opt/fzf/shell/completion.zsh ] && source /opt/homebrew/opt/fzf/shell/completion.zsh
+# Tailscale
+if [[ "$OS" == "mac" ]]; then
+  alias tailscale="/Applications/Tailscale.app/Contents/MacOS/Tailscale"
+fi
+
+# Xcode
+if [[ "$OS" == "mac" ]]; then
+  alias xcodeclean='sudo rm -rf ~/Library/Developer/Xcode/DerivedData'
+fi
+
+# General
+if [[ "$OS" == "mac" ]]; then
+  alias allow_app='sudo xattr -rd com.apple.quarantine --'
+fi
+
+# Apply Brewfile
+if [[ "$OS" == "mac" ]]; then
+  alias brew_restore='brew bundle --file="$HOME/.config/homebrew/Brewfile"'
+  alias brew_dump='brew bundle dump --file=$HOME/.config/homebrew/Brewfile --force'
+fi
 
 # zoxide → smarter directory jumps
 eval "$(zoxide init zsh --cmd cd)"
 alias z=zoxide
 
+# ############################################################
+# # 🔑 bitwarden SSH Agent
+# ############################################################
 
-############################################################
-# 🎨 UI/Prompt/Colors
-############################################################
-# Powerlevel10k
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
-
-# vivid colors for ls
-export LS_COLORS="$(vivid generate catppuccin-mocha)"
-
-############################################################
-# 🖥️ TMUX
-############################################################
- # tmux auto-attach when in SSH
- if [[ -n "$SSH_CONNECTION" && -z "$TMUX" && -n "$PS1" ]]; then
-     tmux attach || tmux new
- fi
-
-
-############################################################
-# 🔑 bitwarden SSH Agent
-############################################################
 if [ -S "$HOME/.bitwarden-ssh-agent.sock" ]; then
   export SSH_AUTH_SOCK="$HOME/.bitwarden-ssh-agent.sock"
 fi
