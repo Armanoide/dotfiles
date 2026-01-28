@@ -54,6 +54,7 @@ quit-after-last-window-closed = true
 auto-update = "check"
 quick-terminal-position = "bottom"
 copy-on-select = false
+app-notifications = no-clipboard-copy
 
 ###########
 ########### Font
