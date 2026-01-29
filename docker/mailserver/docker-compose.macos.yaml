@@ -20,7 +20,7 @@ services:
     networks:
       - mail_network
     volumes:
-      - ${PATH_MAIL}:/var/mail
+      - nasshare:/var/mail
       - ./config/:/tmp/docker-mailserver/
       - ./logs/:/var/log/mail/
 
@@ -50,6 +50,12 @@ services:
 volumes:
   postfix_data:
   postfix_spool:
+  nasshare:
+    driver: local
+    driver_opts:
+      type: cifs
+      o: "username=${NAS_USER},password=${NAS_PASS},vers=3.0,uid=${MY_UID},gid=${MY_GID},mfsymlinks,noperm"
+      device: "${NAS_PATH}"
 
 networks:
   mail_network:
