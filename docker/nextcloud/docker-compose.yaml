@@ -1,0 +1,70 @@
+services:
+  nextcloud_db:
+    image: mariadb:lts
+    container_name: nextcloud_db
+    restart: always
+    networks:
+      - mail_network
+    command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
+    volumes:
+      - nextcloud_db:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+
+  nextcloud_redis:
+    image: redis:alpine
+    restart: always
+    container_name: nextcloud_redis
+    volumes:
+      - nextcloud_redis:/data
+    networks:
+      - mail_network
+
+  nextcloud_app:
+    image: nextcloud
+    container_name: nextcloud_app
+    restart: always
+    ports:
+      - 8818:80
+    networks:
+      - mail_network
+    extra_hosts:
+      - "mail.armanoide.net:${SERVER_IMAP}"
+    depends_on:
+      - nextcloud_redis
+      - nextcloud_db
+    volumes:
+      - ./html:/var/www/html
+      - nasshare:/var/www/html/data
+      - ./logs:/var/www/html/data/logs
+      - ./appdata:/var/www/html/data/appdata_oc0idgquhy36
+
+    environment:
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_HOST=nextcloud_db
+      - REDIS_HOST=nextcloud_redis
+      - NEXTCLOUD_ADMIN_USER=${NEXTCLOUD_ADMIN_USER}
+      - NEXTCLOUD_ADMIN_PASSWORD=${NEXTCLOUD_ADMIN_PASSWORD}
+      - NEXTCLOUD_TRUSTED_DOMAINS=${NEXTCLOUD_TRUSTED_DOMAINS}
+
+volumes:
+  nextcloud:
+  nextcloud_db:
+  nextcloud_redis:
+    name: nextcloud_redis
+
+  nasshare:
+    driver: local
+    driver_opts:
+      type: cifs
+      o: "username=${NAS_USER},password=${NAS_PASS},vers=3.0,uid=33,gid=33,file_mode=0770,dir_mode=0770"
+      device: "${NAS_PATH}"
+
+networks:
+  mail_network:
+    external: true
