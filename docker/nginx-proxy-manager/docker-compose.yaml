@@ -11,9 +11,9 @@ services:
       TZ: "Europe/Paris"
       DB_POSTGRES_HOST: "nginx_proxy_manager_db"
       DB_POSTGRES_PORT: "5432"
-      DB_POSTGRES_USER: "npm"
-      DB_POSTGRES_PASSWORD: "npmpass"
-      DB_POSTGRES_NAME: "npm"
+      DB_POSTGRES_USER: ${DB_USER}
+      DB_POSTGRES_PASSWORD: ${DB_PASS}
+      DB_POSTGRES_NAME: ${DB_NAME}
       # Uncomment this if IPv6 is not enabled on your host
       # DISABLE_IPV6: 'true'
     volumes:
@@ -35,9 +35,9 @@ services:
     image: postgres:17
     container_name: nginx_proxy_manager_db
     environment:
-      POSTGRES_USER: "npm"
-      POSTGRES_PASSWORD: "npmpass"
-      POSTGRES_DB: "npm"
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+      POSTGRES_DB: ${DB_NAME}
     volumes:
       - ./postgresql:/var/lib/postgresql/data
     healthcheck:
@@ -50,4 +50,5 @@ services:
 
 networks:
   nginx_proxy_manager_net:
-    driver: bridge
+    name: nginx_proxy_manager_net
+    external: true
