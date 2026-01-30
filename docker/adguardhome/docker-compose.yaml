@@ -1,0 +1,28 @@
+services:
+  adguardhome:
+    image: adguard/adguardhome
+    container_name: adguardhome
+    restart: unless-stopped
+    env_file: .env
+    security_opt:
+      - no-new-privileges:true
+    mem_limit: 2g
+    cpu_shares: 768
+    environment:
+      - TZ=Europe/Paris
+    volumes:
+      - ./work:/opt/adguardhome/work
+      - ./conf:/opt/adguardhome/conf
+    networks:
+      adguard_net:
+        ipv4_address: ${AD_GUARD_IP}
+
+networks:
+  adguard_net:
+    driver: macvlan
+    driver_opts:
+      parent: ${PARENT_LAN}
+    ipam:
+      config:
+        - subnet: ${SUBNET}
+          gateway: ${GATEWAY}
