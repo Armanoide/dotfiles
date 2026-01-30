@@ -31,16 +31,14 @@ services:
       - 8818:80
     networks:
       - mail_network
-    extra_hosts:
-      - "mail.armanoide.net:${SERVER_IMAP}"
     depends_on:
       - nextcloud_redis
       - nextcloud_db
     volumes:
       - ./html:/var/www/html
-      - nasshare:/var/www/html/data
-      - ./logs:/var/www/html/data/logs
-      - ./appdata:/var/www/html/data/appdata_oc0idgquhy36
+      - /volume1/NextCloud:/var/www/html/data
+      - ./nextcloud.log:/var/www/html/data/nextcloud.log
+      - ./${APP_FOLDER}:/var/www/html/data/${APP_FOLDER}
 
     environment:
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
@@ -57,13 +55,6 @@ volumes:
   nextcloud_db:
   nextcloud_redis:
     name: nextcloud_redis
-
-  nasshare:
-    driver: local
-    driver_opts:
-      type: cifs
-      o: "username=${NAS_USER},password=${NAS_PASS},vers=3.0,uid=33,gid=33,file_mode=0770,dir_mode=0770"
-      device: "${NAS_PATH}"
 
 networks:
   mail_network:
