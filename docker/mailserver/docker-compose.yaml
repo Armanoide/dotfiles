@@ -18,7 +18,10 @@ services:
       - "587:587"
       - "993:993"
     networks:
-      - mail_network
+      mail_network:
+        aliases:
+          - mail.armanoide.net
+          - mailserver
     volumes:
       - ${PATH_MAIL}:/var/mail
       - ./config/:/tmp/docker-mailserver/
