@@ -1,0 +1,18 @@
+services:
+  cloudflare_bouncer:
+    image: crowdsecurity/cloudflare-bouncer:latest
+    container_name: cloudflare_bouncer
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - ../crowd_sec/bouncer/crowdsec-cloudflare-bouncer.yaml:/etc/crowdsec/bouncers/crowdsec-cloudflare-bouncer.yaml
+      - ../crowd_sec/bouncer/cache:/var/lib/crowdsec/crowdsec-cloudflare-bouncer/
+    labels:
+    - "homarr.hide=true"
+    networks:
+      - crowdsec_net
+
+networks:
+  crowdsec_net:
+    external: true
