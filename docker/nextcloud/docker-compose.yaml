@@ -4,7 +4,7 @@ services:
     container_name: nextcloud_db
     restart: always
     networks:
-      - mail_network
+      - nextcloud_net
     command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
     volumes:
       - nextcloud_db:/var/lib/mysql
@@ -21,16 +21,15 @@ services:
     volumes:
       - nextcloud_redis:/data
     networks:
-      - mail_network
+      - nextcloud_net
 
   nextcloud_app:
     image: nextcloud
     container_name: nextcloud_app
     restart: always
-    ports:
-      - 8818:80
     networks:
-      - mail_network
+      - proxy_net
+      - nextcloud_net
     depends_on:
       - nextcloud_redis
       - nextcloud_db
@@ -39,7 +38,6 @@ services:
       - /volume1/NextCloud:/var/www/html/data
       - ./nextcloud.log:/var/www/html/data/nextcloud.log
       - ./${APP_FOLDER}:/var/www/html/data/${APP_FOLDER}
-
     environment:
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
@@ -49,6 +47,18 @@ services:
       - NEXTCLOUD_ADMIN_USER=${NEXTCLOUD_ADMIN_USER}
       - NEXTCLOUD_ADMIN_PASSWORD=${NEXTCLOUD_ADMIN_PASSWORD}
       - NEXTCLOUD_TRUSTED_DOMAINS=${NEXTCLOUD_TRUSTED_DOMAINS}
+      - OVERWRITEPROTOCOL=https
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.nextcloud.rule=Host(`cloud.armanoide.net`)"
+      - "traefik.http.routers.nextcloud.entrypoints=https"
+      - "traefik.http.routers.nextcloud.tls=true"
+      - "traefik.http.routers.nextcloud.tls.certresolver=cloudflare"
+      - "traefik.http.services.nextcloud.loadbalancer.server.port=80"
+      # Middlewares pour corriger les avertissements CalDAV/CardDAV de Nextcloud
+      - "traefik.http.routers.nextcloud.middlewares=nextcloud-dav"
+      - "traefik.http.middlewares.nextcloud-dav.redirectregex.regex=^https://(.*)/.well-known/(card|cal)dav"
+      - "traefik.http.middlewares.nextcloud-dav.redirectregex.replacement=https://$$1/remote.php/dav/"
 
 volumes:
   nextcloud:
@@ -57,5 +67,7 @@ volumes:
     name: nextcloud_redis
 
 networks:
-  mail_network:
+  proxy_net:
     external: true
+  nextcloud_net:
+      driver: bridge
