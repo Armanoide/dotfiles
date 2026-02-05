@@ -1,12 +1,17 @@
 services:
   beszel_agent:
-      image: 'henrygd/beszel-agent:latest'
-      container_name: beszel_agent
-      restart: always
-      network_mode: host
-      environment:
-        KEY: ${KEY}
-        HUB_URL: ${HUB_URL}
-        TOKEN: ${TOKEN}
-      volumes:
-        - /var/run/docker.sock:/var/run/docker.sock:ro
+    image: "henrygd/beszel-agent:latest"
+    container_name: beszel_agent
+    restart: always
+    network_mode: host
+    environment:
+      KEY: ${KEY}
+      HUB_URL: ${HUB_URL}
+      TOKEN: ${TOKEN}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - beszel_agent_data:/var/lib/beszel-agent
+
+volumes:
+  beszel_agent_data:
+    name: beszel_agent_data
