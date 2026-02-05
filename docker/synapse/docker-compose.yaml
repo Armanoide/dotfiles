@@ -1,0 +1,47 @@
+services:
+  synapse:
+    image: matrixdotorg/synapse:latest
+    container_name: synapse
+    restart: unless-stopped
+    ports:
+      - 8448:8448/tcp
+      - 8008:8008
+    volumes:
+      - ./data:/data
+      - ${MEDIA_STORE}:/data/media_store
+    environment:
+      - SYNAPSE_CONFIG_PATH=/data/homeserver.yaml
+    depends_on:
+      - synapse_db
+    networks:
+      - proxy_net
+      - synapse_net
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.synapse.rule=Host(`matrix.armanoide.net`)"
+      - "traefik.http.routers.synapse.entrypoints=https"
+      - "traefik.http.routers.synapse.tls=true"
+      - "traefik.http.routers.synapse.tls.certresolver=cloudflare"
+      - "traefik.http.services.synapse.loadbalancer.server.port=8008"
+
+  synapse_db:
+    image: postgres:14-alpine
+    container_name: synapse_db
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
+      - POSTGRES_INITDB_ARGS=--encoding=UTF-8 --lc-collate=C --lc-ctype=C
+    volumes:
+      - ./db:/var/lib/postgresql/data
+    networks:
+      - synapse_net
+
+networks:
+  proxy_net:
+    external: true
+  synapse_net:
+    name: synapse_net
+    driver: bridge
