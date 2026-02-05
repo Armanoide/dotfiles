@@ -1,0 +1,21 @@
+services:
+  arcane_agent:
+    image: ghcr.io/getarcaneapp/arcane-headless:latest
+    container_name: arcane_agent
+    restart: unless-stopped
+    environment:
+      - AGENT_MODE=true
+      - AGENT_TOKEN=${AGENT_TOKEN}
+      - MANAGER_API_URL=${MANAGER_API_URL}
+    ports:
+      - "3553:3553"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      # - ${DOCKER_STACK_PATH}/arcane_agent/data/arcane.db:/app/data/arcane.db
+      - ${DOCKER_STACK_PATH}:/app/data/projects
+      - ${DOCKER_STACK_PATH}/arcane_agent/data:/app/data
+      # - ${DOCKER_STACK_PATH}/arcane_agent/data/arcane.db-wal:/app/data/arcane.db-wal
+      # - ${DOCKER_STACK_PATH}/arcane_agent/data/arcane.db-shm:/app/data/arcane.db-shm
+
+volumes:
+  arcane_data:
