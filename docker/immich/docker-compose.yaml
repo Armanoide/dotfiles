@@ -2,34 +2,51 @@ services:
   immich:
     container_name: immich
     image: ghcr.io/immich-app/immich-server:${IMMICH_VERSION:-release}
-    # Accélération matérielle Intel pour le DX4800+
     devices:
       - /dev/dri:/dev/dri
     # extends:
     #   file: hwaccel.transcoding.yml
     #   service: cpu # set to one of [nvenc, quicksync, rkmpp, vaapi, vaapi-wsl] for accelerated transcoding
     volumes:
-      # Do not edit the next line. If you want to change the media storage location on your system, edit the value of UPLOAD_LOCATION in the .env file
-      - ${UPLOAD_LOCATION}:/data
-      - /home/norbert/Photos:/photos_norbert:ro
+      # To HDD (original picture and cache-video)
+      - /volume1/Immich/library:/data/library
+      - /volume1/Immich/upload:/data/upload
+      - /volume1/Immich/encoded-video:/data/encoded-video
+      - /volume1/Immich/backups:/data/backups
+      # TO SSD (thumbs)
+      - ./profile:/data/profile
+      - ./thumbs:/data/thumbs
+
       - /etc/localtime:/etc/localtime:ro
     env_file:
       - .env
-    ports:
-      - "2283:2283"
     depends_on:
       - redis
       - database
+    networks:
+      - proxy_net
+      - immich_internal
     restart: always
     healthcheck:
       disable: false
-
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.immich.rule=Host(`immich.armanoide.net`)"
+      - "traefik.http.routers.immich.entrypoints=https"
+      - "traefik.http.routers.immich.tls=true"
+      - "traefik.http.routers.immich.tls.certresolver=cloudflare"
+      - "traefik.http.services.immich.loadbalancer.server.port=2283"
+      # Immich remove limit like we manage huge file
+      - "traefik.http.routers.immich.middlewares=immich-buffering,crowdsec-bouncer@docker"
+      - "traefik.http.middlewares.immich-buffering.buffering.maxRequestBodyBytes=0"
   redis:
     container_name: immich_redis
     image: docker.io/valkey/valkey:9@sha256:546304417feac0874c3dd576e0952c6bb8f06bb4093ea0c9ca303c73cf458f63
     healthcheck:
       test: redis-cli ping || exit 1
     restart: always
+    networks:
+      - immich_internal
 
   database:
     container_name: immich_postgres
@@ -48,6 +65,11 @@ services:
     restart: always
     healthcheck:
       disable: false
+    networks:
+      - immich_internal
 
-volumes:
-  model-cache:
+networks:
+  proxy_net:
+    external: true
+  immich_internal:
+    driver: bridge
