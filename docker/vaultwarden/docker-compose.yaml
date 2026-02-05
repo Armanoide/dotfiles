@@ -11,12 +11,22 @@ services:
       - EXPERIMENTAL_CLIENT_FEATURE_FLAGS=ssh-key-vault-item,ssh-agent
     volumes:
       - ./vw-data:/data
-    ports:
-      - "${PORT_WEB}:80"
-      - "${PORT_WEBSOCKET}:3012"
     networks:
-      - shared_db_network
+      - proxy_net
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.vw.rule=Host(`vault.armanoide.net`)"
+      - "traefik.http.routers.vw.entrypoints=https"
+      - "traefik.http.routers.vw.tls=true"
+      - "traefik.http.routers.vw.tls.certresolver=cloudflare"
+      - "traefik.http.routers.vw.service=vw-web"
+      - "traefik.http.services.vw-web.loadbalancer.server.port=80"
+      - "traefik.http.routers.vw-ws.rule=Host(`vault.armanoide.net`) && PathPrefix(`/notifications/hub`)"
+      - "traefik.http.routers.vw-ws.entrypoints=https"
+      - "traefik.http.routers.vw-ws.tls=true"
+      - "traefik.http.routers.vw-ws.service=vw-websocket"
+      - "traefik.http.services.vw-websocket.loadbalancer.server.port=3012"
 
 networks:
-  shared_db_network:
+  proxy_net:
     external: true
