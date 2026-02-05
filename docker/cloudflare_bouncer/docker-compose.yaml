@@ -5,14 +5,19 @@ services:
     restart: always
     env_file:
       - .env
+    environment:
+      - CROWDSEC_LAPI_URL=http://crowdsec:8080
+      - CROWDSEC_LAPI_KEY=${CROWDSEC_LAPI_KEY}
+      - CF_API_KEY=${CF_API_KEY}
+      - CF_CONFIG_PATH=/etc/crowdsec/bouncers/cloudflare-bouncer.yaml
     volumes:
       - ../crowd_sec/bouncer/crowdsec-cloudflare-bouncer.yaml:/etc/crowdsec/bouncers/crowdsec-cloudflare-bouncer.yaml
       - ../crowd_sec/bouncer/cache:/var/lib/crowdsec/crowdsec-cloudflare-bouncer/
     labels:
     - "homarr.hide=true"
     networks:
-      - crowdsec_net
+      - proxy_net
 
 networks:
-  crowdsec_net:
+  proxy_net:
     external: true
