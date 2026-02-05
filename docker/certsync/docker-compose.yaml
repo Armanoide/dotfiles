@@ -1,0 +1,27 @@
+services:
+  certsync:
+    image: alpine
+    container_name: certsync
+    restart: always
+    entrypoint: |
+      sh -c "
+        apk add --no-cache jq;
+        while true; do
+          echo 'Extracting certificates...';
+          # Extraction du certificat
+          jq -r '.cloudflare.Certificates[] | select(.domain.main==\"${DOMAIN}\") | .certificate' /data/acme.json | base64 -d > /out/fullchain.pem;
+          # Extraction de la clé privée
+          jq -r '.cloudflare.Certificates[] | select(.domain.main==\"${DOMAIN}\") | .key' /data/acme.json | base64 -d > /out/privkey.pem;
+          chmod 600 /out/*.pem;
+          echo 'Done. Waiting 24h...';
+          sleep 86400;
+        done"
+    volumes:
+      - ${TRAEFIK_DATA_PATH}:/data:ro
+      - ${SSL_PATH_LOCAL}:/out
+    networks:
+      - proxy_net
+
+networks:
+  proxy_net:
+    external: true
