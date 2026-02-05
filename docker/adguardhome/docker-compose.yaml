@@ -14,11 +14,23 @@ services:
       - ./work:/opt/adguardhome/work
       - ./conf:/opt/adguardhome/conf
     networks:
-      adguard_net:
+      proxy_net:
+      vlan60_services:
         ipv4_address: ${AD_GUARD_IP}
 
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.adguard.rule=Host(`adguard.armanoide.net`)"
+      - "traefik.http.routers.adguard.entrypoints=https"
+      - "traefik.http.routers.adguard.tls=true"
+      - "traefik.http.routers.adguard.tls.certresolver=cloudflare"
+      - "traefik.http.services.adguard.loadbalancer.server.port=80"
+
 networks:
-  adguard_net:
+  proxy_net:
+    external: true
+  vlan60_services:
+    name: vlan60_services
     driver: macvlan
     driver_opts:
       parent: ${PARENT_LAN}
