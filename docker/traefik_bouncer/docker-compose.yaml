@@ -1,0 +1,17 @@
+services:
+  traefik_bouncer:
+    image: docker.io/fbonalair/traefik-crowdsec-bouncer:latest
+    container_name: traefik_bouncer
+    restart: always
+    env_file: .env
+    environment:
+      GIN_MODE: release
+      CROWDSEC_AGENT_HOST: crowdsec:8080
+      CROWDSEC_BOUNCER_API_KEY: ${CROWDSEC_BOUNCER_API_KEY}
+      LOG_LEVEL: info
+    networks:
+      - proxy_net
+
+networks:
+  proxy_net:
+    external: true
