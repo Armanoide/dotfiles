@@ -1,0 +1,33 @@
+services:
+  roundcubemail:
+    image: roundcube/roundcubemail:latest
+    container_name: roundcubemail
+    restart: unless-stopped
+    volumes:
+      - ./www:/var/www/html
+      - ./db/sqlite:/var/roundcube/db
+    environment:
+      - ROUNDCUBEMAIL_DB_TYPE=sqlite
+      - ROUNDCUBEMAIL_SKIN=elastic
+      - ROUNDCUBEMAIL_DEFAULT_HOST=${ROUNDCUBEMAIL_DEFAULT_HOST}
+      - ROUNDCUBEMAIL_DEFAULT_PORT=${ROUNDCUBEMAIL_DEFAULT_PORT}
+      - ROUNDCUBEMAIL_SMTP_SERVER=${ROUNDCUBEMAIL_SMTP_SERVER}
+      - ROUNDCUBEMAIL_SMTP_PORT=${ROUNDCUBEMAIL_SMTP_PORT}
+      - ROUNDCUBEMAIL_HTTPS=true
+    networks:
+      - proxy_net
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.roundcube.rule=Host(`webmail.armanoide.net`)"
+      - "traefik.http.routers.roundcube.entrypoints=https"
+      - "traefik.http.routers.roundcube.tls=true"
+      - "traefik.http.routers.roundcube.tls.certresolver=cloudflare"
+      - "traefik.http.services.roundcube.loadbalancer.server.port=80"
+      # remove limit for upload big file
+      - "traefik.http.middlewares.roundcube-limit.buffering.maxRequestBodyBytes=0"
+      - "traefik.http.routers.roundcube.middlewares=crowdsec-bouncer@docker"
+      - "traefik.http.routers.roundcube.middlewares=roundcube-limit"
+
+networks:
+  proxy_net:
+    external: true
