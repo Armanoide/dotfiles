@@ -1,0 +1,25 @@
+services:
+  dozzle:
+    container_name: dozzle
+    image: amir20/dozzle:latest
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - DOZZLE_REMOTE_AGENT=${DOZZLE_REMOTE_AGENT}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - proxy_net
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.dozzle.rule=Host(`logs.armanoide.net`)"
+      - "traefik.http.routers.dozzle.entrypoints=https"
+      - "traefik.http.routers.dozzle.tls=true"
+      - "traefik.http.routers.dozzle.tls.certresolver=cloudflare"
+      - "traefik.http.services.dozzle.loadbalancer.server.port=8080"
+      # Auth for middlewares
+      # - "traefik.http.routers.dozzle.middlewares=traefik-auth"
+
+networks:
+  proxy_net:
+    external: true
