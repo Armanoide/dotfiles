@@ -6,22 +6,22 @@ services:
     expose:
       - "8080"
     environment:
-      COLLECTIONS: "crowdsecurity/nginx-proxy-manager crowdsecurity/http-cve"
+      COLLECTIONS: "crowdsecurity/traefik crowdsecurity/http-cve crowdsecurity/whitelist-good-actors crowdsecurity/base-http-scenarios crowdsecurity/vaultwarden crowdsecurity/sshd crowdsecurity/linux"
       TZ: "Europe/Paris"
       GID: "1000"
     volumes:
       - ./crowdsec/acquis.yaml:/etc/crowdsec/acquis.yaml
       - ./crowdsec/db:/var/lib/crowdsec/data/
       - ./crowdsec/config:/etc/crowdsec/
-      - ${NGINX_LOG}:/var/log/npm:ro
+      - /volume2/Docker/traefik/logs:/var/log/traefik:ro
     labels:
       - "homepage.group=Security"
       - "homepage.name=CrowdSec"
       - "homepage.widget.type=crowdsec"
       - "homepage.widget.url=http://crowdsec:8080"
     networks:
-      - crowdsec_net
+      - proxy_net
 
 networks:
-  crowdsec_net:
+  proxy_net:
     external: true
