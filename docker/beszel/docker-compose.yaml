@@ -1,0 +1,22 @@
+services:
+  beszel:
+    image: 'henrygd/beszel:latest'
+    container_name: beszel
+    restart: always
+    volumes:
+      - ./data:/beszel_data
+    networks:
+      - proxy_net
+    ports:
+      - 8090:8090
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.beszel.rule=Host(`monitor.${DOMAIN}`)"
+      - "traefik.http.routers.beszel.entrypoints=https"
+      - "traefik.http.routers.beszel.tls=true"
+      - "traefik.http.routers.beszel.tls.certresolver=cloudflare"
+      - "traefik.http.services.beszel.loadbalancer.server.port=8090"
+
+networks:
+  proxy_net:
+    external: true
