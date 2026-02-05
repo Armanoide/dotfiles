@@ -1,0 +1,31 @@
+services:
+  uptime-kuma:
+    container_name: uptime_kuma
+    image: louislam/uptime-kuma:2
+    restart: unless-stopped
+    environment:
+      - PORT=8034
+    networks:
+      - proxy_net
+    volumes:
+      - ./data:/app/data
+    extra_hosts:
+      - "dashboard.armanoide.net:host-gateway"
+      - "adguard.armanoide.net:host-gateway"
+      - "infra.armanoide.net:host-gateway"
+      - "monitor.armanoide.net:host-gateway"
+      - "docker.armanoide.net:host-gateway"
+      - "logs.armanoide.net:host-gateway"
+      - "webmail.armanoide.net:host-gateway"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.kuma.rule=Host(`status.armanoide.net`)"
+      - "traefik.http.routers.kuma.entrypoints=https"
+      - "traefik.http.routers.kuma.tls=true"
+      - "traefik.http.routers.kuma.tls.certresolver=cloudflare"
+      - "traefik.http.routers.kuma.middlewares=crowdsec-bouncer@docker"
+      - "traefik.http.services.kuma.loadbalancer.server.port=8034"
+
+networks:
+  proxy_net:
+    external: true
