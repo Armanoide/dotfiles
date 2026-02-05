@@ -3,8 +3,6 @@ services:
     image: ghcr.io/getarcaneapp/arcane:latest
     container_name: arcane
     restart: always
-    ports:
-      - 3552:3552
     environment:
       - APP_URL=${APP_URL}
       - PUID=1000
@@ -15,3 +13,16 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./data:/app/data
       - ${DOCKER_STACK_PATH}:/app/data/projects
+    networks:
+      - proxy_net
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.arcane.rule=Host(`docker.armanoide.net`)"
+      - "traefik.http.routers.arcane.entrypoints=https"
+      - "traefik.http.routers.arcane.tls=true"
+      - "traefik.http.routers.arcane.tls.certresolver=cloudflare"
+      - "traefik.http.services.arcane.loadbalancer.server.port=3552"
+
+networks:
+  proxy_net:
+    external: true
