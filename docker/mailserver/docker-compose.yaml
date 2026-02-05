@@ -17,11 +17,11 @@ services:
       - "143:143"
       - "587:587"
       - "993:993"
+
     networks:
-      mail_network:
-        aliases:
-          - mail.armanoide.net
-          - mailserver
+      proxy_net:
+      vlan60_services:
+        ipv4_address: ${MAILSERVER_IP}
     volumes:
       - ${PATH_MAIL}:/var/mail
       - ./config/:/tmp/docker-mailserver/
@@ -55,5 +55,7 @@ volumes:
   postfix_spool:
 
 networks:
-  mail_network:
+  vlan60_services:
+    external: true
+  proxy_net:
     external: true
