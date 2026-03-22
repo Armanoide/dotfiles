@@ -14,7 +14,17 @@ vim.g.autoformat = false
 -- Use the system clipboard for all yank, delete, change, and put operations
 -- (makes Vim share the same clipboard as macOS/Linux/Windows)
 vim.opt.clipboard = "unnamedplus"
-
+vim.g.clipboard = {
+  name = "osc52",
+  copy = {
+    ["+"] = require("vim.ui.clipboard.osc52").copy("+"),
+    ["*"] = require("vim.ui.clipboard.osc52").copy("*"),
+  },
+  paste = {
+    ["+"] = require("vim.ui.clipboard.osc52").paste("+"),
+    ["*"] = require("vim.ui.clipboard.osc52").paste("*"),
+  },
+}
 -- Configure LazyVim’s Rust integration to use rust-analyzer for diagnostics
 -- (default LSP engine for Rust, ensures proper error reporting & analysis)
 vim.g.lazyvim_rust_diagnostics = "rust-analyser"

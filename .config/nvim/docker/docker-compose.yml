@@ -1,0 +1,11 @@
+services:
+  nvim_editor:
+    container_name: nvim_editor
+    build: .
+    volumes:
+      - /:/internal_volume:rw
+      - ${PATH_NVIM}:/root/.config/nvim
+    privileged: true
+    stdin_open: true
+    tty: true
+    network_mode: host
