@@ -98,6 +98,7 @@ fi
  # tmux auto-attach when in SSH
  if [[ -n "$SSH_CONNECTION" && -z "$TMUX" && -n "$PS1" ]]; then
     tmux attach || tmux new
+    eval $(tmux showenv -s | grep -E '^(SSH|DISPLAY)')
  fi
 
 ############################################################
