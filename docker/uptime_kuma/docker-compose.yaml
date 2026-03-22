@@ -10,16 +10,19 @@ services:
     volumes:
       - ./data:/app/data
     extra_hosts:
-      - "dashboard.armanoide.net:host-gateway"
-      - "adguard.armanoide.net:host-gateway"
-      - "infra.armanoide.net:host-gateway"
-      - "monitor.armanoide.net:host-gateway"
-      - "docker.armanoide.net:host-gateway"
-      - "logs.armanoide.net:host-gateway"
-      - "webmail.armanoide.net:host-gateway"
+      - "${DASHBOARD}:host-gateway"
+      - "${ADGUARD}:host-gateway"
+      - "${INFRA}:host-gateway"
+      - "${MONITOR}:host-gateway"
+      - "${DOCKER}:host-gateway"
+      - "${DOCKER2}:host-gateway"
+      - "${NOTIF}:host-gateway"
+      - "${BACKUPS}:host-gateway"
+      - "${LOGS}:host-gateway"
+      - "${WEBMAIL}:host-gateway"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.kuma.rule=Host(`status.armanoide.net`)"
+      - "traefik.http.routers.kuma.rule=Host(`status.${DOMAIN}`)"
       - "traefik.http.routers.kuma.entrypoints=https"
       - "traefik.http.routers.kuma.tls=true"
       - "traefik.http.routers.kuma.tls.certresolver=cloudflare"
