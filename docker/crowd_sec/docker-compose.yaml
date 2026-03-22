@@ -6,7 +6,7 @@ services:
     expose:
       - "8080"
     environment:
-      COLLECTIONS: "crowdsecurity/traefik crowdsecurity/http-cve crowdsecurity/whitelist-good-actors crowdsecurity/base-http-scenarios crowdsecurity/vaultwarden crowdsecurity/sshd crowdsecurity/linux"
+      COLLECTIONS: "crowdsecurity/traefik crowdsecurity/http-cve crowdsecurity/whitelist-good-actors crowdsecurity/base-http-scenarios Dominic-Wagner/vaultwarden crowdsecurity/sshd crowdsecurity/linux"
       TZ: "Europe/Paris"
       GID: "1000"
     volumes:
@@ -14,13 +14,29 @@ services:
       - ./crowdsec/db:/var/lib/crowdsec/data/
       - ./crowdsec/config:/etc/crowdsec/
       - /volume2/Docker/traefik/logs:/var/log/traefik:ro
+      - /volume2/Docker/vaultwarden/vw-data/vaultwarden.log:/var/log/vaultwarden.log:ro
     labels:
       - "homepage.group=Security"
       - "homepage.name=CrowdSec"
       - "homepage.widget.type=crowdsec"
       - "homepage.widget.url=http://crowdsec:8080"
+
+      - "traefik.enable=true"
+      - "traefik.http.routers.crowdsec.tls=true"
+      - "traefik.http.routers.crowsed.entrypoints=https"
+      - "traefik.http.routers.crowsed.rule=Host(`crowsed.${DOMAIN}`) && PathPrefix(`/health`)"
+      - "traefik.http.routers.crowsed.tls.certresolver=cloudflare"
+      - "traefik.http.middlewares.crowdsec.replacepath.path=/v1/health"
+      - "traefik.http.services.crowsed.loadbalancer.server.port=8080"
+
+
     networks:
       - proxy_net
+    healthcheck:
+      test: ["CMD", "cscli", "lapi", "status"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
 
 networks:
   proxy_net:
