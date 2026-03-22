@@ -9,19 +9,35 @@ services:
       - WEBSOCKET_ENABLED=true
       # Add this line to enable SSH item support
       - EXPERIMENTAL_CLIENT_FEATURE_FLAGS=ssh-key-vault-item,ssh-agent
+      - LOG_FILE=/data/vaultwarden.log
+      - LOG_LEVEL=warn
+      - EXTENDED_LOGGING=true
+      # Le format recommandé par la doc que tu as trouvée :
+      - LOG_TIMESTAMP_FORMAT=%Y-%m-%d %H:%M:%S.%3f%z
+
+      - ADMIN_TOKEN=${ADMIN_TOKEN}
+
+      - SMTP_HOST=${SMTP_HOST}
+      - SMTP_FROM=${SMTP_FROM}
+      - SMTP_FROM_NAME=${SMTP_FROM_NAME}
+      - SMTP_PORT=587
+      - SMTP_SECURITY=starttls
+      - SMTP_USERNAME=${SMTP_USERNAME}
+      - SMTP_PASSWORD=${SMTP_PASSWORD}
+      - SMTP_AUTH_MECHANISM=Plain
     volumes:
       - ./vw-data:/data
     networks:
       - proxy_net
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.vw.rule=Host(`vault.armanoide.net`)"
+      - "traefik.http.routers.vw.rule=Host(`vault.${DOMAIN}`)"
       - "traefik.http.routers.vw.entrypoints=https"
       - "traefik.http.routers.vw.tls=true"
       - "traefik.http.routers.vw.tls.certresolver=cloudflare"
       - "traefik.http.routers.vw.service=vw-web"
       - "traefik.http.services.vw-web.loadbalancer.server.port=80"
-      - "traefik.http.routers.vw-ws.rule=Host(`vault.armanoide.net`) && PathPrefix(`/notifications/hub`)"
+      - "traefik.http.routers.vw-ws.rule=Host(`vault.${DOMAIN}`) && PathPrefix(`/notifications/hub`)"
       - "traefik.http.routers.vw-ws.entrypoints=https"
       - "traefik.http.routers.vw-ws.tls=true"
       - "traefik.http.routers.vw-ws.service=vw-websocket"
