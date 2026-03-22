@@ -12,7 +12,7 @@ services:
     volumes:
       - ./garage.toml:/etc/garage.toml
       - ./meta:/var/lib/garage/meta
-      - /volume1/Garage:/var/lib/garage/data
+      - ${DATA_PATH}:/var/lib/garage/data
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.garage_s3.rule=Host(`s3.${DOMAIN}`)"
