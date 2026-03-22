@@ -1,3 +1,4 @@
 meta/
 garage.toml
 .env
+data/

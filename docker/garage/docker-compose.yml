@@ -7,6 +7,7 @@ services:
       - TZ=${TZ}
       - RUST_LOG=garage=info
     ports:
+      - "3901:3901"
       - "3903:3903"
       - "3900:3900"
     volumes:
