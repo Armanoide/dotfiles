@@ -197,9 +197,15 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 export PATH="/opt/homebrew/Cellar/qt/6.7.3/share/qt/libexec:$PATH"
 
 # Anaconda
-
 if [[ "$OS" == "mac" ]]; then
   export PATH="/opt/homebrew/anaconda3/bin:$PATH"
+fi
+
+# LM Studio CLI
+if [[ "$OS" == "mac" ]]; then
+  # Added by LM Studio CLI (lms)
+  export PATH="$PATH:/Volumes/EXT1_SSD/Users/user1/.lmstudio/bin"
+  # End of LM Studio CLI section
 fi
 
 ############################################################
@@ -264,3 +270,4 @@ alias z=zoxide
 if [ -S "$HOME/.bitwarden-ssh-agent.sock" ]; then
   export SSH_AUTH_SOCK="$HOME/.bitwarden-ssh-agent.sock"
 fi
+
