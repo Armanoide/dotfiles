@@ -13,10 +13,26 @@ services:
     volumes:
       - ../crowd_sec/bouncer/crowdsec-cloudflare-bouncer.yaml:/etc/crowdsec/bouncers/crowdsec-cloudflare-bouncer.yaml
       - ../crowd_sec/bouncer/cache:/var/lib/crowdsec/crowdsec-cloudflare-bouncer/
-    labels:
-    - "homarr.hide=true"
     networks:
       - proxy_net
+    labels:
+      - "homarr.hide=true"
+
+      - "traefik.enable=true"
+      - "traefik.http.routers.cloudflare_bouncer.tls=true"
+      - "traefik.http.routers.cloudflare_bouncer.entrypoints=https"
+      - "traefik.http.routers.cloudflare_bouncer.rule=Host(`cloudflare-bouncer.${DOMAIN}`) && PathPrefix(`/health`)"
+      - "traefik.http.routers.cloudflare_bouncer.tls.certresolver=cloudflare"
+      - "traefik.http.middlewares.cloudflare_bouncer.replacepath.path=/v1/health"
+      - "traefik.http.services.cloudflare_bouncer.loadbalancer.server.port=2112"
+
+      - "traefik.http.middlewares.cf-rewrite.replacepath.path=/metrics"
+      - "traefik.http.routers.cloudflare_bouncer.middlewares=cf-rewrite"
+    healthcheck:
+      test: ["CMD-SHELL", "netstat -an | grep 2112 | grep LISTEN || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
 
 networks:
   proxy_net:
