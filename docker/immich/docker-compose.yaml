@@ -2,6 +2,8 @@ services:
   immich:
     container_name: immich
     image: ghcr.io/immich-app/immich-server:${IMMICH_VERSION:-release}
+    group_add:
+      - "105"
     devices:
       - /dev/dri:/dev/dri
     # extends:
@@ -25,13 +27,13 @@ services:
       - database
     networks:
       - proxy_net
-      - immich_internal
+      - immich_net
     restart: always
     healthcheck:
       disable: false
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.immich.rule=Host(`immich.armanoide.net`)"
+      - "traefik.http.routers.immich.rule=Host(`immich.${DOMAIN}`)"
       - "traefik.http.routers.immich.entrypoints=https"
       - "traefik.http.routers.immich.tls=true"
       - "traefik.http.routers.immich.tls.certresolver=cloudflare"
@@ -46,7 +48,7 @@ services:
       test: redis-cli ping || exit 1
     restart: always
     networks:
-      - immich_internal
+      - immich_net
 
   database:
     container_name: immich_postgres
@@ -66,10 +68,11 @@ services:
     healthcheck:
       disable: false
     networks:
-      - immich_internal
+      - immich_net
 
 networks:
   proxy_net:
     external: true
-  immich_internal:
+  immich_net:
     driver: bridge
+    name: immich_net
