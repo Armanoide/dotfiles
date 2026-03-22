@@ -1,0 +1,35 @@
+services:
+  zerobyte:
+    image: ghcr.io/nicotsx/zerobyte:v0.29
+    container_name: zerobyte
+    restart: unless-stopped
+    cap_add:
+      - SYS_ADMIN
+    devices:
+      - /dev/fuse:/dev/fuse
+    environment:
+      - TZ=${TZ}
+      - BASE_URL=https://backups.${DOMAIN}
+      - APP_SECRET=${APP_SECRET}
+    extra_hosts:
+      - "s3.${DOMAIN}:host-gateway"
+      - "mail.${DOMAIN}:10.0.60.3"
+      - "notif.${DOMAIN}:host-gateway"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./data:/var/lib/zerobyte
+      - /volume2/Docker:/mydata/Docker:ro
+      - /volume1/Immich:/mydata/Immich:ro
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.zerobyte.rule=Host(`backups.${DOMAIN}`)"
+      - "traefik.http.routers.zerobyte.entrypoints=https"
+      - "traefik.http.routers.zerobyte.tls=true"
+      - "traefik.http.routers.zerobyte.tls.certresolver=cloudflare"
+      - "traefik.http.services.zerobyte.loadbalancer.server.port=4096"
+    networks:
+      - proxy_net
+
+networks:
+  proxy_net:
+    external: true
