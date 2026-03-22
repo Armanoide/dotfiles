@@ -15,43 +15,14 @@ services:
       - /volume1/Garage:/var/lib/garage/data
     labels:
       - "traefik.enable=true"
-      # - "traefik.docker.network=web"
       - "traefik.http.routers.garage_s3.rule=Host(`s3.${DOMAIN}`)"
       - "traefik.http.routers.garage_s3.entrypoints=https"
       - "traefik.http.routers.garage_s3.tls=true"
       - "traefik.http.routers.garage_s3.tls.certresolver=cloudflare"
       - "traefik.http.services.garage_s3.loadbalancer.server.port=3900"
 
-      # - "traefik.http.routers.garage_web.rule=Host(`web.s3.${DOMAIN}`)"
-      # - "traefik.http.routers.garage_web.entrypoints=https"
-      # - "traefik.http.routers.garage_web.tls=true"
-      # - "traefik.http.routers.garage_web.tls.certresolver=cloudflare"
-      # - "traefik.http.services.garage_web.loadbalancer.server.port=3901"
     networks:
       - proxy_net
-
-  garage_ui:
-    image: khairul169/garage-webui:latest
-    container_name: garage_ui
-    restart: unless-stopped
-    volumes:
-      - ./garage.toml:/etc/garage.toml:ro
-    environment:
-      API_BASE_URL: "http://garage:3903"
-      S3_ENDPOINT_URL: "https://s3.armanoide.net"
-    # extra_hosts:
-    #   - "s3.${DOMAIN}:host-gateway"
-    #   - "admin.s3.${DOMAIN}:host-gateway"
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.garage_admin.rule=Host(`admin.s3.${DOMAIN}`)"
-      - "traefik.http.routers.garage_admin.entrypoints=https"
-      - "traefik.http.routers.garage_admin.tls=true"
-      - "traefik.http.routers.garage_admin.tls.certresolver=cloudflare"
-      - "traefik.http.services.garage_admin.loadbalancer.server.port=3909"
-    networks:
-      - proxy_net
-
 
 networks:
   proxy_net:

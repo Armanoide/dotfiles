@@ -1,0 +1,25 @@
+services:
+  garage_ui:
+    image: khairul169/garage-webui:latest
+    container_name: garage_ui
+    restart: unless-stopped
+    volumes:
+      - ../garage/garage.toml:/etc/garage.toml:ro
+    environment:
+      API_BASE_URL: "http://garage:3903"
+      S3_ENDPOINT_URL: "https://s3.armanoide.net"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.garage_admin.rule=Host(`admin.s3.${DOMAIN}`)"
+      - "traefik.http.routers.garage_admin.entrypoints=https"
+      - "traefik.http.routers.garage_admin.tls=true"
+      - "traefik.http.routers.garage_admin.tls.certresolver=cloudflare"
+      - "traefik.http.services.garage_admin.loadbalancer.server.port=3909"
+    networks:
+      - proxy_net
+
+
+networks:
+  proxy_net:
+    external: true
+
