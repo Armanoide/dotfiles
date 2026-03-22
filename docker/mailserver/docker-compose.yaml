@@ -35,21 +35,17 @@ services:
       - ${SSL_KEY_PATH_LOCAL}:/tmp/ssl/privkey.pem:ro
     restart: always
     environment:
-      - ENABLE_FETCHMAIL=1
-      - FETCHMAIL_POLL=86400
       - DMS_VMAIL_UID=${MY_UID}
       - DMS_VMAIL_GID=${MY_GID}
       - DOVECOT_USER_ATTRS==home=/var/mail/%d/%n,=uid=${MY_UID},=gid=${MY_GID}
       - SSL_TYPE=manual
       - SSL_CERT_PATH=/tmp/ssl/fullchain.pem
       - SSL_KEY_PATH=/tmp/ssl/privkey.pem
-      - RELAY_HOST=${RELAY_HOST}
-      - RELAY_PORT=${RELAY_PORT}
-      - RELAY_USER=${RELAY_USER}
-      - RELAY_PASS=${RELAY_PASS}
-      - SENDER_CANONICAL_MAPS=${SENDER_CANONICAL_MAPS}
       - ONE_DIR=0
       - POKS=0
+      # Desactiver pour les vieux mail
+      - ENABLE_AMAVIS=0
+      - ENABLE_SPAMASSASSIN=0
 volumes:
   postfix_data:
   postfix_spool:
