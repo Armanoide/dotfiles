@@ -1,0 +1,42 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: dockhand_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - ./db:/var/lib/postgresql/data
+    networks:
+      - dockhand_net
+
+  dockhand:
+    image: fnsys/dockhand:latest
+    container_name: dockhand
+    environment:
+      DATABASE_URL: postgres://${DB_USER}:${DB_PASS}@postgres:5432/${DB_NAME}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./data:/app/data
+    depends_on:
+      - postgres
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.dockhand.rule=Host(`docker.${DOMAIN}`)"
+      - "traefik.http.routers.dockhand.entrypoints=https"
+      - "traefik.http.routers.dockhand.tls=true"
+      - "traefik.http.routers.dockhand.tls.certresolver=cloudflare"
+      - "traefik.http.routers.dockhand.middlewares=crowdsec-bouncer@docker"
+      - "traefik.http.services.dockhand.loadbalancer.server.port=3000"
+    networks:
+      - proxy_net
+      - dockhand_net
+
+networks:
+  dockhand_net:
+    name: dockhand_net
+  proxy_net:
+    external: true
