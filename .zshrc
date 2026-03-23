@@ -263,6 +263,8 @@ fi
 eval "$(zoxide init zsh --cmd cd)"
 alias z=zoxide
 
+alias garage="docker exec -ti garage /garage"
+
 # ############################################################
 # # 🔑 bitwarden SSH Agent
 # ############################################################
