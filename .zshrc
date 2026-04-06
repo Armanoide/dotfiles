@@ -264,6 +264,8 @@ eval "$(zoxide init zsh --cmd cd)"
 alias z=zoxide
 
 alias garage="docker exec -ti garage /garage"
+alias picoclaw="docker exec -ti picoclaw_gateway picoclaw"
+alias opencode="docker exec -ti opencode opencode"
 
 # ############################################################
 # # 🔑 bitwarden SSH Agent
