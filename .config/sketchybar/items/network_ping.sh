@@ -4,6 +4,7 @@ source "$TOOL_DIR/padding.sh"
 
 sketchybar --add item network_ping right \
   --set network_ping script="$PLUGIN_DIR/network_ping.sh" \
-  update_freq=4
+  update_freq=40000000000000
+  # update_freq=4
 
 set_padding network_ping
