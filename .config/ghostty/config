@@ -53,7 +53,9 @@ theme = "deep"
 quit-after-last-window-closed = true
 auto-update = "check"
 quick-terminal-position = "bottom"
-copy-on-select = false
+clipboard-read = allow
+clipboard-write = allow
+copy-on-select = clipboard
 app-notifications = no-clipboard-copy
 
 ###########
