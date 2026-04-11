@@ -149,6 +149,7 @@ cmd-8 = 'exec-and-forget ~/.config/aerospace/remap-passthrough.sh --key cmd-8 --
 
 cmd-9 = 'exec-and-forget ~/.config/aerospace/remap-passthrough.sh --key cmd-9 --command "workspace 9" --only "Raycast"; exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=9 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)'
 
+cmd-b = 'exec-and-forget ~/.config/aerospace/remap-passthrough.sh --key cmd-b --command "workspace b" --only "Raycast"; exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=b FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)'
 # See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
 
 cmd-shift-1 = 'exec-and-forget ~/.config/aerospace/remap-passthrough.sh --key cmd-shift-1 --command "move-node-to-workspace 1" --only "Raycast"; exec-and-forget sketchybar --trigger change-window-workspace TARGET_WORKSPACE=1 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)'
@@ -219,6 +220,14 @@ run = "move-node-to-workspace 3"
 [[on-window-detected]]
 if.app-id = 'com.apple.finder'
 run = "move-node-to-workspace 9"
+
+[[on-window-detected]]
+if.app-id = 'com.bitwarden.desktop'
+run = "move-node-to-workspace b"
+
+[[on-window-detected]]
+if.app-id = 'com.edovia.screens.5'
+run = "move-node-to-workspace 8"
 
 [workspace-to-monitor-force-assignment]
 1 = 'main'
