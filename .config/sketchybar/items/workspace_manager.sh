@@ -44,6 +44,23 @@ for sid in "${WORKSPACES[@]}"; do
   fi
 done
 
+# magic workspace for bitwarden (b)
+sketchybar --add item "space.b" left \
+  --set "space.b" \
+    background.drawing=on \
+    background.height=$CIRCLE_SIZE \
+    background.width=$CIRCLE_SIZE \
+    background.corner_radius=$RADIUS \
+    background.padding_left=$PADDING_LEFT \
+    background.padding_right=$PADDING_RIGHT \
+    icon.font="sketchybar-app-font:Regular:20.0" \
+    label="b" \
+    click_script="/opt/homebrew/bin/aerospace workspace b" \
+    script="$CONFIG_DIR/plugins/space.sh b" \
+    update_freq=1 \
+  --subscribe "space.b" aerospace_workspace_change workspace_manager
+set_padding "space.b"
+
 sketchybar --add bracket space_group "${SPACE_GROUP[@]}" \
   --set space_group \
     background.color=$CRUST
