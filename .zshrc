@@ -149,6 +149,15 @@ fi
 # Languages & tools
 ############################################################
 
+if [[ "$OS" == "mac" ]]; then
+  export PATH="$PATH:/Applications/Docker.app/Contents/Resources/bin/"
+  # The following lines have been added by Docker Desktop to enable Docker CLI completions.
+  fpath=(/Volumes/EXT1_SSD/Users/user1/.docker/completions $fpath)
+  autoload -Uz compinit
+  compinit
+  # End of Docker CLI completions
+fi
+
 # Ruby
 if [[ "$OS" == "mac" ]]; then
   export PATH="$HOME/.rbenv/bin:$PATH"
