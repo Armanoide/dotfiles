@@ -213,7 +213,7 @@ fi
 # LM Studio CLI
 if [[ "$OS" == "mac" ]]; then
   # Added by LM Studio CLI (lms)
-  export PATH="$PATH:/Volumes/EXT1_SSD/Users/user1/.lmstudio/bin"
+  export PATH="$PATH:$HOME/.lmstudio/bin"
   # End of LM Studio CLI section
 fi
 
@@ -283,4 +283,6 @@ alias opencode="docker exec -ti opencode opencode"
 if [ -S "$HOME/.bitwarden-ssh-agent.sock" ]; then
   export SSH_AUTH_SOCK="$HOME/.bitwarden-ssh-agent.sock"
 fi
+
+
 
