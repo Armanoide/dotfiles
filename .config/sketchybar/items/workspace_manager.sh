@@ -8,6 +8,12 @@ source "$TOOL_DIR/padding.sh"
 WORKSPACES=(1 2 3 4 5 6 7 8 9)
 SPACE_GROUP=()
 
+# Circle size
+CIRCLE_SIZE=32
+RADIUS=$((CIRCLE_SIZE / 2))
+PADDING_RIGHT=5
+PADDING_LEFT=5
+
 for sid in "${WORKSPACES[@]}"; do
   if ! sketchybar --query "space.$sid" &>/dev/null; then
     if [ $sid = "11" ]; then
@@ -16,12 +22,6 @@ for sid in "${WORKSPACES[@]}"; do
       LABEL="$sid"
     fi
 
-    # Circle size
-    CIRCLE_SIZE=32
-    RADIUS=$((CIRCLE_SIZE / 2))
-
-    PADDING_RIGHT=5
-    PADDING_LEFT=5
 
     SPACE_GROUP+=("space.$sid")
 
@@ -45,21 +45,27 @@ for sid in "${WORKSPACES[@]}"; do
 done
 
 # magic workspace for bitwarden (b)
-sketchybar --add item "space.b" left \
-  --set "space.b" \
-    background.drawing=on \
-    background.height=$CIRCLE_SIZE \
-    background.width=$CIRCLE_SIZE \
-    background.corner_radius=$RADIUS \
-    background.padding_left=$PADDING_LEFT \
-    background.padding_right=$PADDING_RIGHT \
-    icon.font="sketchybar-app-font:Regular:20.0" \
-    label="b" \
-    click_script="/opt/homebrew/bin/aerospace workspace b" \
-    script="$CONFIG_DIR/plugins/space.sh b" \
-    update_freq=1 \
-  --subscribe "space.b" aerospace_workspace_change workspace_manager
-set_padding "space.b"
+if ! sketchybar --query "space.b" &>/dev/null; then
+  SPACE_GROUP+=("space.b")
+
+  sketchybar --add item "space.b" left \
+    --set "space.b" \
+      background.drawing=on \
+      background.height=$CIRCLE_SIZE \
+      background.width=$CIRCLE_SIZE \
+      background.corner_radius=$RADIUS \
+      background.padding_left=$PADDING_LEFT \
+      background.padding_right=$PADDING_RIGHT \
+      icon.font="sketchybar-app-font:Regular:20.0" \
+      label="b" \
+      click_script="/opt/homebrew/bin/aerospace workspace b" \
+      script="$CONFIG_DIR/plugins/space.sh b" \
+      update_freq=1 \
+    --subscribe "space.b" aerospace_workspace_change workspace_manager
+  set_padding "space.b"
+fi
+
+sketchybar --reorder "${SPACE_GROUP[@]}"
 
 sketchybar --add bracket space_group "${SPACE_GROUP[@]}" \
   --set space_group \
