@@ -49,6 +49,27 @@ case "$(uname -s)" in
 esac
 
 ############################################################
+# Homebrew Setup
+############################################################
+
+if [[ "$OS" == "mac" ]]; then
+  # Ensure Homebrew bin in PATH
+  export PATH="/opt/homebrew/bin:$PATH"
+  export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
+
+  # Install Homebrew if not present
+  if ! command -v brew >/dev/null 2>&1; then
+    NONINTERACTIVE=1 /bin/bash -c \
+      "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  fi
+
+  # Load Homebrew into PATH (Apple Silicon)
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+
+  export HOMEBREW_EDITOR=nvim
+fi
+
+############################################################
 # System & OS
 ############################################################
 
@@ -122,27 +143,6 @@ source <(fzf --zsh)
 if [[ "$OS" == "mac" ]]; then
   [ -f /opt/homebrew/opt/fzf/shell/key-bindings.zsh ] && source /opt/homebrew/opt/fzf/shell/key-bindings.zsh
   [ -f /opt/homebrew/opt/fzf/shell/completion.zsh ] && source /opt/homebrew/opt/fzf/shell/completion.zsh
-fi
-
-############################################################
-# Homebrew Setup
-############################################################
-
-if [[ "$OS" == "mac" ]]; then
-  # Ensure Homebrew bin in PATH
-  export PATH="/opt/homebrew/bin:$PATH"
-  export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
-
-  # Install Homebrew if not present
-  if ! command -v brew >/dev/null 2>&1; then
-    NONINTERACTIVE=1 /bin/bash -c \
-      "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-  fi
-
-  # Load Homebrew into PATH (Apple Silicon)
-  eval "$(/opt/homebrew/bin/brew shellenv)"
-
-  export HOMEBREW_EDITOR=nvim
 fi
 
 ############################################################
