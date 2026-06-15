@@ -1,0 +1,37 @@
+services:
+  socket_proxy:
+    container_name: socket_proxy
+    image: lscr.io/linuxserver/socket-proxy:latest
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "2375:2375"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    networks:
+      - proxy_net
+    read_only: true
+    tmpfs:
+      - /run
+    security_opt:
+      - no-new-privileges:true
+
+  socket_proxy_mac_mini:
+    container_name: socket_proxy_mac_mini
+    image: lscr.io/linuxserver/socket-proxy:latest
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "2376:2375"
+    volumes:
+      - "/volume2/Users/norbert/docker/autossh/socket/docker.sock:/var/run/docker.sock:ro"
+    networks:
+      - proxy_net
+    read_only: true
+    tmpfs:
+      - /run
+    security_opt:
+      - no-new-privileges:true
+networks:
+  proxy_net:
+    external: true
