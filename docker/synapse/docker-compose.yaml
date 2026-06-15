@@ -3,7 +3,6 @@ services:
     image: matrixdotorg/synapse:latest
     container_name: synapse
     restart: unless-stopped
-    # user: "${UID}:${GID}"
     ports:
       - 8448:8448/tcp
       - 8008:8008
@@ -47,8 +46,8 @@ services:
     hostname: synapse-admin
     image: awesometechnologies/synapse-admin:latest
     restart: unless-stopped
-    volumes:
-      - ./config.json:/app/config.json:ro
+    # volumes:
+    #   - ./config.json:/app/config.json:ro
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.adm-synapse.rule=Host(`admin.matrix.${DOMAIN}`)"
