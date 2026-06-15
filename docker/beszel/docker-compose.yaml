@@ -16,6 +16,8 @@ services:
       - "traefik.http.routers.beszel.tls=true"
       - "traefik.http.routers.beszel.tls.certresolver=cloudflare"
       - "traefik.http.services.beszel.loadbalancer.server.port=8090"
+    extra_hosts:
+      - "ntfy.${DOMAIN}:10.0.10.2"
 
 networks:
   proxy_net:
