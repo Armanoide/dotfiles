@@ -15,7 +15,6 @@ services:
       OCR_PROVIDER: ${OCR_PROVIDER}
       VISION_LLM_PROVIDER: ${VISION_LLM_PROVIDER}
       VISION_LLM_MODEL: ${VISION_LLM_MODEL}
-      OLLAMA_HOST: ${OLLAMA_HOST}
       OCR_PROCESS_MODE: ${OCR_PROCESS_MODE}
       PDF_SKIP_EXISTING_OCR: ${PDF_SKIP_EXISTING_OCR}
       CREATE_LOCAL_HOCR: ${CREATE_LOCAL_HOCR}
@@ -26,20 +25,14 @@ services:
       - ./prompts:/app/prompts
       - ./hocr:/app/hocr
       - ./pdf:/app/pdf
-    networks:
-      - proxy_net
-      - paperless_net
-    extra_hosts:
-      - "paperless.armanoide.net:host-gateway"
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.paperless-gpt.rule=Host(`gpt.paperless.${DOMAIN}`)"
-      - "traefik.http.routers.paperless-gpt.entrypoints=https"
-      - "traefik.http.routers.paperless-gpt.tls=true"
-      - "traefik.http.routers.paperless-gpt.tls.certresolver=cloudflare"
-      - "traefik.http.services.paperless-gpt.loadbalancer.server.port=8080"
-networks:
-  proxy_net:
-    external: true
-  paperless_net:
-    external: true
+    ports:
+      - "8077:8080"
+    # networks:
+    #   - proxy_net
+    #   - paperless_net
+
+# networks:
+#   proxy_net:
+#     external: true
+#   paperless_net:
+#     external: true
