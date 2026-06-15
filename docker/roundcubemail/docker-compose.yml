@@ -4,7 +4,8 @@ services:
     container_name: roundcubemail
     restart: unless-stopped
     volumes:
-      - ./www:/var/www/html
+      - ./www/config:/var/www/html/config
+      - ./www/plugins:/var/www/html/plugins
       - ./db/sqlite:/var/roundcube/db
     environment:
       - ROUNDCUBEMAIL_DB_TYPE=sqlite
@@ -14,19 +15,32 @@ services:
       - ROUNDCUBEMAIL_SMTP_SERVER=${ROUNDCUBEMAIL_SMTP_SERVER}
       - ROUNDCUBEMAIL_SMTP_PORT=${ROUNDCUBEMAIL_SMTP_PORT}
       - ROUNDCUBEMAIL_HTTPS=true
+      - ROUNDCUBEMAIL_PLUGINS=archive,zipdownload,nextbridge,roundcube_catppuccin
     networks:
       - proxy_net
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.roundcube.rule=Host(`webmail.armanoide.net`)"
+      - "traefik.http.routers.roundcube.rule=Host(`webmail.${DOMAIN}`)"
       - "traefik.http.routers.roundcube.entrypoints=https"
       - "traefik.http.routers.roundcube.tls=true"
       - "traefik.http.routers.roundcube.tls.certresolver=cloudflare"
       - "traefik.http.services.roundcube.loadbalancer.server.port=80"
-      # remove limit for upload big file
+
+      - "traefik.http.routers.roundcube-alias.rule=Host(`cloud.${DOMAIN}`) && PathPrefix(`/roundcube`)"
+      - "traefik.http.routers.roundcube-alias.entrypoints=https"
+      - "traefik.http.routers.roundcube-alias.tls=true"
+      - "traefik.http.routers.roundcube-alias.tls.certresolver=cloudflare"
+      - "traefik.http.routers.roundcube-alias.service=roundcube"
+      - "traefik.http.routers.roundcube-alias.priority=100"
+
+      - "traefik.http.middlewares.roundcube-prefix.stripprefix.prefixes=/roundcube"
+
       - "traefik.http.middlewares.roundcube-limit.buffering.maxRequestBodyBytes=0"
-      - "traefik.http.routers.roundcube.middlewares=crowdsec-bouncer@docker"
-      - "traefik.http.routers.roundcube.middlewares=roundcube-limit"
+      - "traefik.http.middlewares.roundcube-security.headers.customFrameOptionsValue="
+      - "traefik.http.middlewares.roundcube-security.headers.contentSecurityPolicy=frame-ancestors 'self' https://cloud.${DOMAIN}"
+
+      - "traefik.http.routers.roundcube.middlewares=crowdsec-bouncer@docker,roundcube-limit,roundcube-security"
+      - "traefik.http.routers.roundcube-alias.middlewares=crowdsec-bouncer@docker,roundcube-limit,roundcube-security,roundcube-prefix"
 
 networks:
   proxy_net:
