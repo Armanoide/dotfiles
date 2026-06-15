@@ -18,8 +18,8 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ./data:/var/lib/zerobyte
-      - /volume2/Docker:/mydata/Docker:ro
-      - /volume1/Immich:/mydata/Immich:ro
+      - /volume2/Docker:/mydata/Docker
+      - /volume1/Immich:/mydata/Immich
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.zerobyte.rule=Host(`backups.${DOMAIN}`)"
