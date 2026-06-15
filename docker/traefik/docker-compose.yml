@@ -25,6 +25,7 @@ services:
       - ./data/config.yaml:/config.yaml:ro
       - ./logs:/var/log/traefik
     command:
+      - "--configfile=/traefik.yaml"
       - "--accesslog=true"
       - "--accesslog.filepath=/var/log/traefik/access.log"
       - "--accesslog.format=json"
