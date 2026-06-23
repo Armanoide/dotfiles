@@ -1,0 +1,108 @@
+services:
+  excalidraw:
+    container_name: excalidraw
+    image: excalidraw/excalidraw:latest
+    entrypoint: /bin/sh
+    command:
+      - -c
+      - |
+        sed -i 's|https://oss-collab\.excalidraw\.com|https://room.draw.armanoide.net|g' /usr/share/nginx/html/assets/*.js
+        sed -i 's|https://json\.excalidraw\.com/api/v2/post/|https://storage.draw.armanoide.net/api/v2/scenes/|g' /usr/share/nginx/html/assets/*.js
+        sed -i 's|https://json\.excalidraw\.com/api/v2/|https://storage.draw.armanoide.net/api/v2/scenes/|g' /usr/share/nginx/html/assets/*.js
+        nginx -g 'daemon off;'
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - proxy_net
+      - excalidraw_net
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.excalidraw.rule=Host(`draw.${DOMAIN}`)"
+      - "traefik.http.routers.excalidraw.entrypoints=https"
+      - "traefik.http.routers.excalidraw.tls=true"
+      - "traefik.http.routers.excalidraw.tls.certresolver=cloudflare"
+      - "traefik.http.routers.excalidraw.middlewares=excalidraw-sablier,crowdsec-bouncer@docker"
+      - "traefik.http.services.excalidraw.loadbalancer.server.port=80"
+      - "traefik.docker.allownonrunning=true"
+      - "traefik.http.middlewares.excalidraw-sablier.plugin.sablier.group=excalidraw"
+      - "traefik.http.middlewares.excalidraw-sablier.plugin.sablier.sablierUrl=http://sablier:10000"
+      - "traefik.http.middlewares.excalidraw-sablier.plugin.sablier.sessionDuration=60m"
+      - "traefik.http.middlewares.excalidraw-sablier.plugin.sablier.dynamic.displayName=excalidraw"
+      - "traefik.http.middlewares.excalidraw-sablier.plugin.sablier.dynamic.theme=hacker-terminal"
+      - "traefik.http.middlewares.excalidraw-sablier.plugin.sablier.dynamic.showDetails=true"
+      - "sablier.enable=true"
+      - "sablier.group=excalidraw"
+
+  excalidraw_room:
+    container_name: excalidraw_room
+    image: excalidraw/excalidraw-room:sha-03ff435
+    environment:
+      - CORS_ORIGIN=https://draw.armanoide.net
+    networks:
+      - proxy_net
+      - excalidraw_net
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.excalidraw_room.rule=Host(`room.draw.${DOMAIN}`)"
+      - "traefik.http.routers.excalidraw_room.entrypoints=https"
+      - "traefik.http.routers.excalidraw_room.tls=true"
+      - "traefik.http.routers.excalidraw_room.tls.certresolver=cloudflare"
+      - "traefik.http.routers.excalidraw_room.middlewares=crowdsec-bouncer@docker"
+      - "traefik.http.services.excalidraw_room.loadbalancer.server.port=80"
+      - "traefik.docker.allownonrunning=true"
+
+  excalidraw_storage:
+    container_name: excalidraw_storage
+    image: nginx:alpine
+    volumes:
+      - /volume2/Users/norbert/docker/excalidraw/storage_nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - excalidraw_storage_backend
+    networks:
+      - proxy_net
+      - excalidraw_net
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.excalidraw_storage.rule=Host(`storage.draw.${DOMAIN}`)"
+      - "traefik.http.routers.excalidraw_storage.entrypoints=https"
+      - "traefik.http.routers.excalidraw_storage.tls=true"
+      - "traefik.http.routers.excalidraw_storage.tls.certresolver=cloudflare"
+      - "traefik.http.routers.excalidraw_storage.middlewares=crowdsec-bouncer@docker"
+      - "traefik.http.services.excalidraw_storage.loadbalancer.server.port=80"
+      - "traefik.docker.allownonrunning=true"
+
+  excalidraw_storage_backend:
+    container_name: excalidraw_storage_backend
+    image: excalidraw-storage-backend:latest
+    environment:
+      - STORAGE_URI=mongodb://excalidraw_db:27017/excalidraw
+      - PORT=8080
+      - GLOBAL_PREFIX=/api/v2
+      - LOG_LEVEL=warn
+    depends_on:
+      - excalidraw_db
+    networks:
+      - excalidraw_net
+
+  excalidraw_db:
+    container_name: excalidraw_db
+    image: mongo:7
+    volumes:
+      - mongo_data:/data/db
+      - mongo_configdb:/data/configdb
+    networks:
+      - excalidraw_net
+
+networks:
+  proxy_net:
+    external: true
+  excalidraw_net:
+    driver: bridge
+
+volumes:
+  mongo_data:
+  mongo_configdb:
