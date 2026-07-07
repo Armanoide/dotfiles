@@ -1,0 +1,76 @@
+services:
+  litellm:
+    container_name: litellm
+    image: docker.litellm.ai/berriai/litellm:main-latest
+    # deploy:
+    #   resources:
+    #     limits:
+    #       memory: 1G
+    #       cpus: '1.0' 
+    #     reservations:
+    #       memory: 256M
+    volumes:
+     - ./config.yaml:/app/config.yaml
+    command:
+     - "--config=/app/config.yaml"
+    environment:
+      DATABASE_URL: "postgresql://${DB_USER}:${DB_PASS}@litellm_db:5432/${DB_NAME}"
+      STORE_MODEL_IN_DB: "True"
+      EXTRA_PROXY_LITELLM_KWARGS: "--telemetry"
+    env_file:
+      - .env
+    ports:
+      - "3008:4000"
+    depends_on:
+      - litellm_db
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - python3 -c "import urllib.request; urllib.request.urlopen('http://localhost:4000/health/liveliness')"
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - proxy_net
+      - litellm_net
+
+  litellm_db:
+    image: postgres:16
+    restart: always
+    container_name: litellm_db
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+    volumes:
+      - ./db/litellm:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d ${DB_NAME} -U ${DB_USER}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - litellm_net
+
+  prometheus:
+    container_name: litellm_prometheus
+    image: prom/prometheus
+    user: "0:0"
+    volumes:
+      - ./db/prometheus:/prometheus
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - litellm_net
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--storage.tsdb.retention.time=7d"
+    restart: always
+
+networks:
+  litellm_net:
+    name: litellm_net
+  proxy_net:
+    external: true
+

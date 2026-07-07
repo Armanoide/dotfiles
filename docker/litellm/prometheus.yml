@@ -1,0 +1,8 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'litellm'
+    bearer_token: 'sk-spoilage-sponsor-province'
+    static_configs:
+      - targets: ['litellm:4000']
