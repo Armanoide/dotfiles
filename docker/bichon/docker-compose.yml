@@ -1,0 +1,24 @@
+services:
+  bichon:
+    image: rustmailer/bichon:latest
+    container_name: bichon
+    restart: unless-stopped
+    ports:
+      - 3006:15630
+    volumes:
+      - ./data:/data
+      - /mnt/nas-bichon/eml:/data/eml
+    environment:
+      BICHON_ROOT_DIR: /data
+      BICHON_LOG_LEVEL: info
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "1143"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+networks:
+  proxy_net:
+    external: true
+
