@@ -8,6 +8,7 @@ services:
       - RUST_LOG=garage=info
     ports:
       - "3901:3901"
+      - "3902:3902"
       - "3903:3903"
       - "3900:3900"
     volumes:
