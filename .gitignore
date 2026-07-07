@@ -24,4 +24,7 @@
 
 .config/karabiner/automatic_backups/**
 
+share
+state
 
+.config/nvim/lazy-lock.json
