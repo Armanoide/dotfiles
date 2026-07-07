@@ -5,10 +5,10 @@ services:
     hostname: ${HOSTNAME}
     domainname: ${DOMAINNAME}
     env_file: .env
-    deploy:
-      resources:
-        limits:
-          memory: 512M
+    # deploy:
+    #   resources:
+    #     limits:
+    #       memory: 512M
     cap_add:
       - NET_ADMIN
       - SYS_PTRACE
@@ -23,7 +23,7 @@ services:
       vlan60_services:
         ipv4_address: ${MAILSERVER_IP}
     volumes:
-      - ${PATH_MAIL}:/var/mail
+      - ./mail:/var/mail
       - ./config/:/tmp/docker-mailserver/
       - ./logs/:/var/log/mail/
 
@@ -41,17 +41,14 @@ services:
       - SSL_TYPE=manual
       - SSL_CERT_PATH=/tmp/ssl/fullchain.pem
       - SSL_KEY_PATH=/tmp/ssl/privkey.pem
-      - ONE_DIR=0
-      - POKS=0
-      # Desactiver pour les vieux mail
+      # disable to be able to get/read old mail
       - ENABLE_AMAVIS=0
       - ENABLE_SPAMASSASSIN=0
-volumes:
-  postfix_data:
-  postfix_spool:
+      - TZ=${TZ}
 
 networks:
   vlan60_services:
     external: true
   proxy_net:
     external: true
+
