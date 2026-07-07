@@ -1,0 +1,8 @@
+# Docker
+.env.local
+.env
+# OS
+.DS_Store
+logs
+ssh_host_keys
+ssh-key

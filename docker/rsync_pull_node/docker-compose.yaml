@@ -1,0 +1,16 @@
+services:
+  rsync_pull_node:
+    build: .
+    container_name: rsync_pull_node
+    env_file: .env
+    environment:
+      - CRON_TASK_1=0 3 * * * /scripts/sync_nodes.sh
+    volumes:
+      - ${DOCKER_SOURCE}:/source/docker
+      - ./scripts/sync_nodes.sh:/scripts/sync_nodes.sh
+      - ./logs:/var/log/rsync_pull
+      - /etc/localtime:/etc/localtime
+      - ./ssh_host_keys:/ssh_host_keys
+      - ./ssh-key:/root/.ssh
+    command: "client"
+    restart: unless-stopped
