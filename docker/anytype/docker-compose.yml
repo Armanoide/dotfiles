@@ -1,0 +1,45 @@
+services:
+  anytype:
+    image: ghcr.io/grishy/any-sync-bundle:latest
+    container_name: anytype_sync
+    restart: unless-stopped
+    volumes:
+      - ./data:/data
+    environment:
+      - ANY_SYNC_BUNDLE_INIT_EXTERNAL_ADDRS=sync.notes.
+    ports:
+      - 33010:33010
+      - 33020:33020/udp
+    healthcheck:
+      test: ["CMD", "bash", "-c", "echo >/dev/tcp/localhost/33010"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+    networks:
+      - proxy_net
+      - anytype_net
+
+  anytype_api:
+    image: anyproto/anytype-cli:latest
+    container_name: anytype_api
+    restart: unless-stopped
+    command: [serve, --listen-address, 0.0.0.0:31012]
+    ports:
+    - 31012:31012
+    volumes:
+      - ./account:/root/.anytype
+      - ./config:/root/.config/anytype
+    depends_on:
+      anytype:
+        condition: service_healthy
+    networks:
+      - anytype_net
+      - proxy_net
+
+
+networks:
+  proxy_net:
+    external: true
+  anytype_net:
+    external: true
