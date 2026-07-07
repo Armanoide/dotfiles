@@ -17,7 +17,6 @@ services:
       proxy_net:
       vlan60_services:
         ipv4_address: ${AD_GUARD_IP}
-
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.adguard.rule=Host(`adguard.${DOMAIN}`)"
@@ -30,11 +29,12 @@ networks:
   proxy_net:
     external: true
   vlan60_services:
-    name: vlan60_services
-    driver: macvlan
-    driver_opts:
-      parent: ${PARENT_LAN}
-    ipam:
-      config:
-        - subnet: ${SUBNET}
-          gateway: ${GATEWAY}
+    external: true
+    # name: vlan60_services
+    # driver: macvlan
+    # driver_opts:
+    #   parent: ${PARENT_LAN}
+    # ipam:
+    #   config:
+    #     - subnet: ${SUBNET}
+    #       gateway: ${GATEWAY}
