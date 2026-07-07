@@ -13,12 +13,19 @@ services:
           # Extraction de la clé privée
           jq -r '.cloudflare.Certificates[] | select(.domain.main==\"${DOMAIN}\") | .key' /data/acme.json | base64 -d > /out/privkey.pem;
           chmod 600 /out/*.pem;
+
+          echo 'Copying certificates to shared path...';
+          # Copie vers le second dossier
+          cp /out/*.pem /shared/;
+          chmod 600 /shared/*.pem;
+
           echo 'Done. Waiting 24h...';
           sleep 86400;
         done"
     volumes:
       - ${TRAEFIK_DATA_PATH}:/data:ro
       - ${SSL_PATH_LOCAL}:/out
+      - ${SHARED_CERT_PATH}:/shared
     networks:
       - proxy_net
 
