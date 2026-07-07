@@ -1,0 +1,119 @@
+services:
+  excalidash_postgres:
+    image: postgres:16-alpine
+    container_name: excalidash_postgres
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER:-excalidash}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-excalidash}
+      - POSTGRES_DB=${POSTGRES_DB:-excalidash}
+    volumes:
+      - ./db:/var/lib/postgresql/data
+    networks:
+      - excalidash_net
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-excalidash}"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  excalidash_backend:
+    image: zimengxiong/excalidash-backend:latest
+    container_name: excalidash_backend
+    environment:
+      - DATABASE_PROVIDER=postgresql
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-excalidash}:${POSTGRES_PASSWORD:-excalidash}@excalidash_postgres:5432/${POSTGRES_DB:-excalidash}
+      - PORT=8000
+      - NODE_ENV=production
+      - AUTH_MODE=local
+      - TRUST_PROXY=1
+      - ENFORCE_HTTPS_REDIRECT=false
+      - JWT_SECRET=${JWT_SECRET}
+      - CSRF_SECRET=${CSRF_SECRET}
+      - FRONTEND_URL=https://draw.${DOMAIN}
+    depends_on:
+      excalidash_postgres:
+        condition: service_healthy
+    volumes:
+      - ./data:/app/prisma
+    networks:
+      - excalidash_net
+    restart: unless-stopped
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "require('http').get('http://127.0.0.1:8000/health', (r) => process.exit(r.statusCode === 200 ? 0 : 1))",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  excalidash_frontend:
+    image: zimengxiong/excalidash-frontend:latest
+    container_name: excalidash_frontend
+    environment:
+      - BACKEND_URL=excalidash_backend:8000
+    depends_on:
+      - excalidash_backend
+    ports:
+      - "3004:80"
+    networks:
+      - proxy_net
+      - excalidash_net
+    restart: unless-stopped
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--quiet",
+          "--tries=1",
+          "--spider",
+          "http://127.0.0.1:80",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  excalidash_api:
+    image: ghcr.io/armanoide/excalidash-api:latest
+    container_name: excalidash_api
+    environment:
+      - BACKEND_URL=excalidash_backend:8000
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-excalidash}:${POSTGRES_PASSWORD:-excalidash}@excalidash_postgres:5432/${POSTGRES_DB:-excalidash}
+      - FRONTEND_URL=https://draw.${DOMAIN}
+      - JWT_SECRET=${JWT_SECRET}
+      - PORT=3000
+      - REQUEST_TIMEOUT=${REQUEST_TIMEOUT:-15000}
+      - API_JWT_EXPIRES_IN=${API_JWT_EXPIRES_IN:-1h}
+      - API_REFRESH_EXPIRES_IN=${API_REFRESH_EXPIRES_IN:-7d}
+    depends_on:
+      - excalidash_backend
+    ports:
+      - "3005:3000"
+    networks:
+      - proxy_net
+      - excalidash_net
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://127.0.0.1:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    stop_grace_period: 10s
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+        reservations:
+          memory: 64M
+
+networks:
+  proxy_net:
+    external: true
+  excalidash_net:
+    name: excalidash_net
+    driver: bridge
