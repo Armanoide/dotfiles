@@ -1,10 +1,17 @@
 services:
   nvim_editor:
     container_name: nvim_editor
-    build: .
+    build:
+      context: .
+      args:
+        CONTAINER_UID: ${CONTAINER_UID}
+        CONTAINER_GID: ${CONTAINER_GID}
     volumes:
       - /:/internal_volume:rw
-      - ${PATH_NVIM}:/root/.config/nvim
+      # nvim config for root (--root mode)
+      - ${NVIM_CONFIG_HOST}:/root/.config/nvim
+      # nvim config for nvim user (default mode)
+      - ${NVIM_CONFIG_HOST}:/home/nvim/.config/nvim
     privileged: true
     stdin_open: true
     tty: true
