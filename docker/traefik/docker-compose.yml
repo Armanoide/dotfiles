@@ -55,7 +55,8 @@ services:
       # Sub domain
       - "traefik.http.routers.traefik-secure.tls.domains[0].main=${DOMAIN}"
       - "traefik.http.routers.traefik-secure.tls.domains[0].sans=*.${DOMAIN}"
-      #
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
 secrets:
   cf_token:
