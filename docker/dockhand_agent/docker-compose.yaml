@@ -1,7 +1,7 @@
 services:
   hawser:
     image: ghcr.io/finsys/hawser:latest
-    container_name: dockhand-agent
+    container_name: dockhand_agent
     restart: unless-stopped
     ports:
       - "2376:2376"
