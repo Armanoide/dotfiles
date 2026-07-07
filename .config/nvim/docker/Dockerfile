@@ -6,6 +6,7 @@ ARG CONTAINER_GID
 RUN apt-get update && apt-get install -y \
     curl \
     git \
+    tini \
     build-essential \
     gcc \
     ripgrep \
@@ -46,5 +47,5 @@ RUN printf '#!/bin/bash\n' > /usr/local/bin/entrypoint.sh && \
 
 WORKDIR /home/nvim
 USER nvim
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+ENTRYPOINT ["/usr/bin/tini", "--"]
 CMD ["/usr/local/bin/nvim"]
