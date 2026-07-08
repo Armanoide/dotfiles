@@ -5,7 +5,7 @@ services:
     restart: unless-stopped
     ports:
       - 8448:8448/tcp
-      - 8008:8008
+      - 3010:8008
     volumes:
       - ./data:/data
       - ${MEDIA_STORE}:/data/media_store
@@ -18,13 +18,6 @@ services:
     networks:
       - proxy_net
       - synapse_net
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.synapse.rule=Host(`matrix.${DOMAIN}`)"
-      - "traefik.http.routers.synapse.entrypoints=https"
-      - "traefik.http.routers.synapse.tls=true"
-      - "traefik.http.routers.synapse.tls.certresolver=cloudflare"
-      - "traefik.http.services.synapse.loadbalancer.server.port=8008"
 
   synapse_db:
     image: postgres:14-alpine
@@ -46,15 +39,8 @@ services:
     hostname: synapse-admin
     image: awesometechnologies/synapse-admin:latest
     restart: unless-stopped
-    # volumes:
-    #   - ./config.json:/app/config.json:ro
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.adm-synapse.rule=Host(`admin.matrix.${DOMAIN}`)"
-      - "traefik.http.routers.adm-synapse.entrypoints=https"
-      - "traefik.http.routers.adm-synapse.tls=true"
-      - "traefik.http.routers.adm-synapse.tls.certresolver=cloudflare"
-      - "traefik.http.services.adm-synapse.loadbalancer.server.port=80"
+    ports:
+      - "3009:80"
     networks:
       - synapse_net
       - proxy_net
