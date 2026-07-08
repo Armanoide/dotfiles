@@ -1,0 +1,17 @@
+#!/bin/sh
+
+# 1. Check if local nvim exists based on OS or standard PATH
+if [ "$(uname)" = "Darwin" ] && [ -x "/opt/homebrew/bin/nvim" ]; then
+    # macOS with Homebrew Neovim
+    exec /opt/homebrew/bin/nvim "$@"
+elif command -v nvim >/dev/null 2>&1; then
+    # Linux (or macOS) with nvim available in standard PATH
+    # We use 'command -v' but ensure it's not pointing to this script itself
+    LOCAL_NVIM=$(which -a nvim | grep -v "$0" | head -n 1)
+    if [ -n "$LOCAL_NVIM" ]; then
+        exec "$LOCAL_NVIM" "$@"
+    fi
+fi
+
+# 2. Fallback to Docker if no local installation is found
+exec docker exec -it -w "/internal_volume$(pwd)" nvim_editor nvim "$@"
