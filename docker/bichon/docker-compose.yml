@@ -11,12 +11,6 @@ services:
     environment:
       BICHON_ROOT_DIR: /data
       BICHON_LOG_LEVEL: info
-    healthcheck:
-      test: ["CMD", "nc", "-z", "localhost", "1143"]
-      interval: 30s
-      timeout: 5s
-      retries: 3
-      start_period: 10s
 
 networks:
   proxy_net:
