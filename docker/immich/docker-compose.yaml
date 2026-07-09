@@ -9,12 +9,14 @@ services:
     # extends:
     #   file: hwaccel.transcoding.yml
     #   service: cpu # set to one of [nvenc, quicksync, rkmpp, vaapi, vaapi-wsl] for accelerated transcoding
+    ports:
+      - "3011:2283"
     volumes:
       # To HDD (original picture and cache-video)
-      - /volume1/Immich/library:/data/library
-      - /volume1/Immich/upload:/data/upload
-      - /volume1/Immich/encoded-video:/data/encoded-video
-      - /volume1/Immich/backups:/data/backups
+      - /mnt/nas-immich/library:/data/library
+      - /mnt/nas-immich/upload:/data/upload
+      - /mnt/nas-immich/encoded-video:/data/encoded-video
+      - /mnt/nas-immich/backups:/data/backups
       # TO SSD (thumbs)
       - ./profile:/data/profile
       - ./thumbs:/data/thumbs
@@ -31,16 +33,7 @@ services:
     restart: always
     healthcheck:
       disable: false
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.immich.rule=Host(`immich.${DOMAIN}`)"
-      - "traefik.http.routers.immich.entrypoints=https"
-      - "traefik.http.routers.immich.tls=true"
-      - "traefik.http.routers.immich.tls.certresolver=cloudflare"
-      - "traefik.http.services.immich.loadbalancer.server.port=2283"
-      # Immich remove limit like we manage huge file
-      - "traefik.http.routers.immich.middlewares=immich-buffering,crowdsec-bouncer@docker"
-      - "traefik.http.middlewares.immich-buffering.buffering.maxRequestBodyBytes=0"
+
   redis:
     container_name: immich_redis
     image: docker.io/valkey/valkey:9@sha256:546304417feac0874c3dd576e0952c6bb8f06bb4093ea0c9ca303c73cf458f63
