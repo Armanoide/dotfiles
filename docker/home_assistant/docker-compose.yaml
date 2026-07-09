@@ -1,0 +1,27 @@
+services:
+  homeassistant:
+    container_name: home_assistant
+    image: ghcr.io/home-assistant/home-assistant:stable
+    volumes:
+      - ./config:/config
+      - /etc/localtime:/etc/localtime:ro
+    restart: unless-stopped
+    ports:
+      - "3016:8123"
+    networks:
+      proxy_net:
+      vlan60_services:
+        ipv4_address: ${HA_IP}
+    # labels:
+    #   - "traefik.enable=true"
+    #   - "traefik.http.routers.ha.rule=Host(`ha.${DOMAIN}`)"
+    #   - "traefik.http.routers.ha.entrypoints=https"
+    #   - "traefik.http.routers.ha.tls=true"
+    #   - "traefik.http.routers.ha.tls.certresolver=cloudflare"
+    #   - "traefik.http.services.ha.loadbalancer.server.port=8123"
+
+networks:
+  vlan60_services:
+    external: true
+  proxy_net:
+    external: true
