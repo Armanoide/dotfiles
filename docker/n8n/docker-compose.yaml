@@ -1,0 +1,91 @@
+services:
+  n8n_db:
+    image: postgres:18
+    container_name: n8n_db
+    restart: on-failure:5
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
+      timeout: 45s
+      interval: 10s
+      retries: 10
+    volumes:
+      - ./db:/var/lib/postgresql
+    environment:
+      TZ: Europe/Bucharest
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+    networks:
+      - n8n_net
+  n8n:
+    container_name: n8n
+    user: root
+    image: docker.io/n8nio/n8n:latest
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    ports:
+      - "3014:5678"
+    environment:
+      # - UID=${UID}
+      # - GID=${GID}
+      - N8N_HOST=n8n.${DOMAIN}
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=https
+      - WEBHOOK_URL=https://n8n.${DOMAIN}/
+      - N8N_ENCRYPTION_KEY=${N8N_SECRET}
+      - TZ=${TZ}
+      - GENERIC_TIMEZONE=${TZ}
+      - NODE_ENV=production
+      - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
+      - DB_TYPE=postgresdb
+      - DB_POSTGRESDB_DATABASE=${DB_NAME}
+      - DB_POSTGRESDB_HOST=n8n_db
+      - DB_POSTGRESDB_PORT=5432
+      - DB_POSTGRESDB_USER=${DB_USER}
+      - DB_POSTGRESDB_PASSWORD=${DB_PASS}
+      - N8N_COMMUNITY_PACKAGES_ENABLED=true
+      - EXECUTIONS_DATA_SAVE_ON_SUCCESS=none
+      - EXECUTIONS_DATA_SAVE_ON_ERROR=all
+      - EXECUTIONS_DATA_PRUNE=true
+      - EXECUTIONS_DATA_PRUNE_TIMEOUT=3600
+      - EXECUTIONS_DATA_MAX_AGE=24
+      - EXECUTIONS_DATA_PRUNE_MAX_COUNT=50
+      - N8N_FEATURE_FLAG_MCP=true
+      - WEBHOOK_SECRET=retinal-tranquil-radial-rack
+    volumes:
+      - ./data:/root/.n8n
+      # - ./data:/home/node/.n8n
+      - ./files:/files
+
+    networks:
+      - proxy_net
+      - n8n_net
+    extra_hosts:
+      - "api.ia.${DOMAIN}:host-gateway"
+      - "n8n.${DOMAIN}:host-gateway"
+      - "paperless.${DOMAIN}:host-gateway"
+    # labels:
+    #   - "traefik.enable=true"
+    #   - "traefik.http.routers.n8n.rule=Host(`n8n.${DOMAIN}`)"
+    #   - "traefik.http.routers.n8n.entrypoints=https"
+    #   - "traefik.http.routers.n8n.tls=true"
+    #   - "traefik.http.routers.n8n.tls.certresolver=cloudflare"
+    #   - "traefik.http.services.n8n.loadbalancer.server.port=5678"
+    #   - "traefik.http.middlewares.n8n.headers.SSLRedirect=true"
+    #   - "traefik.http.middlewares.n8n.headers.STSSeconds=315360000"
+    #   - "traefik.http.middlewares.n8n.headers.browserXSSFilter=true"
+    #   - "traefik.http.middlewares.n8n.headers.contentTypeNosniff=true"
+    #   - "traefik.http.middlewares.n8n.headers.forceSTSHeader=true"
+    #   - "traefik.http.middlewares.n8n.headers.SSLHost=${DOMAIN}"
+    #   - "traefik.http.middlewares.n8n.headers.STSIncludeSubdomains=true"
+    #   - "traefik.http.middlewares.n8n.headers.STSPreload=true"
+    #   - "traefik.http.routers.n8n.middlewares=n8n@docker"
+
+networks:
+  proxy_net:
+    external: true
+  n8n_net:
+    name: n8n_net
