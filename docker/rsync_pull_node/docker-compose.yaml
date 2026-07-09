@@ -4,7 +4,7 @@ services:
     container_name: rsync_pull_node
     env_file: .env
     environment:
-      - CRON_TASK_1=0 3 * * * /scripts/sync_nodes.sh
+      - CRON_TASK_1=0 * * * * /scripts/sync_nodes.sh
     volumes:
       - ${DOCKER_SOURCE}:/source/docker
       - ./scripts/sync_nodes.sh:/scripts/sync_nodes.sh
