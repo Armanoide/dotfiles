@@ -7,6 +7,7 @@ services:
       - TZ=${TZ}
       - RUST_LOG=garage=info
     ports:
+      - "3902:3902"
       - "3901:3901"
       - "3902:3902"
       - "3903:3903"
@@ -29,4 +30,3 @@ services:
 networks:
   proxy_net:
     external: true
-
