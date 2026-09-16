@@ -10,6 +10,7 @@ services:
       - ./db:/var/lib/postgresql/data
     networks:
       - excalidash_net
+      - portabase_net
     restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-excalidash}"]
@@ -117,3 +118,6 @@ networks:
   excalidash_net:
     name: excalidash_net
     driver: bridge
+  portabase_net:
+    external: true
+
