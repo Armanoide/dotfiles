@@ -11,6 +11,7 @@ services:
       - ./db:/var/lib/postgresql/data
     networks:
       - dockhand_net
+      - portabase_net
 
   dockhand:
     image: fnsys/dockhand:latest
@@ -31,6 +32,7 @@ services:
       - "traefik.http.routers.dockhand.tls.certresolver=cloudflare"
       - "traefik.http.routers.dockhand.middlewares=crowdsec-bouncer@docker"
       - "traefik.http.services.dockhand.loadbalancer.server.port=3000"
+      - "traefik.docker.network=proxy_net"
     networks:
       - proxy_net
       - dockhand_net
@@ -39,4 +41,6 @@ networks:
   dockhand_net:
     name: dockhand_net
   proxy_net:
+    external: true
+  portabase_net:
     external: true
