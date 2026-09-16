@@ -19,6 +19,7 @@ services:
       POSTGRES_PASSWORD: ${DB_PASS}
     networks:
       - n8n_net
+      - portabase_net
   n8n:
     container_name: n8n
     user: root
@@ -85,6 +86,8 @@ services:
     #   - "traefik.http.routers.n8n.middlewares=n8n@docker"
 
 networks:
+  portabase_net:
+    external: true
   proxy_net:
     external: true
   n8n_net:
