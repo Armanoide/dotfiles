@@ -5,25 +5,27 @@ services:
     restart: unless-stopped
     env_file: .env
     environment:
-        - TZ=Europe/Paris
-        - APP_ENV=production
-        - LOG=debug
+      - TZ=Europe/Paris
+      - APP_ENV=production
+      - LOG=debug
     volumes:
-        - ./databases.json:/config/config.json
-        - /var/run/docker.sock:/var/run/docker.sock
-        - ${PATH_VAULTWARDEN}:/data/vaultwarden:ro
-        - ${PATH_CROWD_SEC}:/data/crowdsec:ro
-        - ${PATH_BESZEL}:/data/beszel:ro
+      - ./databases.json:/config/config.json
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${PATH_VAULTWARDEN:-/dev/null}:/data/vaultwarden:ro
+      - ${PATH_CROWD_SEC:-/dev/null}:/data/crowdsec:ro
+      - ${PATH_BESZEL:-/dev/null}:/data/beszel:ro
+      - ${PATH_SPOOLMAN:-/dev/null}:/data/spoolman:ro
+      - ${PATH_ROUNDCUBE:-/dev/null}:/data/roundcube:rw
 
     extra_hosts:
-        - "db.backups.armanoide.net:host-gateway"
-        - "s3.armanoide.net:host-gateway"
+      - "db.backups.armanoide.net:${DB_BACKUP_HOST:-10.0.10.2}"
+      - "s3.armanoide.net:${S3_HOST:-10.0.10.2}"
     networks:
-        - proxy_net
-        - portabase_net
+      - proxy_net
+      - portabase_net
 
 networks:
-    proxy_net:
-        external: true
-    portabase_net:
-        external: true
+  proxy_net:
+      external: true
+  portabase_net:
+      external: true
