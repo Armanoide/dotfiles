@@ -46,6 +46,10 @@ RUN printf '#!/bin/bash\n' > /usr/local/bin/entrypoint.sh && \
     chmod +x /usr/local/bin/entrypoint.sh
 
 WORKDIR /home/nvim
+
+COPY editor-manager /usr/local/bin/editor-manager
+RUN chmod +x /usr/local/bin/editor-manager
+
 USER nvim
 ENTRYPOINT ["/usr/bin/tini", "--"]
-CMD ["/usr/local/bin/nvim"]
+CMD ["/usr/local/bin/editor-manager", "serve"]
