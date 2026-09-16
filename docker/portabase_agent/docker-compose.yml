@@ -1,0 +1,29 @@
+services:
+  agent:
+    container_name: portabase_agent
+    image: portabase/agent:latest
+    restart: unless-stopped
+    env_file: .env
+    environment:
+        - TZ=Europe/Paris
+        - APP_ENV=production
+        - LOG=debug
+    volumes:
+        - ./databases.json:/config/config.json
+        - /var/run/docker.sock:/var/run/docker.sock
+        - ${PATH_VAULTWARDEN}:/data/vaultwarden:ro
+        - ${PATH_CROWD_SEC}:/data/crowdsec:ro
+        - ${PATH_BESZEL}:/data/beszel:ro
+
+    extra_hosts:
+        - "db.backups.armanoide.net:host-gateway"
+        - "s3.armanoide.net:host-gateway"
+    networks:
+        - proxy_net
+        - portabase_net
+
+networks:
+    proxy_net:
+        external: true
+    portabase_net:
+        external: true
