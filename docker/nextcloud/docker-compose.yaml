@@ -24,7 +24,7 @@ services:
       - nextcloud_net
 
   nextcloud_app:
-    image: nextcloud
+    image: nextcloud:34.0.3
     container_name: nextcloud_app
     restart: always
     networks:
