@@ -16,3 +16,15 @@ services:
     stdin_open: true
     tty: true
     network_mode: host
+    restart: unless-stopped
+    environment:
+      IDLE_TIMEOUT: "7200"
+      CHECK_INTERVAL: "5"
+      STOP_GRACE: "15"
+      PROTECT_MODIFIED: "1"
+    healthcheck:
+      test: ["CMD", "/usr/local/bin/editor-manager", "health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
