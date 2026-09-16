@@ -5,6 +5,7 @@ services:
     restart: always
     networks:
       - nextcloud_net
+      - portabase_net
     command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
     volumes:
       - ./db:/var/lib/mysql
@@ -72,3 +73,6 @@ networks:
     external: true
   nextcloud_net:
       driver: bridge
+  portabase_net:
+      external: true
+
