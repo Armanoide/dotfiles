@@ -17,12 +17,17 @@ services:
       DATABASE_URL: "postgresql://${DB_USER}:${DB_PASS}@litellm_db:5432/${DB_NAME}"
       STORE_MODEL_IN_DB: "True"
       EXTRA_PROXY_LITELLM_KWARGS: "--telemetry"
+      REDIS_HOST: "litellm_redis"
+      REDIS_PORT: "6379"
+
     env_file:
       - .env
     ports:
       - "3008:4000"
     depends_on:
       - litellm_db
+      - litellm_redis
+
     healthcheck:
       test:
         - CMD-SHELL
@@ -53,6 +58,16 @@ services:
     networks:
       - litellm_net
 
+  litellm_redis:
+    image: redis:alpine
+    container_name: litellm_redis
+    restart: always
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+    - litellm_redis:/data
+    networks:
+    - litellm_net
+
   prometheus:
     container_name: litellm_prometheus
     image: prom/prometheus
@@ -67,6 +82,9 @@ services:
       - "--storage.tsdb.path=/prometheus"
       - "--storage.tsdb.retention.time=7d"
     restart: always
+
+volumes:
+  litellm_redis:
 
 networks:
   litellm_net:
