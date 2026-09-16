@@ -1,0 +1,247 @@
+#!/usr/bin/env bash
+set -u
+
+STATE_DIR="${EDITOR_MANAGER_STATE_DIR:-/tmp/editor-manager}"
+IDLE_TIMEOUT="${IDLE_TIMEOUT:-7200}"
+CHECK_INTERVAL="${CHECK_INTERVAL:-5}"
+STOP_GRACE="${STOP_GRACE:-15}"
+PROTECT_MODIFIED="${PROTECT_MODIFIED:-1}"
+
+is_num() {
+  [[ ${1:-} =~ ^[0-9]+$ ]]
+}
+
+is_num "$IDLE_TIMEOUT" || IDLE_TIMEOUT=7200
+is_num "$CHECK_INTERVAL" || CHECK_INTERVAL=5
+is_num "$STOP_GRACE" || STOP_GRACE=15
+
+if [[ -e "$STATE_DIR" && ! -d "$STATE_DIR" ]]; then
+  printf 'editor-manager: STATE_DIR exists and is not a directory: %s\n' "$STATE_DIR" >&2
+  exit 1
+fi
+
+mkdir -p "$STATE_DIR"
+
+log() {
+  printf '%s editor-manager %s\n' "$(date -Is)" "$*"
+}
+
+read_state() {
+  local file="$STATE_DIR/$1"
+  local value=""
+  if [[ -f "$file" ]]; then
+    IFS= read -r value < "$file" || true
+  fi
+  printf '%s' "$value"
+}
+
+clear_state() {
+  rm -f \
+    "$STATE_DIR/epoch" \
+    "$STATE_DIR/pid" \
+    "$STATE_DIR/current_file" \
+    "$STATE_DIR/file_buffer_count" \
+    "$STATE_DIR/loaded_buffer_count" \
+    "$STATE_DIR/modified" \
+    "$STATE_DIR/mode" \
+    "$STATE_DIR/fallback_epoch" \
+    "$STATE_DIR/dirty_logged" 2>/dev/null || true
+}
+
+nvim_pid() {
+  local pid
+  pid=$(read_state pid)
+  if is_num "$pid" && kill -0 "$pid" 2>/dev/null; then
+    printf '%s' "$pid"
+    return 0
+  fi
+  pgrep -o -x nvim 2>/dev/null || true
+}
+
+pgid_for_pid() {
+  local pid="$1"
+  local pgid
+  pgid=$(ps -o pgid= -p "$pid" 2>/dev/null | tr -d '[:space:]')
+  if is_num "$pgid"; then
+    printf '%s' "$pgid"
+  fi
+}
+
+stop_nvim() {
+  local pids
+  pids=$(pgrep -x nvim 2>/dev/null || true)
+
+  if [[ -z "$pids" ]]; then
+    log "stop: no nvim process found"
+    clear_state
+    return 0
+  fi
+
+  log "stop: sending TERM to nvim pids: $(printf '%s' "$pids" | tr '\n' ' ')"
+
+  local pid pgid
+  for pid in $pids; do
+    pgid=$(pgid_for_pid "$pid")
+    if [[ -n "$pgid" && "$pgid" -gt 1 ]]; then
+      kill -TERM -- "-$pgid" 2>/dev/null || kill -TERM "$pid" 2>/dev/null || true
+    else
+      kill -TERM "$pid" 2>/dev/null || true
+    fi
+  done
+
+  local waited=0
+  while (( waited < STOP_GRACE )); do
+    if ! pgrep -x nvim >/dev/null 2>&1; then
+      log "stop: nvim exited gracefully"
+      clear_state
+      return 0
+    fi
+    sleep 1
+    waited=$((waited + 1))
+  done
+
+  log "stop: sending KILL to remaining nvim processes"
+  pkill -KILL -x nvim 2>/dev/null || true
+  clear_state
+}
+
+daemon() {
+  exec 9>"$STATE_DIR/daemon.lock"
+  if ! flock -n 9; then
+    log "daemon: already running"
+    exit 0
+  fi
+
+  echo $$ > "$STATE_DIR/daemon.pid"
+  log "daemon: started idle_timeout=${IDLE_TIMEOUT}s interval=${CHECK_INTERVAL}s protect_modified=${PROTECT_MODIFIED}"
+
+  while true; do
+    local pid epoch modified current count now age
+    mkdir -p "$STATE_DIR" 2>/dev/null || true
+    if [[ ! -f "$STATE_DIR/daemon.pid" ]]; then
+      echo $$ > "$STATE_DIR/daemon.pid"
+    fi
+    pid=$(nvim_pid)
+
+    if [[ -n "$pid" ]]; then
+      epoch=$(read_state epoch)
+
+      if ! is_num "$epoch"; then
+        if [[ ! -f "$STATE_DIR/fallback_epoch" ]]; then
+          date +%s > "$STATE_DIR/fallback_epoch"
+          log "state: no epoch found, using fallback epoch"
+        fi
+        epoch=$(read_state fallback_epoch)
+      fi
+
+      if ! is_num "$epoch"; then
+        epoch=$(date +%s)
+      fi
+
+      modified=$(read_state modified)
+      current=$(read_state current_file)
+      count=$(read_state file_buffer_count)
+      now=$(date +%s)
+      age=$((now - epoch))
+
+      if [[ "$PROTECT_MODIFIED" == "1" && "$modified" == "1" ]]; then
+        if (( age > IDLE_TIMEOUT )) && [[ ! -f "$STATE_DIR/dirty_logged" ]]; then
+          log "idle: nvim is idle but modified=1, auto-stop protected age=${age}s current_file=$current"
+          touch "$STATE_DIR/dirty_logged"
+        fi
+      else
+        if (( age > IDLE_TIMEOUT )); then
+          log "idle: stopping nvim pid=$pid age=${age}s current_file=$current file_buffer_count=$count"
+          stop_nvim
+        fi
+      fi
+    else
+      if [[ -f "$STATE_DIR/epoch" || -f "$STATE_DIR/pid" ]]; then
+        clear_state
+      fi
+    fi
+
+    sleep "$CHECK_INTERVAL"
+  done
+}
+
+status() {
+  local pid
+  pid=$(nvim_pid)
+
+  echo "state_dir=$STATE_DIR"
+  echo "idle_timeout=$IDLE_TIMEOUT"
+  echo "check_interval=$CHECK_INTERVAL"
+  echo "protect_modified=$PROTECT_MODIFIED"
+
+  if [[ -z "$pid" ]]; then
+    echo "running=false"
+    return 0
+  fi
+
+  local epoch modified current count mode now age
+  epoch=$(read_state epoch)
+  is_num "$epoch" || epoch=$(date +%s)
+  now=$(date +%s)
+  age=$((now - epoch))
+
+  modified=$(read_state modified)
+  [[ -n "$modified" ]] || modified="unknown"
+
+  current=$(read_state current_file)
+  count=$(read_state file_buffer_count)
+  [[ -n "$count" ]] || count="unknown"
+  mode=$(read_state mode)
+  [[ -n "$mode" ]] || mode="unknown"
+
+  echo "running=true"
+  echo "pid=$pid"
+  echo "age_seconds=$age"
+  echo "current_file=$current"
+  echo "file_buffer_count=$count"
+  echo "modified=$modified"
+  echo "mode=$mode"
+}
+
+health() {
+  local pid
+  pid=$(read_state daemon.pid)
+  if is_num "$pid" && kill -0 "$pid" 2>/dev/null; then
+    return 0
+  fi
+  pgrep -f 'editor-manager serve' >/dev/null 2>&1
+}
+
+run_nvim() {
+  shift
+  exec nvim "$@"
+}
+
+case "${1:-help}" in
+  serve)
+    daemon
+    ;;
+  status)
+    status
+    ;;
+  health)
+    health
+    ;;
+  stop)
+    stop_nvim
+    ;;
+  run)
+    run_nvim "$@"
+    ;;
+  help|*)
+    cat <<EOF
+usage: editor-manager {serve|status|health|stop|run [nvim args]}
+
+environment:
+  IDLE_TIMEOUT      default 7200
+  CHECK_INTERVAL    default 5
+  STOP_GRACE        default 15
+  PROTECT_MODIFIED  default 1
+EOF
+    ;;
+esac
