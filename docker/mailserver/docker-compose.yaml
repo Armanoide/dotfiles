@@ -30,6 +30,8 @@ services:
       - ./state/indices:/var/mail-state/indices
       - ./state/control:/var/mail-state/control
 
+      - ./state/fetchmail:/var/lib/fetchmail
+
       - /etc/localtime:/etc/localtime:ro
       - ${SSL_CERT_PATH_LOCAL}:/tmp/ssl/fullchain.pem:ro
       - ${SSL_KEY_PATH_LOCAL}:/tmp/ssl/privkey.pem:ro
