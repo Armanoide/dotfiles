@@ -4,6 +4,13 @@ get_icon() {
   app="$1"
 
   case "$app" in
+    *Obsidian*)                         echo ":obsidian:";;
+    *RustDesk*)                         echo ":rustdesk:";;
+    *FreeCAD*)                          echo ":freecad:";;
+    *Fusion*)                           echo ":fusion:";;
+    *Bambu*)                            echo ":bambu_studio:";;
+    *Element*)                          echo ":element:";;
+    *Anytype*)                          echo ":anytype:";;
     *Brave*)                            echo ":brave_browser:";;
     *Bitwarden*)                        echo ":bit_warden:";;
     *Google\ Chrome*)                   echo ":google_chrome:";;
