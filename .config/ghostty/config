@@ -49,7 +49,7 @@
 #theme = "Catppuccin Mocha"
 # use deep for better contrast
 theme = "deep" 
-
+window-new-tab-position = current
 quit-after-last-window-closed = true
 auto-update = "check"
 quick-terminal-position = "bottom"
@@ -63,7 +63,7 @@ app-notifications = no-clipboard-copy
 ###########
 
 #font-family = "JetBrainsMono Nerd Font Mono"
-font-family = BerkeleyMono Nerd Font
+#font-family = BerkeleyMono Nerd Font
 font-style = Medium
 font-style-bold = Bold
 font-style-italic = Medium Italic
@@ -90,7 +90,6 @@ macos-titlebar-style=transparent
 minimum-contrast = 1.05
 window-vsync = true
 window-theme = dark
-
 
 ###########
 ########### Cursor
@@ -161,6 +160,11 @@ keybind=cmd+0=text:\x0B
 ###########
 
 keybind=shift+alt+l=text:|
+
+
+
+# force herdr
+keybind = alt+backspace=text:\x1b\x7f
 
 
 ###########
