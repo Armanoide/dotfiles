@@ -1,0 +1,18 @@
+onboarding = false
+
+[ui.toast]
+delivery = "off"
+
+[ui]
+status_indicators = "symbols"
+
+# Harmonisé avec tmux catppuccin mocha
+[theme]
+name = "catppuccin"
+auto_switch = false
+
+[theme.custom]
+accent = "#cba6f7"
+sidebar_bg = "#1e1e2e"
+active_row_bg = "#313244"
+selection_bg = "#45475a"
