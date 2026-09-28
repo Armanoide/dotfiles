@@ -1,3 +1,7 @@
+config-version = 2
+
+persistent-workspaces = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'b']
+
 # Place a copy of this config to ~/.aerospace.toml
 # After that, you can edit ~/.aerospace.toml to your liking
 
@@ -44,7 +48,8 @@ default-root-container-orientation = 'auto'
 # See https://nikitabobko.github.io/AeroSpace/commands#move-mouse
 # Fallback value (if you omit the key): on-focused-monitor-changed = []
 on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
-on-focus-changed = "move-mouse window-lazy-center"
+# on-focus-changed = "move-mouse window-lazy-center"
+
 
 # You can effectively turn off macOS "Hide application" (cmd-h) feature by toggling this flag
 # Useful if you don't use this macOS feature, but accidentally hit cmd-h or cmd-alt-h key
@@ -207,15 +212,39 @@ shift-down = ['volume set 0', 'mode main']
 
 [[on-window-detected]]
 if.app-id = 'com.mitchellh.ghostty'
-run = "move-node-to-workspace 1"
+run = ['layout tiles', 'move-node-to-workspace 1']
+
+[[on-window-detected]]
+if.app-id = 'com.brave.Browser'
+run = "move-node-to-workspace 2"
 
 [[on-window-detected]]
 if.app-id = 'com.apple.Safari'
-run = "move-node-to-workspace 4"
+run = "move-node-to-workspace 2"
 
 [[on-window-detected]]
 if.app-id = 'com.google.Chrome'
+run = "move-node-to-workspace 2"
+
+[[on-window-detected]]
+if.app-id = 'md.obsidian'
 run = "move-node-to-workspace 3"
+
+[[on-window-detected]]
+if.app-id = 'com.bambulab.bambu-studio'
+run = "move-node-to-workspace 4"
+
+[[on-window-detected]]
+if.app-id = 'com.carriez.rustdesk'
+run = "move-node-to-workspace 8"
+
+[[on-window-detected]]
+if.app-id = 'org.freecad.FreeCAD'
+run = "move-node-to-workspace 5"
+
+[[on-window-detected]]
+if.app-id = 'com.autodesk.fusion360'
+run = ['layout floating', 'move-node-to-workspace 5']
 
 [[on-window-detected]]
 if.app-id = 'com.apple.finder'
