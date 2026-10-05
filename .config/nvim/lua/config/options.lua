@@ -14,17 +14,27 @@ vim.g.autoformat = false
 -- Use the system clipboard for all yank, delete, change, and put operations
 -- (makes Vim share the same clipboard as macOS/Linux/Windows)
 vim.opt.clipboard = "unnamedplus"
-vim.g.clipboard = {
-  name = "osc52",
-  copy = {
-    ["+"] = require("vim.ui.clipboard.osc52").copy("+"),
-    ["*"] = require("vim.ui.clipboard.osc52").copy("*"),
-  },
-  paste = {
-    ["+"] = require("vim.ui.clipboard.osc52").paste("+"),
-    ["*"] = require("vim.ui.clipboard.osc52").paste("*"),
-  },
-}
+-- OSC 52 seulement quand le presse-papier natif est inaccessible (SSH / tmux distant)
+local native_ok = vim.fn.has("mac") == 1 or vim.fn.has("win32") == 1
+    or (vim.fn.has("unix") == 1 and not vim.env.SSH_TTY)
+    or vim.fn.has("wsl") == 1
+
+if native_ok then
+  local copy, paste = "pbcopy", "pbpaste"
+  if vim.fn.has("wsl") == 1 then copy, paste = "wl-copy", "wl-paste"
+  elseif vim.fn.has("linux") == 1 then copy, paste = "wl-copy", "xclip -selection clipboard" end
+  vim.g.clipboard = {
+    name = "native",
+    copy = { ["+"] = copy, ["*"] = copy },
+    paste = { ["+"] = paste, ["*"] = paste },
+  }
+else
+  vim.g.clipboard = {
+    name = "osc52",
+    copy = { ["+"] = require("vim.ui.clipboard.osc52").copy("+"), ["*"] = require("vim.ui.clipboard.osc52").copy("*") },
+    paste = { ["+"] = require("vim.ui.clipboard.osc52").paste("+"), ["*"] = require("vim.ui.clipboard.osc52").paste("*") },
+  }
+end
 -- Configure LazyVim’s Rust integration to use rust-analyzer for diagnostics
 -- (default LSP engine for Rust, ensures proper error reporting & analysis)
 vim.g.lazyvim_rust_diagnostics = "rust-analyser"

@@ -8,7 +8,7 @@ return {
     -- Forces the use of OSC 52, which is the only protocol
     -- capable of traversing Docker -> SSH -> Mac
     osc52 = {
-      enabled = true,
+      enabled = not (vim.fn.has("mac") == 1 and not vim.env.SSH_TTY),
     },
     -- copy to the system registry at the same time
     clipboard = {
