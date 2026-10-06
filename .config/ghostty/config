@@ -62,13 +62,12 @@ app-notifications = no-clipboard-copy
 ########### Font
 ###########
 
-#font-family = "JetBrainsMono Nerd Font Mono"
-#font-family = BerkeleyMono Nerd Font
+font-family = "JetBrains Mono"
 font-style = Medium
 font-style-bold = Bold
 font-style-italic = Medium Italic
 font-style-bold-italic = Bold Italic
-font-size = 14
+font-size = 15
 font-thicken = true
 
 ###########
