@@ -1,3 +1,5 @@
+sync_address = "https://atuin.armanoide.net"
+extra_hosts = ["atuin.armanoide.net:10.0.10.2"]
 ## Base directory for Atuin data files (databases, keys, session, etc.)
 ## All data file paths default to being relative to this directory.
 ## linux/mac: ~/.local/share/atuin (or XDG_DATA_HOME/atuin)
@@ -34,7 +36,7 @@
 # update_channel = "stable"
 
 ## address of the sync server
-sync_address = "https://atuin.armanoide.net"
+# sync_address = "https://api.atuin.sh"
 
 ## how often to sync history. note that this is only triggered when a command
 ## is ran, so sync intervals may well be longer
