@@ -1,0 +1,22 @@
+# Secrets
+.env
+
+# Generated auth files
+config/opencode_data/auth.json
+
+# Python virtual environments
+app/.venv/
+app/.venv_test/
+
+# Node modules
+app/dev/**/node_modules/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# OS files
+.DS_Store
+Thumbs.db
+config/opencode_config/

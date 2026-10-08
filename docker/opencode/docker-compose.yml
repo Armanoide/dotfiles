@@ -1,0 +1,178 @@
+# =============================================================================
+# opencode Docker Compose Configuration
+#
+# Services:
+#   opencode      — TUI mode: interactive sessions via SSH / docker exec
+#   opencode_web  — Web mode: HTTP API server on port 4096 (managed by Sablier)
+#
+# Usage:
+#   cp .env.example .env          # Configure environment variables
+#   docker compose up -d          # Start both services
+#   docker compose up -d opencode # Start TUI only
+#   docker compose up -d opencode_web  # Start Web only
+# =============================================================================
+
+name: opencode
+
+services:
+  opencode_test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: opencode_test
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: "3g"
+    shm_size: "2gb"
+    ports:
+      - "2223:2222"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    stdin_open: true
+    tty: true
+    env_file: .env
+    privileged: true
+    cap_add:
+      - SYS_ADMIN
+      - DAC_READ_SEARCH
+    volumes:
+      - ~/.docker/run/docker.sock:/var/run/docker.sock
+      - ./config/sshd_hostkeys:/etc/ssh/hostkeys
+      - ./config/herdr_authorized_keys:/home/opencode/.ssh/authorized_keys
+      - ./app/:/home/opencode/app
+      - ./backups:/backups
+      - ${VAULT_ROOT}/0 - System:/vaults/system
+      - ${VAULT_ROOT}/1 - Docs/Tech:/vaults/docs/tech
+      - ${VAULT_ROOT}/3 - Projects:/vaults/projects
+      - ${VAULT_ROOT}/5 - Resources:/vaults/resources
+      - ./config/opencode_data:/home/opencode/.local/share/opencode
+      - ./config/opencode_config:/home/opencode/.config/opencode
+      - ./cbm:/home/opencode/.local/share/cbm
+      - /etc/localtime:/etc/localtime:ro
+      - ~/.gitconfig:/home/opencode/.gitconfig:ro
+      - ~/.config/gh:/home/opencode/.config/gh:ro
+      - ~/.hindsight:/home/opencode/.hindsight:ro
+    environment:
+      # - GOMEMLIMIT=2.5GiB
+      - NODE_ENV=development
+      - CBM_CACHE_DIR=/home/opencode/.local/share/cbm
+      - CBM_UI_HOST=0.0.0.0
+    networks:
+      - opencode_net
+      - claw_net
+    entrypoint: ["/usr/bin/tini", "--", "/usr/local/bin/entrypoint-tui.sh"]
+  # ---------------------------------------------------------------------------
+  # TUI Service — Interactive terminal sessions
+  # ---------------------------------------------------------------------------
+  opencode:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: opencode
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: "3g"
+    shm_size: "2gb"
+    ports:
+      - "2222:2222"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    stdin_open: true
+    tty: true
+    env_file: .env
+    privileged: true
+    cap_add:
+      - SYS_ADMIN
+      - DAC_READ_SEARCH
+    volumes:
+      - ~/.docker/run/docker.sock:/var/run/docker.sock
+      - ./config/sshd_hostkeys:/etc/ssh/hostkeys
+      - ./config/herdr_authorized_keys:/home/opencode/.ssh/authorized_keys
+      - ./app/:/home/opencode/app
+      - ./backups:/backups
+      - ${VAULT_ROOT}/0 - System:/vaults/system
+      - ${VAULT_ROOT}/1 - Docs/Tech:/vaults/docs/tech
+      - ${VAULT_ROOT}/3 - Projects:/vaults/projects
+      - ${VAULT_ROOT}/5 - Resources:/vaults/resources
+      - ./config/opencode_data:/home/opencode/.local/share/opencode
+      - ./config/opencode_config:/home/opencode/.config/opencode
+      - ./cbm:/home/opencode/.local/share/cbm
+      - /etc/localtime:/etc/localtime:ro
+      - ~/.gitconfig:/home/opencode/.gitconfig:ro
+      - ~/.config/gh:/home/opencode/.config/gh:ro
+      - ~/.hindsight:/home/opencode/.hindsight:ro
+    environment:
+      # - GOMEMLIMIT=2.5GiB
+      - NODE_ENV=development
+      - CBM_CACHE_DIR=/home/opencode/.local/share/cbm
+      - CBM_UI_HOST=0.0.0.0
+    networks:
+      - opencode_net
+      - claw_net
+    entrypoint: ["/usr/bin/tini", "--", "/usr/local/bin/entrypoint-tui.sh"]
+
+  # ---------------------------------------------------------------------------
+  # Web Service — HTTP API server (port 4096)
+  # Managed by Sablier for on-demand start/stop
+  # ---------------------------------------------------------------------------
+  opencode_web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: opencode_web
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: "1.5g"
+    labels:
+      - "sablier.enable=true"
+      - "sablier.group=mac-mini"
+    shm_size: "2gb"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - "4096:4096"
+    env_file: .env
+    privileged: true
+    cap_add:
+      - SYS_ADMIN
+      - DAC_READ_SEARCH
+    volumes:
+      - ~/.docker/run/docker.sock:/var/run/docker.sock
+      - ./app/:/home/opencode/app
+      - ./config/opencode_data:/home/opencode/.local/share/opencode
+      - ./config/opencode_config:/home/opencode/.config/opencode
+      - /etc/localtime:/etc/localtime:ro
+      - ~/.gitconfig:/home/opencode/.gitconfig:ro
+      - ~/.config/gh:/home/opencode/.config/gh:ro
+      - ~/.hindsight:/home/opencode/.hindsight:ro
+    environment:
+      # - GOMEMLIMIT=1.2GiB
+      - NODE_ENV=development
+      - CBM_CACHE_DIR=/home/opencode/.local/share/cbm
+      - OPENCODE_CORS_URL=https://opencode.aramnoide.net
+    networks:
+      - opencode_net
+      - claw_net
+    entrypoint: ["/usr/bin/tini", "--", "/usr/local/bin/entrypoint-web.sh"]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4096/"]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
+
+# ---------------------------------------------------------------------------
+# Networks
+# ---------------------------------------------------------------------------
+
+networks:
+  opencode_net:
+    name: opencode_net
+  claw_net:
+    external: true
