@@ -303,4 +303,5 @@ tmux() {
 
 
 
+. "$HOME/.atuin/bin/env" 2>/dev/null || true
 eval "$(atuin init zsh)"
