@@ -1,0 +1,21 @@
+services:
+  rsync_dashboard:
+    build: .
+    container_name: rsync_dashboard
+    image: local/rsync_dashboard:latest
+    environment:
+      - TZ=Europe/Paris
+      - PORT=8091
+      - RSYNC_LOG_DIR=/source/docker/rsync_pull_node/logs
+      - RSYNC_STATE=/dashboard/state.json
+      - RSYNC_NOTE=/dashboard/Rsync-Dashboard.md
+      - RSYNC_BLACKLIST=/source/docker/.blacklist
+      - RSYNC_ARCHIVED=/dashboard/archived.txt
+    volumes:
+      # logs produits par rsync_pull_node (bind-mount, lecture)
+      - ${DOCKER_SOURCE:-/volume2/Users/norbert/docker}:/source/docker:ro
+      # dossier dashboard (etat + note + cron log, ecriture) — "." = ce dossier
+      - .:/dashboard
+    ports:
+      - "8091:8091"
+    restart: unless-stopped

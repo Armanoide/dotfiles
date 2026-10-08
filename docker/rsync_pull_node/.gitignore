@@ -6,3 +6,5 @@
 logs
 ssh_host_keys
 ssh-key
+dashboard/state.json
+dashboard/cron.log
