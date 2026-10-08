@@ -28,3 +28,5 @@ share
 state
 
 .config/nvim/lazy-lock.json
+
+.config/atuin/atuin-receipt.json
