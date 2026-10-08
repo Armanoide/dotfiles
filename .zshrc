@@ -140,12 +140,6 @@ export LS_COLORS="$(vivid generate catppuccin-mocha)"
 # zsh completion
 fpath+=~/.zfunc; autoload -Uz compinit; compinit
 
-# fzf → fuzzy search, completion, and keybindings
-source <(fzf --zsh)
-if [[ "$OS" == "mac" ]]; then
-  [ -f /opt/homebrew/opt/fzf/shell/key-bindings.zsh ] && source /opt/homebrew/opt/fzf/shell/key-bindings.zsh
-  [ -f /opt/homebrew/opt/fzf/shell/completion.zsh ] && source /opt/homebrew/opt/fzf/shell/completion.zsh
-fi
 
 ############################################################
 # Languages & tools
@@ -308,6 +302,5 @@ tmux() {
 
 
 
-. "$HOME/.atuin/bin/env"
 
 eval "$(atuin init zsh)"
