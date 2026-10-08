@@ -16,6 +16,8 @@ services:
       - ${PATH_BESZEL:-/dev/null}:/data/beszel:ro
       - ${PATH_SPOOLMAN:-/dev/null}:/data/spoolman:ro
       - ${PATH_ROUNDCUBE:-/dev/null}:/data/roundcube:rw
+      - ${PATH_NTFY:-/dev/null}:/data/ntfy:ro
+      - ${PATH_JELLYFIN:-/dev/null}:/data/jellyfin:ro
 
     extra_hosts:
       - "db.backups.armanoide.net:${DB_BACKUP_HOST:-10.0.10.2}"
