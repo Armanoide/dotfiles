@@ -1,0 +1,37 @@
+services:
+  tiny_media_manager:
+    image: tinymediamanager/tinymediamanager:latest
+    container_name: tiny_media_manager
+    restart: unless-stopped
+    networks:
+      - proxy_net
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - LC_ALL=fr_FR.UTF-8
+    volumes:
+      - ./config:/data
+      - ${MEDIA_PATH}:/media
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.tmm.rule=Host(`media-tools.${DOMAIN}`)"
+      - "traefik.http.routers.tmm.entrypoints=https"
+      - "traefik.http.routers.tmm.tls=true"
+      - "traefik.http.routers.tmm.tls.certresolver=cloudflare"
+      - "traefik.http.routers.tmm.middlewares=crowdsec-bouncer@docker,tmm-sablier"
+      - "traefik.http.services.tmm.loadbalancer.server.port=4000"
+      # Sablier middleware (self-contained)
+      - "traefik.http.middlewares.tmm-sablier.plugin.sablier.group=tmm"
+      - "traefik.http.middlewares.tmm-sablier.plugin.sablier.sablierUrl=http://sablier:10000"
+      - "traefik.http.middlewares.tmm-sablier.plugin.sablier.sessionDuration=1h"
+      - "traefik.http.middlewares.tmm-sablier.plugin.sablier.dynamic.displayName=Tiny Media Manager"
+      - "traefik.http.middlewares.tmm-sablier.plugin.sablier.dynamic.theme=hacker-terminal"
+      - "traefik.http.middlewares.tmm-sablier.plugin.sablier.dynamic.showDetails=true"
+      # Sablier discovery
+      - "sablier.enable=true"
+      - "sablier.group=tmm"
+
+networks:
+  proxy_net:
+    external: true
