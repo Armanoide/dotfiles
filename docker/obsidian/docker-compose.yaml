@@ -1,0 +1,45 @@
+services:
+  obsidian_livesync:
+    image: apache/couchdb:3
+    container_name: obsidian_livesync
+    restart: unless-stopped
+    environment:
+      - COUCHDB_USER=${COUCHDB_USER}
+      - COUCHDB_PASSWORD=${COUCHDB_PASSWORD}
+      - TZ=${TZ}
+    volumes:
+      - ./data:/opt/couchdb/data
+      - ./local.ini:/opt/couchdb/etc/local.ini
+    ports:
+      - "5984:5984"
+    networks:
+      - proxy_net
+      - portabase_net
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS -u $COUCHDB_USER:$COUCHDB_PASSWORD http://127.0.0.1:5984/_up || exit 1"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+      # labels:
+      #   - "traefik.enable=true"
+      #   - "traefik.docker.network=proxy_net"
+      #   - "traefik.http.routers.obsidian_livesync.rule=Host(`sync.${DOMAIN}`)"
+      #   - "traefik.http.routers.obsidian_livesync.entrypoints=https"
+      #   - "traefik.http.routers.obsidian_livesync.tls=true"
+      #   - "traefik.http.routers.obsidian_livesync.tls.certresolver=cloudflare"
+      #   - "traefik.http.services.obsidian_livesync.loadbalancer.server.port=5984"
+      #   # --- CORS officiel LiveSync ---
+      #   - "traefik.http.routers.obsidian_livesync.middlewares=obsidiancors"
+      #   - "traefik.http.middlewares.obsidiancors.headers.accesscontrolallowmethods=GET,PUT,POST,HEAD,DELETE"
+      #   - "traefik.http.middlewares.obsidiancors.headers.accesscontrolallowheaders=accept,authorization,content-type,origin,referer"
+      #   - "traefik.http.middlewares.obsidiancors.headers.accesscontrolalloworiginlist=app://obsidian.md,capacitor://localhost,http://localhost"
+      #   - "traefik.http.middlewares.obsidiancors.headers.accesscontrolmaxage=3600"
+      #   - "traefik.http.middlewares.obsidiancors.headers.addvaryheader=true"
+      #   - "traefik.http.middlewares.obsidiancors.headers.accessControlAllowCredentials=true"
+
+networks:
+  proxy_net:
+    external: true
+  portabase_net:
+    external: true
