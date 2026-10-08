@@ -1,0 +1,39 @@
+services:
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    restart: unless-stopped
+    networks:
+      - proxy_net
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ./config:/config
+      - ${SHOWS_PATH}:/tv
+      - ${DOWNLOAD_PATH}:/downloads
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.sonarr.rule=Host(`sonarr.${DOMAIN}`)"
+      - "traefik.http.routers.sonarr.entrypoints=https"
+      - "traefik.http.routers.sonarr.tls=true"
+      - "traefik.http.routers.sonarr.tls.certresolver=cloudflare"
+      - "traefik.http.routers.sonarr.middlewares=sonarr-sablier,crowdsec-bouncer@docker"
+      - "traefik.http.services.sonarr.loadbalancer.server.port=8989"
+
+      # Sablier middleware (self-contained)
+      - "traefik.http.middlewares.sonarr-sablier.plugin.sablier.group=sonarr"
+      - "traefik.http.middlewares.sonarr-sablier.plugin.sablier.sablierUrl=http://sablier:10000"
+      - "traefik.http.middlewares.sonarr-sablier.plugin.sablier.sessionDuration=5m"
+      - "traefik.http.middlewares.sonarr-sablier.plugin.sablier.dynamic.displayName=sonarr"
+      - "traefik.http.middlewares.sonarr-sablier.plugin.sablier.dynamic.theme=hacker-terminal"
+      - "traefik.http.middlewares.sonarr-sablier.plugin.sablier.dynamic.showDetails=true"
+      # Sablier discovery
+      - "sablier.enable=true"
+      - "sablier.group=sonarr"
+
+
+networks:
+  proxy_net:
+    external: true
