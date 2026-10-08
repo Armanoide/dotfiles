@@ -1,0 +1,50 @@
+services:
+  bambuddy:
+    image: ghcr.io/maziggy/bambuddy:latest
+    container_name: bambuddy
+    restart: unless-stopped
+    env_file: .env
+    cap_add:
+      - NET_BIND_SERVICE
+    security_opt:
+      - no-new-privileges:true
+    environment:
+      - TZ=${TZ}
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - PORT=${PORT}
+      - VIRTUAL_PRINTER_PASV_ADDRESS=${BAMBU_IP}
+      - BAMBUDDY_EXTERNAL_ROOTS=/app/library
+
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+      - ./library:/app/library
+      - ./virtual_printer:/app/data/virtual_printer
+    ports:
+      - "3000:3000"
+      - "3002:3002"
+      - "8883:8883"
+      - "990:990"
+      - "6000:6000"
+      - "322:322"
+      - "50000-50009:50000-50009"
+    networks:
+      proxy_net:
+      vlan60_services:
+        ipv4_address: ${BAMBU_IP}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.bambuddy.rule=Host(`bambu.${DOMAIN}`)"
+      - "traefik.http.routers.bambuddy.entrypoints=https"
+      - "traefik.http.routers.bambuddy.tls=true"
+      - "traefik.http.routers.bambuddy.tls.certresolver=cloudflare"
+      - "traefik.http.routers.bambuddy.middlewares=crowdsec-bouncer@docker"
+      - "traefik.http.services.bambuddy.loadbalancer.server.port=8000"
+
+networks:
+  proxy_net:
+    external: true
+  vlan60_services:
+    external: true
+
