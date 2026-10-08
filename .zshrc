@@ -112,13 +112,15 @@ if [[ "$USE_AUTH_SOCK" == "true" ]]; then
       mkdir -p "$(dirname "$TARGET")"
       ln -sf "$SSH_AUTH_SOCK" "$TARGET"
   fi
-  if [[ -S "$TARGET" ]]; then
+  # the symlink may point to a stale sshd socket (disconnect/reconnect):
+  # use it only if alive, otherwise keep the current SSH_AUTH_SOCK
+  if [[ -S "$TARGET" ]] && SSH_AUTH_SOCK="$TARGET" ssh-add -l >/dev/null 2>&1; then
       export SSH_AUTH_SOCK="$TARGET"
   fi
 fi
  # tmux auto-attach when in SSH
- if [[ -n "$SSH_CONNECTION" && -z "$TMUX" && -n "$PS1" ]]; then
-    tmux attach || tmux new
+ if [[ -n "$SSH_CONNECTION" && -z "$TMUX" && -t 1 ]]; then
+    tmux new-session -A -s main
     eval $(tmux showenv -s | grep -E '^(SSH|DISPLAY)')
  fi
 
@@ -272,9 +274,13 @@ fi
 eval "$(zoxide init zsh --cmd cd)"
 alias z=zoxide
 
-alias garage="docker exec -ti garage /garage"
+# opencode CLI (container + host)
+if [[ -f /.dockerenv ]]; then export PATH="$HOME/.opencode/bin:$PATH"; fi
+
+
+alias sb='tmux-agent-sidebar toggle "#{window_id}" "#{pane_current_path}"'  # sidebar: same effect as prefix+e
 alias picoclaw="docker exec -ti picoclaw_gateway picoclaw"
-alias opencode="docker exec -ti opencode opencode"
+alias opencode="docker exec -ti opencode tmux new-session -A -s main"   # mac_mini: container + tmux (sidebar active)
 
 # ############################################################
 # # 🔑 bitwarden SSH Agent
@@ -283,6 +289,21 @@ alias opencode="docker exec -ti opencode opencode"
 if [ -S "$HOME/.bitwarden-ssh-agent.sock" ]; then
   export SSH_AUTH_SOCK="$HOME/.bitwarden-ssh-agent.sock"
 fi
+
+# tmux: allow new/attach when $TMUX is wrongly exported (ssh from a tmux terminal
+# on another machine — no real nesting here). `new` becomes `new-session -A` so a
+# named session is attached if it already exists instead of spawning a numbered one.
+tmux() {
+  if [ -n "$TMUX" ]; then
+    case "$1" in
+      new|new-session) shift; [ "$1" = "-session" ] && shift
+                       case " $* " in *" -A "*) command tmux -2 new-session "$@" ;; *) command tmux -2 new-session -A "$@" ;; esac ;;
+      *) command tmux "$@" ;;
+    esac
+  else
+    command tmux "$@"
+  fi
+}
 
 
 
