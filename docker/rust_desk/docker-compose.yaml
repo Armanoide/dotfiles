@@ -1,0 +1,33 @@
+services:
+  hbbs:
+    container_name: rustdesk_hbbs
+    image: rustdesk/rustdesk-server:latest
+    command: hbbs -r ${RUSTDESK_IP}
+    environment:
+      - TZ=${TZ}
+    volumes:
+      - ./data:/root
+    networks:
+      proxy_net:
+      vlan60_services:
+        ipv4_address: ${RUSTDESK_IP}
+    restart: unless-stopped
+
+  hbbr:
+    container_name: rustdesk_hbbr
+    image: rustdesk/rustdesk-server:latest
+    command: hbbr
+    environment:
+      - TZ=${TZ}
+    volumes:
+      - ./data:/root
+    # LA MAGIE EST ICI : hbbr se greffe directement sur le réseau de hbbs
+    network_mode: "service:hbbs"
+    restart: unless-stopped
+    depends_on:
+      - hbbs
+networks:
+  vlan60_services:
+    external: true
+  proxy_net:
+    external: true
