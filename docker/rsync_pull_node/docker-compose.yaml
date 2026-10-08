@@ -5,9 +5,12 @@ services:
     env_file: .env
     environment:
       - CRON_TASK_1=0 * * * * /scripts/sync_nodes.sh
+      - CRON_TASK_2=0 4 * * 7 /scripts/archive_old.sh
     volumes:
       - ${DOCKER_SOURCE}:/source/docker
       - ./scripts/sync_nodes.sh:/scripts/sync_nodes.sh
+      - ./scripts/archive_old.sh:/scripts/archive_old.sh
+      - ./scripts/notify.sh:/scripts/notify.sh
       - ./logs:/var/log/rsync_pull
       - /etc/localtime:/etc/localtime
       - ./ssh_host_keys:/ssh_host_keys
