@@ -8,3 +8,4 @@ ssh_host_keys
 ssh-key
 dashboard/state.json
 dashboard/cron.log
+dashboard/Rsync-Dashboard.md
