@@ -1,0 +1,98 @@
+services:
+  paperless_ngx_redis:
+    container_name: paperless_ngx_redis
+    image: docker.io/library/redis:8.6.1
+    restart: unless-stopped
+    volumes:
+      - paperless_ngx_redis:/data
+    networks:
+      - paperless_net
+
+  paperless_ngx_db:
+    container_name: paperless_ngx_db
+    image: docker.io/library/postgres:18
+    restart: unless-stopped
+    volumes:
+      - ./db:/var/lib/postgresql
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+    networks:
+      - paperless_net
+      - portabase_net
+
+
+  paperless_ngx_webserver:
+    container_name: paperless_ngx_webserver
+    image: ghcr.io/paperless-ngx/paperless-ngx:latest
+    restart: unless-stopped
+    depends_on:
+      - paperless_ngx_db
+      - paperless_ngx_redis
+      - paperless_ngx_gotenberg
+      - paperless_ngx_tika
+    volumes:
+      - ./data:/usr/src/paperless/data
+      - ./consume:/usr/src/paperless/consume
+      - ${PATH_MEDIA}:/usr/src/paperless/media
+      - ${PATH_EXPORT}:/usr/src/paperless/export
+    env_file: .env
+    ports:
+      - "3015:8000"
+    environment:
+      PAPERLESS_REDIS: redis://paperless_ngx_redis:6379
+      PAPERLESS_DBHOST: paperless_ngx_db
+      PAPERLESS_TIKA_ENABLED: 1
+      PAPERLESS_TIKA_GOTENBERG_ENDPOINT: http://paperless_ngx_gotenberg:3000
+      PAPERLESS_TIKA_ENDPOINT: http://paperless_ngx_tika:9998
+      PAPERLESS_DBUSER: ${DB_USER}
+      PAPERLESS_DBPASS: ${DB_PASS}
+      PAPERLESS_DBNAME: ${DB_NAME}
+      PAPERLESS_ALLOWED_HOSTS: ${PAPERLESS_ALLOWED_HOSTS}
+    # labels:
+    #   - "traefik.enable=true"
+    #   - "traefik.docker.allownonrunning=true"
+    #   - "traefik.http.routers.paperless.middlewares=paperless-sablier,crowdsec-bouncer@docker"
+    #   - "traefik.http.routers.paperless.rule=Host(`paperless.${DOMAIN}`)"
+    #   - "traefik.http.routers.paperless.entrypoints=https"
+    #   - "traefik.http.routers.paperless.tls=true"
+    #   - "traefik.http.routers.paperless.tls.certresolver=cloudflare"
+    #   - "traefik.http.services.paperless.loadbalancer.server.port=8000"
+    networks:
+      - proxy_net
+      - paperless_net
+
+  paperless_ngx_gotenberg:
+    container_name: paperless_ngx_gotenberg
+    image: docker.io/gotenberg/gotenberg:8.25
+    restart: unless-stopped
+    # The gotenberg chromium route is used to convert .eml files. We do not
+    # want to allow external content like tracking pixels or even javascript.
+    command:
+      - "gotenberg"
+      - "--chromium-disable-javascript=true"
+      - "--chromium-allow-list=file:///tmp/.*"
+    networks:
+      - paperless_net
+
+  paperless_ngx_tika:
+    container_name: paperless_ngx_tika
+    image: docker.io/apache/tika:latest
+    restart: unless-stopped
+    networks:
+    - paperless_net
+
+volumes:
+  paperless_ngx_redis:
+    name: paperless_ngx_redis
+
+networks:
+  proxy_net:
+    external: true
+  paperless_net:
+    name: paperless_net
+    external: true
+  portabase_net:
+      external: true
+
