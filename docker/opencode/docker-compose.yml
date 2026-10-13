@@ -215,6 +215,8 @@ services:
       - PORT=5003
       - AUTH_TRUSTED_ORIGINS=https://opencode.armanoide.net,http://mac-mini.home:4096,http://localhost:4096
       - AUTH_SECURE_COOKIES=false
+      # Folder browser root so Add Repository -> Folder can find the app tree
+      - REPO_BROWSE_ROOT=/home/opencode/app
       # Sessions are keyed by directory path; the app dir must exist in-container
       # for repo relinking to find them (it is mounted below at the same path).
       # Import is automatic when the state dir is mounted (one-shot, fresh volume).
