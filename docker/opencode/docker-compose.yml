@@ -153,7 +153,7 @@ services:
   #       - "sablier.enable=true"
   #       - "sablier.group=mac-mini"
   #     ports:
-  #       - "4096:4096"
+  #       - "4096:5003"
   #     volumes:
   #       # CONFIG (shared)
   #       - ~/.gitconfig:/home/opencode/.gitconfig:ro
@@ -206,15 +206,17 @@ services:
     container_name: opencode_manager
     profiles: ["web"]
     ports:
-      - "4096:4096"
+      - "4096:5003"
     environment:
       - NODE_ENV=production
       - PUID=1000
       - PGID=1000
       - HOST=0.0.0.0
       - PORT=5003
-      - AUTH_TRUSTED_ORIGINS=http://mac-mini.home:4096,http://localhost:4096
+      - AUTH_TRUSTED_ORIGINS=https://opencode.armanoide.net,http://mac-mini.home:4096,http://localhost:4096
       - AUTH_SECURE_COOKIES=false
+      # Sessions are keyed by directory path; the app dir must exist in-container
+      # for repo relinking to find them (it is mounted below at the same path).
       # Import is automatic when the state dir is mounted (one-shot, fresh volume).
       # Config mirror mount stays OFF: the image chowns it at boot (fails on :ro)
       # and rw would let the Manager rewrite prod config. Import config via UI if needed.
@@ -222,8 +224,12 @@ services:
       - ocm_workspace:/workspace
       - ocm_data:/app/data
       - ocm_bin:/home/node/.opencode/bin
-      # IMPORT (one-shot on first start with a fresh volume)
+      # IMPORT (official paths): config dir mounted rw at the container home path
+      # (the image chowns it at boot); state dir read-only for the one-shot import.
+      - ./data/config:/home/node/.config/opencode
       - ./data/share:/import/state:ro
+      # Same path as prod sessions so repo relink resolves (/home/opencode/app)
+      - ./app:/home/opencode/app
     networks:
       - opencode_net
     restart: unless-stopped
