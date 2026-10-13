@@ -4,7 +4,7 @@
 # Services:
 #   opencode      — TUI prod : interactive sessions via SSH (port 2222)
 #   opencode_test — Sandbox TUI : plugin/env experiments, isolated data (port 2223)
-#   opencode_manager — OpenCode Manager web UI on port 5003 (profile: web, Sablier)
+#   opencode_manager — OpenCode Manager web UI on port 4096 (profile: web, Sablier)
 #
 # Shared config lives in x-opencode-base (compose ignores x-* fields).
 # Each service overrides only what differs: ports, volumes, entrypoint.
@@ -197,24 +197,23 @@ services:
   # ---------------------------------------------------------------------------
   # OpenCode Manager — web command center replacing opencode_web (profile: web).
   # Published image (OpenCode v2, bundled >=2.0.15). Own SQLite + workspace;
-  # prod config/state imported read-only on first start (one-shot).
+  # prod sessions imported read-only on first start (one-shot, fresh volume).
+  # Takes over port 4096 so opencode.armanoide.net (Traefik -> mac-mini:4096)
+  # keeps working unchanged. Stop opencode_web before starting this one.
   # ---------------------------------------------------------------------------
   opencode_manager:
     image: ghcr.io/chriswritescode-dev/opencode-manager:latest
     container_name: opencode_manager
     profiles: ["web"]
-    labels:
-      - "sablier.enable=true"
-      - "sablier.group=mac-mini"
     ports:
-      - "5003:5003"
+      - "4096:4096"
     environment:
       - NODE_ENV=production
       - PUID=1000
       - PGID=1000
       - HOST=0.0.0.0
       - PORT=5003
-      - AUTH_TRUSTED_ORIGINS=http://mac-mini.home:5003,http://localhost:5003
+      - AUTH_TRUSTED_ORIGINS=http://mac-mini.home:4096,http://localhost:4096
       - AUTH_SECURE_COOKIES=false
       # Import is automatic when the state dir is mounted (one-shot, fresh volume).
       # Config mirror mount stays OFF: the image chowns it at boot (fails on :ro)
@@ -257,9 +256,9 @@ volumes:
     name: opencode_tmux_plugins
     external: true
 
-# ---------------------------------------------------------------------------
-# Named volumes — test sandbox (isolated state)
-# ---------------------------------------------------------------------------
+  # ---------------------------------------------------------------------------
+  # Named volumes — test sandbox (isolated state)
+  # ---------------------------------------------------------------------------
 
   test_data_share:
     name: opencode_test_data_share
@@ -272,9 +271,9 @@ volumes:
   test_tmux_plugins:
     name: opencode_test_tmux_plugins
 
-# ---------------------------------------------------------------------------
-# Named volumes — OpenCode Manager (own workspace/db/binary, imported once)
-# ---------------------------------------------------------------------------
+  # ---------------------------------------------------------------------------
+  # Named volumes — OpenCode Manager (own workspace/db/binary, imported once)
+  # ---------------------------------------------------------------------------
 
   ocm_workspace:
     name: ocm_workspace
