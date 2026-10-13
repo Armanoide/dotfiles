@@ -1,0 +1,15 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# Secrets & generated config
+.env
+
+# Git
+.git/
+.gitignore
+
+# Python cache (si un spike python atterrit dans le contexte)
+__pycache__/
+*.pyc
+*.pyo

@@ -2,127 +2,147 @@
 # opencode Docker Compose Configuration
 #
 # Services:
-#   opencode      — TUI mode: interactive sessions via SSH / docker exec
-#   opencode_web  — Web mode: HTTP API server on port 4096 (managed by Sablier)
+#   opencode      — TUI prod : interactive sessions via SSH (port 2222)
+#   opencode_test — Sandbox TUI : plugin/env experiments, isolated data (port 2223)
+#   opencode_web  — Web API server on port 4096 (managed by Sablier)
+#
+# Shared config lives in x-opencode-base (compose ignores x-* fields).
+# Each service overrides only what differs: ports, volumes, entrypoint.
 #
 # Usage:
-#   cp .env.example .env          # Configure environment variables
-#   docker compose up -d          # Start both services
-#   docker compose up -d opencode # Start TUI only
-#   docker compose up -d opencode_web  # Start Web only
+#   docker compose up -d opencode                 # prod TUI
+#   docker compose up -d opencode_test            # sandbox
+#   docker compose --profile web up -d opencode_web  # web (on-demand)
 # =============================================================================
 
 name: opencode
 
+# ---------------------------------------------------------------------------
+# Base template — invariable config shared by all three services.
+# Compose ignores any top-level key prefixed with x-.
+# ---------------------------------------------------------------------------
+x-opencode-base: &opencode-base
+  build:
+    context: ./build
+    dockerfile: Dockerfile
+  shm_size: "2gb"
+  stdin_open: true
+  tty: true
+  env_file: .env
+  extra_hosts:
+    - "host.docker.internal:host-gateway"
+  cap_add:
+    - SYS_ADMIN
+    - DAC_READ_SEARCH
+  networks:
+    - opencode_net
+    - claw_net
+
 services:
-  opencode_test:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: opencode_test
-    deploy:
-      resources:
-        limits:
-          cpus: "1.0"
-          memory: "3g"
-    shm_size: "2gb"
-    ports:
-      - "2223:2222"
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-    stdin_open: true
-    tty: true
-    env_file: .env
-    privileged: true
-    cap_add:
-      - SYS_ADMIN
-      - DAC_READ_SEARCH
-    volumes:
-      - ~/.docker/run/docker.sock:/var/run/docker.sock
-      - ./config/sshd_hostkeys:/etc/ssh/hostkeys
-      - ./config/herdr_authorized_keys:/home/opencode/.ssh/authorized_keys
-      - ./app/:/home/opencode/app
-      - ./backups:/backups
-      - ${VAULT_ROOT}/0 - System:/vaults/system
-      - ${VAULT_ROOT}/1 - Docs/Tech:/vaults/docs/tech
-      - ${VAULT_ROOT}/3 - Projects:/vaults/projects
-      - ${VAULT_ROOT}/5 - Resources:/vaults/resources
-      - ./config/opencode_data:/home/opencode/.local/share/opencode
-      - ./config/opencode_config:/home/opencode/.config/opencode
-      - ./cbm:/home/opencode/.local/share/cbm
-      - /etc/localtime:/etc/localtime:ro
-      - ~/.gitconfig:/home/opencode/.gitconfig:ro
-      - ~/.config/gh:/home/opencode/.config/gh:ro
-      - ~/.hindsight:/home/opencode/.hindsight:ro
-    environment:
-      # - GOMEMLIMIT=2.5GiB
-      - NODE_ENV=development
-      - CBM_CACHE_DIR=/home/opencode/.local/share/cbm
-      - CBM_UI_HOST=0.0.0.0
-    networks:
-      - opencode_net
-      - claw_net
-    entrypoint: ["/usr/bin/tini", "--", "/usr/local/bin/entrypoint-tui.sh"]
   # ---------------------------------------------------------------------------
-  # TUI Service — Interactive terminal sessions
+  # TUI Service — production interactive terminal sessions
   # ---------------------------------------------------------------------------
   opencode:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    <<: *opencode-base
     container_name: opencode
     deploy:
       resources:
         limits:
           cpus: "1.0"
           memory: "3g"
-    shm_size: "2gb"
     ports:
       - "2222:2222"
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-    stdin_open: true
-    tty: true
-    env_file: .env
-    privileged: true
-    cap_add:
-      - SYS_ADMIN
-      - DAC_READ_SEARCH
     volumes:
-      - ~/.docker/run/docker.sock:/var/run/docker.sock
-      - ./config/sshd_hostkeys:/etc/ssh/hostkeys
-      - ./config/herdr_authorized_keys:/home/opencode/.ssh/authorized_keys
-      - ./app/:/home/opencode/app
+      # CONFIG
+      - ~/.gitconfig:/home/opencode/.gitconfig:ro
+      - ~/.tmux.conf:/home/opencode/.tmux.conf:ro
+      - ~/.config/gh:/home/opencode/.config/gh:ro
+      - /etc/localtime:/etc/localtime:ro
+      # BACKUPS
       - ./backups:/backups
+      # DATA (prod)
+      - ./app/:/home/opencode/app
+      - ./data/share:/home/opencode/.local/share/opencode
+      - ./data/config:/home/opencode/.config/opencode
+      - ./data/state:/home/opencode/.local/state/opencode
+      - ./data/.hindsight:/home/opencode/.hindsight:ro
+      - ./data/ssh/hostkeys:/etc/ssh/hostkeys:ro
+      - ./data/ssh/authorized_keys:/home/opencode/.ssh/authorized_keys:ro
+      # TMUX plugins (named volume — persists across rebuilds)
+      - opencode_tmux_plugins:/home/opencode/.tmux/plugins
+      # RUNTIME TOOLCHAINS (named volumes — Go/Rust installed on first boot)
+      - opencode_goroot:/usr/local/go
+      - opencode_rustup:/home/opencode/.rustup
+      - opencode_cargo:/home/opencode/.cargo
+      # VAULTS
       - ${VAULT_ROOT}/0 - System:/vaults/system
       - ${VAULT_ROOT}/1 - Docs/Tech:/vaults/docs/tech
       - ${VAULT_ROOT}/3 - Projects:/vaults/projects
       - ${VAULT_ROOT}/5 - Resources:/vaults/resources
-      - ./config/opencode_data:/home/opencode/.local/share/opencode
-      - ./config/opencode_config:/home/opencode/.config/opencode
       - ./cbm:/home/opencode/.local/share/cbm
-      - /etc/localtime:/etc/localtime:ro
-      - ~/.gitconfig:/home/opencode/.gitconfig:ro
-      - ~/.config/gh:/home/opencode/.config/gh:ro
-      - ~/.hindsight:/home/opencode/.hindsight:ro
     environment:
-      # - GOMEMLIMIT=2.5GiB
       - NODE_ENV=development
+      - TMUX_AGENTIX_ID=${TMUX_AGENTIX_ID:-999}
       - CBM_CACHE_DIR=/home/opencode/.local/share/cbm
       - CBM_UI_HOST=0.0.0.0
-    networks:
-      - opencode_net
-      - claw_net
-    entrypoint: ["/usr/bin/tini", "--", "/usr/local/bin/entrypoint-tui.sh"]
+    entrypoint: ["/usr/bin/tini", "--", "/usr/local/bin/entrypoints/tui.sh"]
 
   # ---------------------------------------------------------------------------
-  # Web Service — HTTP API server (port 4096)
-  # Managed by Sablier for on-demand start/stop
+  # Test Service — sandbox (isolated data, port SSH 2223)
+  # Same code/vaults/config as prod, but opencode state lives in test_*
+  # named volumes so a broken plugin/env never touches prod.
+  # ---------------------------------------------------------------------------
+  opencode_test:
+    <<: *opencode-base
+    container_name: opencode_test
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: "3g"
+    ports:
+      - "2223:2222"
+    volumes:
+      # CONFIG (shared, read-only)
+      - ~/.gitconfig:/home/opencode/.gitconfig:ro
+      - ~/.tmux.conf:/home/opencode/.tmux.conf:ro
+      - ~/.config/gh:/home/opencode/.config/gh:ro
+      - /etc/localtime:/etc/localtime:ro
+      # BACKUPS (shared, read-only)
+      - ./backups:/backups:ro
+      # CODE + VAULTS (shared)
+      - ./app/:/home/opencode/app
+      - ${VAULT_ROOT}/0 - System:/vaults/system
+      - ${VAULT_ROOT}/1 - Docs/Tech:/vaults/docs/tech
+      - ${VAULT_ROOT}/3 - Projects:/vaults/projects
+      - ${VAULT_ROOT}/5 - Resources:/vaults/resources
+      # DATA (ISOLATED — test_* named volumes, never prod state)
+      - test_data_share:/home/opencode/.local/share/opencode
+      - test_data_config:/home/opencode/.config/opencode
+      - test_data_state:/home/opencode/.local/state/opencode
+      - ./data/.hindsight:/home/opencode/.hindsight:ro
+      - test_ssh_hostkeys:/etc/ssh/hostkeys
+      - ./data/ssh/authorized_keys:/home/opencode/.ssh/authorized_keys:ro
+      # TMUX plugins (isolated)
+      - test_tmux_plugins:/home/opencode/.tmux/plugins
+      # RUNTIME TOOLCHAINS (shared — toolchains are read-only after install)
+      - opencode_goroot:/usr/local/go
+      - opencode_rustup:/home/opencode/.rustup
+      - opencode_cargo:/home/opencode/.cargo
+    environment:
+      - NODE_ENV=development
+      - TMUX_AGENTIX_ID=${TMUX_AGENTIX_ID:-999}
+      - CBM_CACHE_DIR=/home/opencode/.local/share/cbm
+      - CBM_UI_HOST=0.0.0.0
+    entrypoint: ["/usr/bin/tini", "--", "/usr/local/bin/entrypoints/tui.sh"]
+
+  # ---------------------------------------------------------------------------
+  # Web Service — HTTP API server (port 4096), shares prod data.
+  # Managed by Sablier for on-demand start/stop (profile: web).
   # ---------------------------------------------------------------------------
   opencode_web:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    <<: *opencode-base
+    profiles: ["web"]
     container_name: opencode_web
     deploy:
       resources:
@@ -132,36 +152,42 @@ services:
     labels:
       - "sablier.enable=true"
       - "sablier.group=mac-mini"
-    shm_size: "2gb"
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
     ports:
       - "4096:4096"
-    env_file: .env
-    privileged: true
-    cap_add:
-      - SYS_ADMIN
-      - DAC_READ_SEARCH
     volumes:
-      - ~/.docker/run/docker.sock:/var/run/docker.sock
-      - ./app/:/home/opencode/app
-      - ./config/opencode_data:/home/opencode/.local/share/opencode
-      - ./config/opencode_config:/home/opencode/.config/opencode
-      - /etc/localtime:/etc/localtime:ro
+      # CONFIG (shared)
       - ~/.gitconfig:/home/opencode/.gitconfig:ro
+      - ~/.tmux.conf:/home/opencode/.tmux.conf:ro
       - ~/.config/gh:/home/opencode/.config/gh:ro
-      - ~/.hindsight:/home/opencode/.hindsight:ro
+      - /etc/localtime:/etc/localtime:ro
+      # BACKUPS (shared)
+      - ./backups:/backups
+      # DATA (prod — same base as opencode)
+      - ./app/:/home/opencode/app
+      - ./data/share:/home/opencode/.local/share/opencode
+      - ./data/config:/home/opencode/.config/opencode
+      - ./data/state:/home/opencode/.local/state/opencode
+      - ./data/.hindsight:/home/opencode/.hindsight:ro
+      - ./data/ssh/hostkeys:/etc/ssh/hostkeys:ro
+      - ./data/ssh/authorized_keys:/home/opencode/.ssh/authorized_keys:ro
+      # TMUX plugins + TOOLCHAINS (shared with prod)
+      - opencode_tmux_plugins:/home/opencode/.tmux/plugins
+      - opencode_goroot:/usr/local/go
+      - opencode_rustup:/home/opencode/.rustup
+      - opencode_cargo:/home/opencode/.cargo
+      # VAULTS
+      - ${VAULT_ROOT}/0 - System:/vaults/system
+      - ${VAULT_ROOT}/1 - Docs/Tech:/vaults/docs/tech
+      - ${VAULT_ROOT}/3 - Projects:/vaults/projects
+      - ${VAULT_ROOT}/5 - Resources:/vaults/resources
+      - ./cbm:/home/opencode/.local/share/cbm
     environment:
-      # - GOMEMLIMIT=1.2GiB
       - NODE_ENV=development
       - CBM_CACHE_DIR=/home/opencode/.local/share/cbm
       - OPENCODE_CORS_URL=https://opencode.aramnoide.net
-    networks:
-      - opencode_net
-      - claw_net
-    entrypoint: ["/usr/bin/tini", "--", "/usr/local/bin/entrypoint-web.sh"]
+    entrypoint: ["/usr/bin/tini", "--", "/usr/local/bin/entrypoints/web.sh"]
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:4096/"]
+      test: ["CMD-SHELL", "curl -sf -u opencode:${OPENCODE_SERVER_PASSWORD} http://localhost:4096/api/info"]
       interval: 5s
       timeout: 3s
       retries: 3
@@ -176,3 +202,36 @@ networks:
     name: opencode_net
   claw_net:
     external: true
+
+# ---------------------------------------------------------------------------
+# Named volumes — prod (opencode + opencode_web share these)
+# ---------------------------------------------------------------------------
+
+volumes:
+  opencode_goroot:
+    name: opencode_goroot
+    external: true
+  opencode_rustup:
+    name: opencode_rustup
+    external: true
+  opencode_cargo:
+    name: opencode_cargo
+    external: true
+  opencode_tmux_plugins:
+    name: opencode_tmux_plugins
+    external: true
+
+# ---------------------------------------------------------------------------
+# Named volumes — test sandbox (isolated state)
+# ---------------------------------------------------------------------------
+
+  test_data_share:
+    name: opencode_test_data_share
+  test_data_config:
+    name: opencode_test_data_config
+  test_data_state:
+    name: opencode_test_data_state
+  test_ssh_hostkeys:
+    name: opencode_test_ssh_hostkeys
+  test_tmux_plugins:
+    name: opencode_test_tmux_plugins

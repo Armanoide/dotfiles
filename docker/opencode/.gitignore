@@ -2,7 +2,7 @@
 .env
 
 # Generated auth files
-config/opencode_data/auth.json
+data/share/auth.json
 
 # Python virtual environments
 app/.venv/
@@ -19,4 +19,13 @@ __pycache__/
 # OS files
 .DS_Store
 Thumbs.db
-config/opencode_config/
+
+# Runtime data (bind-mount targets — never version)
+data/
+cbm/
+
+# Backup pole (mounted at /backups — never version)
+backups/
+
+# Workspace + embedded repos (each has its own git — never version here)
+app/
