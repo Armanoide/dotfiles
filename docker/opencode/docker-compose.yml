@@ -4,7 +4,7 @@
 # Services:
 #   opencode      — TUI prod : interactive sessions via SSH (port 2222)
 #   opencode_test — Sandbox TUI : plugin/env experiments, isolated data (port 2223)
-#   opencode_manager — OpenCode Manager web UI on port 4096 (profile: web, Sablier)
+#   opencode_manager — OpenCode Manager (commenté, en pause — voir bloc)
 #
 # Shared config lives in x-opencode-base (compose ignores x-* fields).
 # Each service overrides only what differs: ports, volumes, entrypoint.
@@ -136,63 +136,64 @@ services:
       - CBM_UI_HOST=0.0.0.0
     entrypoint: ["/usr/bin/tini", "--", "/usr/local/bin/entrypoints/tui.sh"]
 
-  #   # ---------------------------------------------------------------------------
-  #   # Web Service — HTTP API server (port 4096), shares prod data.
-  #   # Managed by Sablier for on-demand start/stop (profile: web).
-  #   # ---------------------------------------------------------------------------
-  #   opencode_web:
-  #     <<: *opencode-base
-  #     profiles: ["web"]
-  #     container_name: opencode_web
-  #     deploy:
-  #       resources:
-  #         limits:
-  #           cpus: "1.0"
-  #           memory: "1.5g"
-  #     labels:
-  #       - "sablier.enable=true"
-  #       - "sablier.group=mac-mini"
-  #     ports:
-  #       - "4096:5003"
-  #     volumes:
-  #       # CONFIG (shared)
-  #       - ~/.gitconfig:/home/opencode/.gitconfig:ro
-  #       - ~/.tmux.conf:/home/opencode/.tmux.conf:ro
-  #       - ~/.config/gh:/home/opencode/.config/gh:ro
-  #       - /etc/localtime:/etc/localtime:ro
-  #       # BACKUPS (shared)
-  #       - ./backups:/backups
-  #       # DATA (prod — same base as opencode)
-  #       - ./app/:/home/opencode/app
-  #       - ./data/share:/home/opencode/.local/share/opencode
-  #       - ./data/config:/home/opencode/.config/opencode
-  #       - ./data/state:/home/opencode/.local/state/opencode
-  #       - ./data/.hindsight:/home/opencode/.hindsight:ro
-  #       - ./data/ssh/hostkeys:/etc/ssh/hostkeys:ro
-  #       - ./data/ssh/authorized_keys:/home/opencode/.ssh/authorized_keys:ro
-  #       # TMUX plugins + TOOLCHAINS (shared with prod)
-  #       - opencode_tmux_plugins:/home/opencode/.tmux/plugins
-  #       - opencode_goroot:/usr/local/go
-  #       - opencode_rustup:/home/opencode/.rustup
-  #       - opencode_cargo:/home/opencode/.cargo
-  #       # VAULTS
-  #       - ${VAULT_ROOT}/0 - System:/vaults/system
-  #       - ${VAULT_ROOT}/1 - Docs/Tech:/vaults/docs/tech
-  #       - ${VAULT_ROOT}/3 - Projects:/vaults/projects
-  #       - ${VAULT_ROOT}/5 - Resources:/vaults/resources
-  #       - ./cbm:/home/opencode/.local/share/cbm
-  #     environment:
-  #       - NODE_ENV=development
-  #       - CBM_CACHE_DIR=/home/opencode/.local/share/cbm
-  #       - OPENCODE_CORS_URL=https://opencode.aramnoide.net
-  #     entrypoint: ["/usr/bin/tini", "--", "/usr/local/bin/entrypoints/web.sh"]
-  #     healthcheck:
-  #       test: ["CMD-SHELL", "curl -sf -u opencode:${OPENCODE_SERVER_PASSWORD} http://localhost:4096/api/info"]
-  #       interval: 5s
-  #       timeout: 3s
-  #       retries: 3
-  #       start_period: 10s
-  #
+
+
+  # ---------------------------------------------------------------------------
+  # Web Service — HTTP API server (port 4096), shares prod data.
+  # Managed by Sablier for on-demand start/stop (profile: web).
+  # ---------------------------------------------------------------------------
+  opencode_web:
+    <<: *opencode-base
+    profiles: ["web"]
+    container_name: opencode_web
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: "1.5g"
+    labels:
+      - "sablier.enable=true"
+      - "sablier.group=mac-mini"
+    ports:
+      - "4096:4096"
+    volumes:
+      # CONFIG (shared)
+      - ~/.gitconfig:/home/opencode/.gitconfig:ro
+      - ~/.tmux.conf:/home/opencode/.tmux.conf:ro
+      - ~/.config/gh:/home/opencode/.config/gh:ro
+      - /etc/localtime:/etc/localtime:ro
+      # BACKUPS (shared)
+      - ./backups:/backups
+      # DATA (prod — same base as opencode)
+      - ./app/:/home/opencode/app
+      - ./data/share:/home/opencode/.local/share/opencode
+      - ./data/config:/home/opencode/.config/opencode
+      - ./data/state:/home/opencode/.local/state/opencode
+      - ./data/.hindsight:/home/opencode/.hindsight:ro
+      - ./data/ssh/hostkeys:/etc/ssh/hostkeys:ro
+      - ./data/ssh/authorized_keys:/home/opencode/.ssh/authorized_keys:ro
+      # TMUX plugins + TOOLCHAINS (shared with prod)
+      - opencode_tmux_plugins:/home/opencode/.tmux/plugins
+      - opencode_goroot:/usr/local/go
+      - opencode_rustup:/home/opencode/.rustup
+      - opencode_cargo:/home/opencode/.cargo
+      # VAULTS
+      - ${VAULT_ROOT}/0 - System:/vaults/system
+      - ${VAULT_ROOT}/1 - Docs/Tech:/vaults/docs/tech
+      - ${VAULT_ROOT}/3 - Projects:/vaults/projects
+      - ${VAULT_ROOT}/5 - Resources:/vaults/resources
+      - ./cbm:/home/opencode/.local/share/cbm
+    environment:
+      - NODE_ENV=development
+      - CBM_CACHE_DIR=/home/opencode/.local/share/cbm
+      - OPENCODE_CORS_URL=https://opencode.aramnoide.net
+    entrypoint: ["/usr/bin/tini", "--", "/usr/local/bin/entrypoints/web.sh"]
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf -u opencode:${OPENCODE_SERVER_PASSWORD} http://localhost:4096/api/info"]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
 
   # ---------------------------------------------------------------------------
   # OpenCode Manager — web command center replacing opencode_web (profile: web).
@@ -201,40 +202,40 @@ services:
   # Takes over port 4096 so opencode.armanoide.net (Traefik -> mac-mini:4096)
   # keeps working unchanged. Stop opencode_web before starting this one.
   # ---------------------------------------------------------------------------
-  opencode_manager:
-    image: ghcr.io/chriswritescode-dev/opencode-manager:latest
-    container_name: opencode_manager
-    profiles: ["web"]
-    ports:
-      - "4096:5003"
-    environment:
-      - NODE_ENV=production
-      - PUID=1000
-      - PGID=1000
-      - HOST=0.0.0.0
-      - PORT=5003
-      - AUTH_TRUSTED_ORIGINS=https://opencode.armanoide.net,http://mac-mini.home:4096,http://localhost:4096
-      - AUTH_SECURE_COOKIES=false
+  # opencode_manager:
+  #   image: ghcr.io/chriswritescode-dev/opencode-manager:latest
+  #   container_name: opencode_manager
+  #   profiles: ["web"]
+  #   ports:
+  #     - "4096:5003"
+  #   environment:
+  #     - NODE_ENV=production
+  #     - PUID=1000
+  #     - PGID=1000
+  #     - HOST=0.0.0.0
+  #     - PORT=5003
+  #     - AUTH_TRUSTED_ORIGINS=https://opencode.armanoide.net,http://mac-mini.home:4096,http://localhost:4096
+  #     - AUTH_SECURE_COOKIES=false
       # Folder browser root so Add Repository -> Folder can find the app tree
-      - REPO_BROWSE_ROOT=/home/opencode/app
+  #     - REPO_BROWSE_ROOT=/home/opencode/app
       # Sessions are keyed by directory path; the app dir must exist in-container
       # for repo relinking to find them (it is mounted below at the same path).
       # Import is automatic when the state dir is mounted (one-shot, fresh volume).
       # Config mirror mount stays OFF: the image chowns it at boot (fails on :ro)
       # and rw would let the Manager rewrite prod config. Import config via UI if needed.
-    volumes:
-      - ocm_workspace:/workspace
-      - ocm_data:/app/data
-      - ocm_bin:/home/node/.opencode/bin
+  #   volumes:
+  #     - ocm_workspace:/workspace
+  #     - ocm_data:/app/data
+  #     - ocm_bin:/home/node/.opencode/bin
       # IMPORT (official paths): config dir mounted rw at the container home path
       # (the image chowns it at boot); state dir read-only for the one-shot import.
-      - ./data/config:/home/node/.config/opencode
-      - ./data/share:/import/state:ro
+  #     - ./data/config:/home/node/.config/opencode
+  #     - ./data/share:/import/state:ro
       # Same path as prod sessions so repo relink resolves (/home/opencode/app)
-      - ./app:/home/opencode/app
-    networks:
-      - opencode_net
-    restart: unless-stopped
+  #     - ./app:/home/opencode/app
+  #   networks:
+  #     - opencode_net
+  #   restart: unless-stopped
 
 # ---------------------------------------------------------------------------
 # Networks
