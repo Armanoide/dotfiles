@@ -216,14 +216,14 @@ services:
       - PORT=5003
       - AUTH_TRUSTED_ORIGINS=http://mac-mini.home:5003,http://localhost:5003
       - AUTH_SECURE_COOKIES=false
-      - OPENCODE_IMPORT_CONFIG_PATH=/import/config
-      - OPENCODE_IMPORT_STATE_PATH=/import/state/opencode.db
+      # Import is automatic when the config/state dirs are mounted (one-shot, fresh volume)
+      - OPENCODE_IMPORT_STATE_PATH=/import/state
     volumes:
       - ocm_workspace:/workspace
       - ocm_data:/app/data
       - ocm_bin:/home/node/.opencode/bin
-      # IMPORT (read-only, one-shot on first start): prod config + sessions DB
-      - ./data/config:/import/config:ro
+      # IMPORT (one-shot on first start with a fresh volume — official paths)
+      - ./data/config:/home/node/.config/opencode:ro
       - ./data/share:/import/state:ro
     networks:
       - opencode_net
