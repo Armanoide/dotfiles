@@ -5,13 +5,12 @@ return {
     dependencies = { "catppuccin/nvim" },
     opts = {
       options = {
-        theme                = "catppuccin",
         component_separators = { left = "", right = "" }, -- rounded small
-        section_separators   = { left = "", right = "" }, -- rounded big
+        section_separators = { left = "", right = "" }, -- rounded big
       },
       sections = {
-        lualine_z = {}
-      }
+        lualine_z = {},
+      },
     },
-  }
+  },
 }
