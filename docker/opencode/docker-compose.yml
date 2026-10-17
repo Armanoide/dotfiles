@@ -55,7 +55,7 @@ services:
     volumes:
       # CONFIG
       - ~/.gitconfig:/home/opencode/.gitconfig:ro
-      - ~/.tmux.conf:/home/opencode/.tmux.conf:ro
+      - ../../.tmux.conf:/home/opencode/.tmux.conf:ro
       - ~/.config/gh:/home/opencode/.config/gh:ro
       - /etc/localtime:/etc/localtime:ro
       # BACKUPS
@@ -105,7 +105,7 @@ services:
     volumes:
       # CONFIG (shared, read-only)
       - ~/.gitconfig:/home/opencode/.gitconfig:ro
-      - ~/.tmux.conf:/home/opencode/.tmux.conf:ro
+      - ../../.tmux.conf:/home/opencode/.tmux.conf:ro
       - ~/.config/gh:/home/opencode/.config/gh:ro
       - /etc/localtime:/etc/localtime:ro
       # BACKUPS (shared, read-only)
@@ -159,7 +159,7 @@ services:
     volumes:
       # CONFIG (shared)
       - ~/.gitconfig:/home/opencode/.gitconfig:ro
-      - ~/.tmux.conf:/home/opencode/.tmux.conf:ro
+      - ../../.tmux.conf:/home/opencode/.tmux.conf:ro
       - ~/.config/gh:/home/opencode/.config/gh:ro
       - /etc/localtime:/etc/localtime:ro
       # BACKUPS (shared)
