@@ -171,6 +171,9 @@ show_preview = true
 ## If set to false, both enter and tab will place the command in the prompt for editing.
 ## This applies for new installs. Old installs will keep the old behaviour unless configured otherwise.
 enter_accept = true
+
+## Ignorer le bruit courant dans l historique (ls/clear/pwd) - Ctrl-R plus dense
+history_filter = ["^clear$", "^ls$", "^pwd$"]
 search_mode = "daemon-fuzzy"
 
 ## Defaults to false. If enabled, when triggered after &&, || or |, Atuin will complete commands to chain rather than replace the current line.
@@ -363,7 +366,7 @@ name = "catppuccin-mocha-mauve"
 
 [ui]
 ## Colonnes affichées dans la recherche interactive (gauche -> droite).
-columns = ["duration", "time", "host", { type = "directory", width = 24 }, "command"]
+columns = ["exit", "duration", "time", "host", { type = "directory", width = 24 }, "command"]
 
 [ai]
 enabled = true
