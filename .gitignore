@@ -31,3 +31,5 @@ state
 
 .config/atuin/atuin-receipt.json
 docker/.old/
+
+.config/atuin/themes/

@@ -88,7 +88,7 @@ extra_hosts = ["atuin.armanoide.net:10.0.10.2"]
 
 ## enable or disable showing a preview of the selected command
 ## useful when the command is longer than the terminal width and is cut off
-# show_preview = true
+show_preview = true
 
 ## what to do when the escape key is pressed when searching
 ## possible values: return-original, return-query
@@ -311,7 +311,7 @@ autostart = true
 ## starts once.
 # enabled = false
 
-# [theme]
+[theme]
 ## Color theme to use for rendering in the terminal.
 ## There are some built-in themes, including the base theme ("default"),
 ## "autumn" and "marine". You can add your own themes to the "./themes" subdirectory of your
@@ -322,6 +322,7 @@ autostart = true
 ## If you provide a custom theme file, it should be  called "NAME.toml" and the theme below
 ## should be the stem, i.e. `theme = "NAME"` for your chosen NAME.
 # name = "autumn"
+name = "catppuccin-mocha-mauve"
 
 ## Whether the theme manager should output normal or extra information to help fix themes.
 ## Boolean, true or false. If unset, left up to the theme manager.
@@ -361,6 +362,8 @@ autostart = true
 # height = "60%"
 
 [ui]
+## Colonnes affichées dans la recherche interactive (gauche -> droite).
+columns = ["duration", "time", "host", { type = "directory", width = 24 }, "command"]
 
 [ai]
 enabled = true
