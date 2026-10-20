@@ -32,8 +32,8 @@ WORKDIR /home/opencode/app
 # Install opencode as the opencode user - version EPINGLEE (tarball npm officiel).
 # Evite qu'un rebuild silencieux tire une version cassee (incident 2026-10-12).
 # Bump = changer OPENCODE_VERSION + OPENCODE_SHA256 (sha1sum du .tgz npm).
-ARG OPENCODE_VERSION=2.0.27
-ARG OPENCODE_SHA1=36fac0c74e408f2b2228ad5b8923f17c17929dd3
+ARG OPENCODE_VERSION=2.0.32
+ARG OPENCODE_SHA1=af4af15e67480285da968bc4289545455825a47e
 USER opencode
 RUN curl -fsSL --retry 3 -o /tmp/oc.tgz \
      "https://registry.npmjs.org/@opencode/cli-linux-arm64/-/cli-linux-arm64-${OPENCODE_VERSION}.tgz" \
@@ -56,10 +56,10 @@ RUN npm install -g uipro-cli get-shit-done-cc@latest defuddle-cli || true
 # TPM partout ; le clone est ici, les plugins s'installent par prefix+I au 1er boot.
 RUN git clone --depth 1 https://github.com/tmux-plugins/tpm /home/opencode/.tmux/plugins/tpm
 
-# Install CBM (codebase-memory-mcp) — binaire amont officiel v0.11.0 (SHA-256 tar.gz épinglé)
+# Install CBM (codebase-memory-mcp) — binaire amont officiel v0.12.1 (SHA-256 tar.gz épinglé)
 # Le fork Armanoide v0.11.0-host est abandonné (403 assets sur LAN) ; UI exposée via conteneur cbm_ui dédié.
-RUN curl -fsSL --retry 3 -o /tmp/cbm.tgz https://github.com/DeusData/codebase-memory-mcp/releases/download/v0.11.0/codebase-memory-mcp-linux-arm64-portable.tar.gz \
-  && echo "d62eeb224d5ee3eba3070938ec62cf1033f10b041ec1c4b2fb67f7aef390cc7b  /tmp/cbm.tgz" | sha256sum -c - \
+RUN curl -fsSL --retry 3 -o /tmp/cbm.tgz https://github.com/DeusData/codebase-memory-mcp/releases/download/v0.12.1/codebase-memory-mcp-linux-arm64-portable.tar.gz \
+  && echo "ed0f1f548cd79b121c401c2e9f7841c189a001af26d3768368088c24f6a53533  /tmp/cbm.tgz" | sha256sum -c - \
   && mkdir -p /home/opencode/.local/bin \
   && tar -xzf /tmp/cbm.tgz -C /home/opencode/.local/bin codebase-memory-mcp \
   && mv /home/opencode/.local/bin/codebase-memory-mcp /home/opencode/.local/bin/codebase-memory-mcp.tmp \
