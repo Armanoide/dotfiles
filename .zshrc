@@ -171,7 +171,7 @@ fi
 
 # Pyenv
 if [[ "$OS" == "mac" ]]; then
-  eval "$(pyenv init -)"
+  eval "$(pyenv init --path --no-rehash -)"
 fi
 
 # Java
