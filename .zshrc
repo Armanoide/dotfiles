@@ -104,8 +104,8 @@ fi
 PATH="$HOME/.local/rbin:$PATH"
 PATH="$HOME/.local/bin:$PATH"
 
-# SSH Agent Symlink Fix (Server-only)
-if [[ "$USE_AUTH_SOCK" == "true" ]]; then
+# SSH Agent Symlink Fix (Server-only, toujours actif — USE_AUTH_SOCK n'était défini nulle part)
+if true; then
   TARGET="$HOME/.ssh/ssh_auth_sock"
   if [[ -n "$SSH_CONNECTION" && -S "$SSH_AUTH_SOCK" && "$SSH_AUTH_SOCK" != "$TARGET" ]]; then
       # Ensure the directory exists first
@@ -121,7 +121,13 @@ fi
  # tmux auto-attach when in SSH
  if [[ -n "$SSH_CONNECTION" && -z "$TMUX" && -t 1 ]]; then
     tmux new-session -A -s main
-    eval $(tmux showenv -s | grep -E '^(SSH|DISPLAY)')
+    # ne pas ré-importer un SSH_AUTH_SOCK mort capturé par tmux à la création de la session
+    eval $(tmux showenv -s | grep -E '^(SSH|DISPLAY)' | grep -v '^SSH_AUTH_SOCK=')
+    # le symlink vivant (mis à jour par le fix ci-dessus) gagne, et est propagé aux nouveaux panes
+    if [[ -S "$HOME/.ssh/ssh_auth_sock" ]] && SSH_AUTH_SOCK="$HOME/.ssh/ssh_auth_sock" ssh-add -l >/dev/null 2>&1; then
+        export SSH_AUTH_SOCK="$HOME/.ssh/ssh_auth_sock"
+        tmux setenv -g SSH_AUTH_SOCK "$SSH_AUTH_SOCK"
+    fi
  fi
 
 ############################################################
