@@ -21,6 +21,7 @@ services:
       - portabase_net
     labels:
       - "traefik.enable=true"
+      - "traefik.docker.network=proxy_net"
       - "traefik.http.routers.atuin.rule=Host(`atuin.${DOMAIN}`)"
       - "traefik.http.routers.atuin.entrypoints=https"
       - "traefik.http.routers.atuin.tls=true"

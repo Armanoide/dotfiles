@@ -19,6 +19,7 @@ services:
         ipv4_address: ${AD_GUARD_IP}
     labels:
       - "traefik.enable=true"
+      - "traefik.docker.network=proxy_net"
       - "traefik.http.routers.adguard.rule=Host(`adguard.${DOMAIN}`)"
       - "traefik.http.routers.adguard.entrypoints=https"
       - "traefik.http.routers.adguard.tls=true"

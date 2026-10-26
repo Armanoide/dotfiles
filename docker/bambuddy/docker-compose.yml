@@ -35,6 +35,7 @@ services:
         ipv4_address: ${BAMBU_IP}
     labels:
       - "traefik.enable=true"
+      - "traefik.docker.network=proxy_net"
       - "traefik.http.routers.bambuddy.rule=Host(`bambu.${DOMAIN}`)"
       - "traefik.http.routers.bambuddy.entrypoints=https"
       - "traefik.http.routers.bambuddy.tls=true"

@@ -56,6 +56,7 @@ services:
       start_period: 60s
     labels:
       - "traefik.enable=true"
+      - "traefik.docker.network=proxy_net"
       - "traefik.http.routers.portabase.rule=Host(`db.backups.${DOMAIN}`)"
       - "traefik.http.routers.portabase.entrypoints=https"
       - "traefik.http.routers.portabase.tls=true"
