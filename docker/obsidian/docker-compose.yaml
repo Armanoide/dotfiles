@@ -14,7 +14,7 @@ services:
       - "5984:5984"
     networks:
       - proxy_net
-      - portabase_net
+      - databases_net
     healthcheck:
       test: ["CMD-SHELL", "curl -fsS -u $COUCHDB_USER:$COUCHDB_PASSWORD http://127.0.0.1:5984/_up || exit 1"]
       interval: 60s
@@ -41,5 +41,5 @@ services:
 networks:
   proxy_net:
     external: true
-  portabase_net:
+  databases_net:
     external: true

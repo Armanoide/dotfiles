@@ -33,7 +33,7 @@ services:
       - ./db:/var/lib/postgresql/data
     networks:
       - synapse_net
-      - portabase_net
+      - databases_net
 
   synapse_admin:
     container_name: synapse_admin
@@ -52,6 +52,6 @@ networks:
   synapse_net:
     name: synapse_net
     driver: bridge
-  portabase_net:
+  databases_net:
       external: true
 

@@ -20,7 +20,7 @@ services:
       POSTGRES_PASSWORD: ${DB_PASS}
     networks:
       - paperless_net
-      - portabase_net
+      - databases_net
 
 
   paperless_ngx_webserver:
@@ -93,6 +93,6 @@ networks:
   paperless_net:
     name: paperless_net
     external: true
-  portabase_net:
+  databases_net:
       external: true
 
