@@ -11,7 +11,7 @@ services:
       - ./db:/var/lib/postgresql/data
     networks:
       - dockhand_net
-      - portabase_net
+      - databases_net
 
   dockhand:
     image: fnsys/dockhand:latest
@@ -42,5 +42,5 @@ networks:
     name: dockhand_net
   proxy_net:
     external: true
-  portabase_net:
+  databases_net:
     external: true

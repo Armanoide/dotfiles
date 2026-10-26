@@ -18,7 +18,7 @@ services:
       - db
     networks:
       - proxy_net
-      - portabase_net
+      - databases_net
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy_net"
@@ -41,10 +41,10 @@ services:
       TZ: Europe/Paris
       PGTZ: Europe/Paris
     networks:
-      - portabase_net
+      - databases_net
 
 networks:
   proxy_net:
     external: true
-  portabase_net:
+  databases_net:
     external: true
