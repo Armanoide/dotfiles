@@ -4,6 +4,7 @@ services:
     restart: unless-stopped
     image: ghcr.io/atuinsh/atuin:latest
     command: start
+    user: "1000:10"
     extra_hosts:
       - "atuin.armanoide.net:host-gateway"
     volumes:
