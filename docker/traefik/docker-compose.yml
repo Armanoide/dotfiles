@@ -11,9 +11,6 @@ services:
       - .env
     networks:
        - proxy_net
-       # 2026-10-05 : acces direct au backend portabase sur internal_net
-       # (portabase_net = bridge orphelin, non routable depuis traefik -> gel de route recurrent)
-       - portabase_internal_net
     ports:
       - 80:80
       - 443:443
@@ -67,6 +64,4 @@ secrets:
 
 networks:
   proxy_net:
-    external: true
-  portabase_internal_net:
     external: true
