@@ -14,6 +14,7 @@ services:
       - infisical_net
     labels:
       - "traefik.enable=true"
+      - "traefik.docker.network=proxy_net"
       - "traefik.http.routers.infisical.rule=Host(`infisical.${DOMAIN}`)"
       - "traefik.http.routers.infisical.entrypoints=https"
       - "traefik.http.routers.infisical.tls=true"
@@ -56,5 +57,4 @@ networks:
   proxy_net:
     external: true
   infisical_net:
-    name: infisical_net
     driver: bridge
