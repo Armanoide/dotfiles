@@ -57,7 +57,7 @@ services:
       retries: 10
     networks:
       - litellm_net
-      - portabase_net
+      - databases_net
 
   litellm_redis:
     image: redis:alpine
@@ -92,6 +92,6 @@ networks:
     name: litellm_net
   proxy_net:
     external: true
-  portabase_net:
+  databases_net:
     external: true
 
