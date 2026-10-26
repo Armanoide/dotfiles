@@ -1,6 +1,6 @@
 services:
   infisical:
-    image: infisical/infisical:latest-postgres
+    image: infisical/infisical:v0.167.3
     container_name: infisical
     restart: unless-stopped
     env_file: .env
