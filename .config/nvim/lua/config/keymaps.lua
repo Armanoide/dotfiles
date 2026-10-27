@@ -27,3 +27,8 @@ vim.keymap.set("n", "<leader>wt", function()
   vim.cmd("startinsert")
 end, { desc = "Open Terminal in cwd" })
 map("t", "<C-z>", "<C-\\><C-n>", { desc = "Terminal Normal Mode" })
+
+
+vim.keymap.set({ "n", "x" }, "<leader>ca", function()
+	require("tiny-code-action").code_action()
+end, { noremap = true, silent = true })
