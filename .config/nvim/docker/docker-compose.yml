@@ -13,6 +13,7 @@ services:
       # nvim config for nvim user (default mode)
       - ${NVIM_CONFIG_HOST}:/home/nvim/.config/nvim
       # persistent nvim data (plugins, parsers, mason)
+      - nvim_state:/home/nvim/.local/state
       - nvim_data:/home/nvim/.local/share/nvim
     privileged: true
     stdin_open: true
@@ -33,3 +34,4 @@ services:
 
 volumes:
   nvim_data:
+  nvim_state:
