@@ -46,7 +46,6 @@ RUN create_user() { \
     }; \
     create_user
 # /opt/npm-global est cree avant create_user -> s assurer que nvim peut ecrire
-RUN mkdir -p /home/nvim/.local/state && chown -R nvim:uucp /home/nvim
 # npm prefix global dans /opt/npm-global (persiste via volume si monte)
 RUN printf "prefix=/opt/npm-global\n" > /home/nvim/.npmrc && chown nvim:uucp /home/nvim/.npmrc
 
@@ -62,6 +61,9 @@ RUN printf '#!/bin/bash\n' > /usr/local/bin/entrypoint.sh && \
     chmod +x /usr/local/bin/entrypoint.sh
 
 WORKDIR /home/nvim
+
+
+RUN mkdir -p /home/nvim/.local/state && chown -R nvim:uucp /home/nvim
 
 COPY editor-manager /usr/local/bin/editor-manager
 RUN chmod +x /usr/local/bin/editor-manager
