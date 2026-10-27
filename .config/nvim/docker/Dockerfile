@@ -17,6 +17,18 @@ RUN apt-get update && apt-get install -y \
     fzf \
     && rm -rf /var/lib/apt/lists/*
 
+# golang: mason installe gopls via `go install` -> go doit exister dans l image
+RUN apt-get update && apt-get install -y golang-go && rm -rf /var/lib/apt/lists/*
+
+# Node 20 via NodeSource — yamlls/jsonls recents exigent node >= 20 (import-with)
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs \
+    && rm -rf /var/lib/apt/lists/*
+
+ENV PATH="/opt/npm-global/bin:${PATH}"
+ENV PATH="/usr/lib/go-1.22/bin:/home/nvim/go/bin:${PATH}"
+RUN mkdir -p /opt/npm-global && chown 1000:10 /opt/npm-global
+
 RUN curl -LO https://github.com/neovim/neovim/releases/download/nightly/nvim-linux-x86_64.tar.gz \
     && tar xzf nvim-linux-x86_64.tar.gz \
     && mv nvim-linux-x86_64/bin/nvim /usr/local/bin/ \
@@ -33,6 +45,10 @@ RUN create_user() { \
       useradd -m -u "${CONTAINER_UID}" -s /bin/bash nvim; \
     }; \
     create_user
+# /opt/npm-global est cree avant create_user -> s assurer que nvim peut ecrire
+RUN mkdir -p /home/nvim/.local/state && chown -R nvim:uucp /home/nvim
+# npm prefix global dans /opt/npm-global (persiste via volume si monte)
+RUN printf "prefix=/opt/npm-global\n" > /home/nvim/.npmrc && chown nvim:uucp /home/nvim/.npmrc
 
 # Entrypoint: --root runs as root, otherwise runs as nvim
 RUN printf '#!/bin/bash\n' > /usr/local/bin/entrypoint.sh && \
