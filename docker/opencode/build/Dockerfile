@@ -32,8 +32,8 @@ WORKDIR /home/opencode/app
 # Install opencode as the opencode user - version EPINGLEE (tarball npm officiel).
 # Evite qu'un rebuild silencieux tire une version cassee (incident 2026-10-12).
 # Bump = changer OPENCODE_VERSION + OPENCODE_SHA256 (sha1sum du .tgz npm).
-ARG OPENCODE_VERSION=2.0.32
-ARG OPENCODE_SHA1=af4af15e67480285da968bc4289545455825a47e
+ARG OPENCODE_VERSION=2.1.4
+ARG OPENCODE_SHA1=05c6fbc15996a6fa495f205dd5cc7a92b5e4e47b
 USER opencode
 RUN curl -fsSL --retry 3 -o /tmp/oc.tgz \
      "https://registry.npmjs.org/@opencode/cli-linux-arm64/-/cli-linux-arm64-${OPENCODE_VERSION}.tgz" \
@@ -50,7 +50,9 @@ RUN mkdir -p ~/.npm-global && \
 ENV PATH="/home/opencode/.npm-global/bin:/home/opencode/.local/bin:/home/opencode/.opencode/bin:${PATH}"
 
 # Install CLI tools for skills (uipro, GSD SDK)
-RUN npm install -g uipro-cli get-shit-done-cc@latest defuddle-cli || true
+# GSD retire (switch Matt Pocock 2026-10-25, cf Changelog opencode) : get-shit-done-cc = poubelle.
+# Pas de `|| true` : une image sans ces outils est cassee, mieux vaut un build rouge.
+RUN npm install -g --fetch-retries=3 uipro-cli defuddle@0.19
 
 # TPM (tmux plugin manager) — tmux.conf du host est monte en ro et active
 # TPM partout ; le clone est ici, les plugins s'installent par prefix+I au 1er boot.
@@ -67,13 +69,20 @@ RUN curl -fsSL --retry 3 -o /tmp/cbm.tgz https://github.com/DeusData/codebase-me
   && rm -f /home/opencode/.local/bin/codebase-memory-mcp.tmp /tmp/cbm.tgz
 
 # Install skills via CLI (overrides/complements manual files)
-RUN graphify install --platform opencode || true && \
-  uipro init --ai opencode --global || true && \
-  npx get-shit-done-cc@latest --opencode --global --yes || true
+# Init skills : echec non bloquant (repertoires deja initialises au boot) mais trace.
+RUN graphify install --platform opencode || echo "WARN: graphify install failed" | tee -a /home/opencode/.build-warnings.log; \
+  uipro init --ai opencode --global || echo "WARN: uipro init failed" | tee -a /home/opencode/.build-warnings.log; \
+  true
 
 # Install Bun via npm (required by opencode npm plugin auto-install).
 # Uses existing ~/.npm-global prefix (USER=opencode) — no permission issues.
 RUN npm install -g bun
+
+# Smoke test : les binaires requis doivent exister, sinon build rouge (nom a la face du log).
+RUN command -v defuddle && command -v bun && command -v graphify && command -v uipro \
+  && test -x /home/opencode/.opencode/bin/opencode \
+  && defuddle --version && opencode --version \
+  && echo "toolchain smoke OK"
 
 # Copy entrypoint scripts (modular: common/* sourced by tui.sh and web.sh)
 USER root
