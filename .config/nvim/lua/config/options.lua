@@ -16,7 +16,8 @@ vim.g.autoformat = false
 vim.opt.clipboard = "unnamedplus"
 -- OSC 52 seulement quand le presse-papier natif est inaccessible (SSH / tmux distant)
 local native_ok = vim.fn.has("mac") == 1 or vim.fn.has("win32") == 1
-    or (vim.fn.has("unix") == 1 and not vim.env.SSH_TTY)
+    or (vim.fn.has("unix") == 1 and vim.env.SSH_TTY ~= nil
+        and (vim.env.WAYLAND_DISPLAY ~= nil or vim.env.DISPLAY ~= nil))
     or vim.fn.has("wsl") == 1
 
 if native_ok then
