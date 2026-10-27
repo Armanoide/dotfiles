@@ -311,3 +311,10 @@ tmux() {
 
 . "$HOME/.atuin/bin/env" 2>/dev/null || true
 eval "$(atuin init zsh)"
+
+# Reset stale mouse-tracking modes left by crashed TUIs/dead SSH sessions (ghostty#12358)
+function _reset_mouse_modes() { printf '\e[?1000l\e[?1002l\e[?1003l\e[?1006l' }
+autoload -U add-zsh-hook
+add-zsh-hook precmd _reset_mouse_modes
+# clear + mouse-mode reset in one keystroke
+alias clear='printf "\e[?1000l\e[?1002l\e[?1003l\e[?1006l"; command clear'
