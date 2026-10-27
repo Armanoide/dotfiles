@@ -14,4 +14,13 @@ elif command -v nvim >/dev/null 2>&1; then
 fi
 
 # 2. Fallback to Docker if no local installation is found
-exec docker exec -it -w "/internal_volume$(pwd)" nvim_editor nvim "$@"
+# Convertir les arguments absolus du host en chemins /internal_volume (montage NAS)
+# shortcut: suppose que tout chemin absolu vise le filesystem hote monte; a affiner si cas exotiques
+_args=""
+for _a in "$@"; do
+    case "$_a" in
+        /*) _args="$_args /internal_volume$_a" ;;
+        *)  _args="$_args $_a" ;;
+    esac
+done
+exec docker exec -it -w "/internal_volume$(pwd)" nvim_editor nvim $_args
