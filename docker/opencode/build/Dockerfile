@@ -15,6 +15,11 @@ RUN if getent passwd node; then userdel -r node; fi
 RUN useradd -m -u 1000 -s /bin/bash opencode && \
   echo "opencode ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
+# terminfo xterm-ghostty : bookworm-slim ne le connait pas ; sinon `ssh opencode`
+# depuis Ghostty echoue avec "missing or unsuitable terminal: xterm-ghostty".
+COPY --chown=opencode:opencode terminfo/xterm-ghostty.ti /tmp/
+RUN tic -x /tmp/xterm-ghostty.ti && rm /tmp/xterm-ghostty.ti
+
 # Go toolchain: INSTALLED AT RUNTIME into named volume /usr/local/go (entrypoints/common/toolchains.sh)
 ENV GO_VERSION=1.22.5 \
   GOPATH=/home/opencode/go
@@ -32,8 +37,8 @@ WORKDIR /home/opencode/app
 # Install opencode as the opencode user - version EPINGLEE (tarball npm officiel).
 # Evite qu'un rebuild silencieux tire une version cassee (incident 2026-10-12).
 # Bump = changer OPENCODE_VERSION + OPENCODE_SHA256 (sha1sum du .tgz npm).
-ARG OPENCODE_VERSION=2.1.4
-ARG OPENCODE_SHA1=05c6fbc15996a6fa495f205dd5cc7a92b5e4e47b
+ARG OPENCODE_VERSION=2.2.0
+ARG OPENCODE_SHA1=27c2d1f09de79465a0ba82584799c21a0132b60b
 USER opencode
 RUN curl -fsSL --retry 3 -o /tmp/oc.tgz \
      "https://registry.npmjs.org/@opencode/cli-linux-arm64/-/cli-linux-arm64-${OPENCODE_VERSION}.tgz" \
