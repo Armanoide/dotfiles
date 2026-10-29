@@ -16,6 +16,13 @@ return {
       },
       -- Customizing the Sourcekit Server
       servers = {
+        -- override the LazyVim <leader>ca keymap (vim.lsp.buf.code_action) with tiny-code-action,
+        -- for ALL servers (opts_extend merges with LazyVim ["*"])
+        ["*"] = {
+          keys = {
+            { "<leader>ca", function() require("tiny-code-action").code_action() end, mode = { "n", "x" }, desc = "Code Action (tiny)" },
+          },
+        },
         sourcekit = {
           -- This command dynamically finds your Xcode's sourcekit path
           cmd = { vim.trim(vim.fn.system("xcrun -f sourcekit-lsp")) },
