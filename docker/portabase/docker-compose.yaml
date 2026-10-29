@@ -30,13 +30,7 @@ services:
     environment:
       - TZ=${TZ}
     extra_hosts:
-      # Self-fetch SSR via PROJECT_URL (auth-client.ts) : 192.168.32.1 = gateway du
-      # bridge proxy_net ou tourne Traefik -> rejoint Traefik sans hairpin LAN
-      # (bloque par le FW UGREEN). NE PAS utiliser host-gateway : il resout la
-      # gateway du bridge par defaut (172.17.0.1) ou Traefik ne tourne pas.
-      # Fix documente : tuto IT-Connect + issue Portabase #273/#412
-      # - "db.backups.${DOMAIN}:192.168.32.1"
-      - "db.backups.armanoide.net:192.168.32.1"
+      - "db.backups.armanoide.net:host-gateway"
       - "s3.armanoide.net:host-gateway"
     volumes:
       - ./data:/data
