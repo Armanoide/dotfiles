@@ -1,4 +1,5 @@
-FROM node:20-bookworm-slim
+# node 26 LTS: requis par rea-agents (engines ^22.23.4 || ^24 || >=26.12.1 ; zlib.zstd* absent de node 20)
+FROM node:26-bookworm-slim
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
@@ -73,6 +74,13 @@ RUN curl -fsSL --retry 3 -o /tmp/cbm.tgz https://github.com/DeusData/codebase-me
   && install -m 0755 /home/opencode/.local/bin/codebase-memory-mcp.tmp /home/opencode/.local/bin/codebase-memory-mcp \
   && rm -f /home/opencode/.local/bin/codebase-memory-mcp.tmp /tmp/cbm.tgz
 
+# Install yt-dlp — binaire autonome (audio/métadonnées YouTube pour le skill video-transcribe).
+# SHA-256 épinglé sur la release latest 2026.10.26 ; mise à jour = re-hash + rebuild.
+RUN curl -fsSL --retry 3 -o /tmp/yt-dlp https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp \
+  && echo "e51e69e89489f199530f13d32a4342da3ddb2cf34842f364603a066db05afbf3  /tmp/yt-dlp" | sha256sum -c - \
+  && sudo install -m 0755 /tmp/yt-dlp /usr/local/bin/yt-dlp \
+  && rm -f /tmp/yt-dlp
+
 # Install skills via CLI (overrides/complements manual files)
 # Init skills : echec non bloquant (repertoires deja initialises au boot) mais trace.
 RUN graphify install --platform opencode || echo "WARN: graphify install failed" | tee -a /home/opencode/.build-warnings.log; \
@@ -83,8 +91,19 @@ RUN graphify install --platform opencode || echo "WARN: graphify install failed"
 # Uses existing ~/.npm-global prefix (USER=opencode) — no permission issues.
 RUN npm install -g bun
 
+# Install REA (reverse-engineering MCP) - npm tarball officiel, SHA-256 epingle.
+# Bump = changer REA_VERSION + REA_SHA256 (sha256sum du .tgz registry) + rebuild.
+ARG REA_VERSION=6.8.0
+ARG REA_SHA256=8d542ec76a9cb350584b60a6c9c088706ff812d5bb5b094c20c95b6dc25698bb
+RUN curl -fsSL --retry 3 -o /tmp/rea.tgz \
+     "https://registry.npmjs.org/rea-agents/-/rea-agents-${REA_VERSION}.tgz" \
+  && echo "${REA_SHA256}  /tmp/rea.tgz" | sha256sum -c - \
+  && npm install -g /tmp/rea.tgz \
+  && rm -f /tmp/rea.tgz
+
 # Smoke test : les binaires requis doivent exister, sinon build rouge (nom a la face du log).
 RUN command -v defuddle && command -v bun && command -v graphify && command -v uipro \
+  && command -v rea \
   && test -x /home/opencode/.opencode/bin/opencode \
   && defuddle --version && opencode --version \
   && echo "toolchain smoke OK"
