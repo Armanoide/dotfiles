@@ -30,7 +30,14 @@ services:
     networks:
       - proxy_net
       - immich_net
-    restart: always
+    # Limites anti-saturation node2 (4 coeurs / 7.7 GiB) : le worker immich
+    # ne peut plus inonder le serveur a la reprise des jobs (incident 2026-11-07).
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 1g
+    restart: unless-stopped
     healthcheck:
       disable: false
 
