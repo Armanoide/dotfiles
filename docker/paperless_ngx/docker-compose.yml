@@ -25,6 +25,11 @@ services:
 
   paperless_ngx_webserver:
     container_name: paperless_ngx_webserver
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 1g
     image: ghcr.io/paperless-ngx/paperless-ngx:latest
     restart: unless-stopped
     depends_on:
