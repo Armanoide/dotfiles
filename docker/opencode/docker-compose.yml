@@ -79,6 +79,7 @@ services:
       - ${VAULT_ROOT}/1 - Docs/Tech:/vaults/docs/tech
       - ${VAULT_ROOT}/3 - Projects:/vaults/projects
       - ${VAULT_ROOT}/5 - Resources:/vaults/resources
+      - ${VAULT_ROOT}/6 - Kanban:/vaults/kanban
       - ./cbm:/home/opencode/.local/share/cbm
     environment:
       - NODE_ENV=development
@@ -116,6 +117,7 @@ services:
       - ${VAULT_ROOT}/1 - Docs/Tech:/vaults/docs/tech
       - ${VAULT_ROOT}/3 - Projects:/vaults/projects
       - ${VAULT_ROOT}/5 - Resources:/vaults/resources
+      - ${VAULT_ROOT}/6 - Kanban:/vaults/kanban
       # DATA (ISOLATED — test_* named volumes, never prod state)
       - test_data_share:/home/opencode/.local/share/opencode
       - test_data_config:/home/opencode/.config/opencode
@@ -182,6 +184,7 @@ services:
       - ${VAULT_ROOT}/1 - Docs/Tech:/vaults/docs/tech
       - ${VAULT_ROOT}/3 - Projects:/vaults/projects
       - ${VAULT_ROOT}/5 - Resources:/vaults/resources
+      - ${VAULT_ROOT}/6 - Kanban:/vaults/kanban
       - ./cbm:/home/opencode/.local/share/cbm
     environment:
       - NODE_ENV=development
