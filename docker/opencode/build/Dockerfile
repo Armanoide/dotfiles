@@ -38,8 +38,8 @@ WORKDIR /home/opencode/app
 # Install opencode as the opencode user - version EPINGLEE (tarball npm officiel).
 # Evite qu'un rebuild silencieux tire une version cassee (incident 2026-10-12).
 # Bump = changer OPENCODE_VERSION + OPENCODE_SHA256 (sha1sum du .tgz npm).
-ARG OPENCODE_VERSION=2.2.0
-ARG OPENCODE_SHA1=27c2d1f09de79465a0ba82584799c21a0132b60b
+ARG OPENCODE_VERSION=2.2.6
+ARG OPENCODE_SHA1=3c39c55cc21036107aaf4a226b825d683f8d4f09
 USER opencode
 RUN curl -fsSL --retry 3 -o /tmp/oc.tgz \
      "https://registry.npmjs.org/@opencode/cli-linux-arm64/-/cli-linux-arm64-${OPENCODE_VERSION}.tgz" \
