@@ -33,3 +33,10 @@ state
 docker/.old/
 
 .config/atuin/themes/
+
+# runtime data & secrets (jamais en git)
+**/.env.sandbox
+.local/bin/
+.local/share/atuin/
+.local/share/nvim/
+.local/share/zoxide/
