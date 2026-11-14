@@ -153,12 +153,16 @@ fpath+=~/.zfunc; autoload -Uz compinit; compinit
 
 if [[ "$OS" == "mac" ]]; then
   export PATH="$PATH:/Applications/Docker.app/Contents/Resources/bin/"
+  export PATH="$PATH:$HOME/.kiri/bin"
   # The following lines have been added by Docker Desktop to enable Docker CLI completions.
   fpath=(/Volumes/EXT1_SSD/Users/user1/.docker/completions $fpath)
   autoload -Uz compinit
   compinit
   # End of Docker CLI completions
 fi
+
+. "$HOME/.atuin/bin/env" 2>/dev/null || true
+eval "$(atuin init zsh)"
 
 # Ruby
 if [[ "$OS" == "mac" ]]; then
@@ -304,13 +308,6 @@ tmux() {
     command tmux "$@"
   fi
 }
-
-
-
-
-
-. "$HOME/.atuin/bin/env" 2>/dev/null || true
-eval "$(atuin init zsh)"
 
 # Reset stale mouse-tracking modes left by crashed TUIs/dead SSH sessions (ghostty#12358)
 function _reset_mouse_modes() { printf '\e[?1000l\e[?1002l\e[?1003l\e[?1006l' }
