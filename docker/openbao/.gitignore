@@ -1,3 +1,4 @@
 .env*
 !.env.ntfy.example
 data/
+keys/
