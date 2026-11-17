@@ -40,3 +40,4 @@ docker/.old/
 .local/share/atuin/
 .local/share/nvim/
 .local/share/zoxide/
+import-secrets.sh

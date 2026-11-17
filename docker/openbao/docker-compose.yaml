@@ -1,16 +1,15 @@
 services:
   openbao:
-    image: openbao/openbao:2.7 # pinned — never latest
+    image: openbao/openbao:2.7
     container_name: openbao
     restart: unless-stopped
     # image CMD is `server -dev`; prod config requires this override (else dev listener conflicts on 8200)
     command: ["server", "-config=/openbao/config/openbao.hcl"]
     ports:
-      - "3020:8200" # host port follows the 30xx node convention; internal stays 8200
+      - "3020:8200"
     volumes:
-      - ./data:/openbao/data # raft storage (NVMe) — never committed
+      - ./data:/openbao/data
       - ./config/openbao.hcl:/openbao/config/openbao.hcl:ro
     environment:
-      # CLI talks to localhost on purpose: never loops back through Traefik
       - BAO_ADDR=http://127.0.0.1:8200
       - BAO_API_ADDR=https://vault.ia.armanoide.net # public redirects (mirrors hcl api_addr)
